@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="3dp"
+    app:cardUseCompatPadding="true"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ff"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/serviceTitleTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:text="Service Title"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                />
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="40dp"
+                android:layout_height="1dp"
+                android:padding="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="3dp"
+                android:background="@color/colorPrimary" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/serviceDescriptionTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="60dp"
+            android:layout_below="@+id/ff"
+            android:text="This service includes cleaning the ground tank."
+            />
+
+        <TextView
+            android:id="@+id/servicePriceTv"
+            android:layout_below="@+id/serviceDescriptionTv"
+            android:padding="4dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rs.230.00"/>
+
+        <TextView
+            android:id="@+id/bookNowBtn"
+            android:layout_below="@+id/serviceDescriptionTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@color/colorPrimaryDark"
+            android:drawableRight="@drawable/ic_baseline_arrow_forward_24"
+            android:padding="@dimen/editpad5dp"
+            android:text="Book Now"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/grediant_background"
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/pneck_icon"
+        android:layout_centerInParent="true"
+        android:id="@+id/icon"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/icon"
+        android:text="@string/p_neck"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:textSize="42sp"
+        android:layout_centerInParent="true"
+        android:textStyle="bold"
+        android:id="@+id/title"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="24dp"
+        android:fontFamily="@font/poppins_medium"
+        android:textSize="16sp"
+        android:padding="4dp"
+        android:typeface="serif"
+        android:textStyle="italic"
+        android:textColor="@color/white"
+        android:text="@string/PNECK_TAG_LINE"/>
+
+</RelativeLayout>

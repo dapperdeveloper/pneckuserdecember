@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".3"
+            android:background="@color/appcolor">
+
+            <ImageView
+                android:id="@+id/img_pass"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/moter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/img_pass"
+                android:layout_marginLeft="10dp"
+                android:text="About Us"
+                android:textColor="@color/white"
+                android:textSize="35dp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".7"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="1. Privacy Policy"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="2. Terms And Conditions"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="3. Join the team"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="4. Blog"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="5. Software Licenses"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:text="Versio: 1.0.0"
+            android:textColor="@color/black"
+            android:textSize="@dimen/contact_font" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

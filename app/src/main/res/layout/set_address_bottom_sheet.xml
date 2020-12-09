@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/bottom_layout"
+    android:visibility="gone"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/over_lay_background"
+        android:background="@color/overlay_dark_40"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:id="@+id/Final_address_view"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:padding="4dp">
+
+
+            <view
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="right|center_vertical"
+                android:gravity="right|center_vertical"
+                android:id="@+id/Save_Address_btn">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginLeft="6dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/BOOK_NOW"
+                    android:textColor="@color/primary_darker_600"
+                    android:textStyle="bold"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/empty_background"
+            android:text="@string/ADDRESS"
+            android:textSize="12sp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/grey_800" />
+
+        <EditText
+            android:id="@+id/Complete_address_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/empty_background"
+            android:text="Road no. 12 near water tank Banjara hills"
+            android:textSize="16sp"
+            android:imeOptions="actionNext"
+            android:maxLines="3"
+            android:inputType="textMultiLine"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/grey_700" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/grey_300"
+            android:layout_marginTop="3dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/empty_background"
+            android:text="@string/LANDMARK"
+            android:textSize="12sp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/grey_800" />
+        <EditText
+            android:id="@+id/Land_mark_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text=""
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:inputType="text"
+            android:hint="@string/ENTER_LANDMARK"
+            android:background="@drawable/empty_background"
+            android:textSize="16sp"
+            android:textColor="@color/grey_700"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/grey_300"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="10dp"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

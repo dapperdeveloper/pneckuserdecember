@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/loging_logo_bg_gradient"
+    tools:context=".activity.registrationSecond.LoginWithPhoneActivity">
+
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/pneck_icon"
+        android:layout_centerInParent="true"
+
+        />
+    <RelativeLayout
+        android:id="@+id/login_with_phoneLayout"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp">
+
+
+            <TextView
+                android:id="@+id/tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter Phone number for verification"
+                android:textSize="26sp"
+                android:textAlignment="center"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+            <TextView
+                android:layout_below="@id/tv"
+                android:id="@+id/detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:padding="@dimen/editpad5dp"
+                android:layout_margin="10dp"
+                android:text="This number will be used for all Pneck-related communication. You shall receive an SMS with code for verification."/>
+            <LinearLayout
+                android:layout_below="@+id/detail"
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/editpad5dp"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_india_flag"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/editpad5dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+91"
+                        android:layout_gravity="center"
+                        android:textSize="16dp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/phoneNumberEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/phone_number"
+                    android:inputType="number"
+                    android:theme="@style/EditText.Grey"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:maxLength="10"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_marginLeft="10dp"
+            android:text="Next"
+            android:enabled="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_corner_background"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/verify_otp_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:layout_marginTop="80dp">
+
+        <TextView
+            android:id="@+id/verityTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please wait We will send you the otp to +91"
+            android:textSize="26sp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            />
+
+        <RelativeLayout
+            android:id="@+id/verifylayout"
+            android:layout_below="@+id/verityTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/edittext_shap"
+            android:padding="10dp">
+
+
+            <EditText
+                android:id="@+id/otpEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_toRightOf="@+id/iv_user"
+                android:background="@color/transparent"
+                android:gravity="center"
+                android:theme="@style/EditText.Grey"
+                android:hint="Enter Your OTP"
+                android:inputType="number"
+                android:paddingLeft="10dp"
+                android:maxLength="6"
+                android:textColorHint="@color/hint_color"
+                android:textSize="@dimen/login_edittext" />
+        </RelativeLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/verifylayout">
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:layout_gravity="center"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/resendotp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Resend Otp"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+
+        </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/btn_verify_otp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:text="Verify"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_corner_background"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/register_layout_user_detail"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/editpad5dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Please fill in the details to create your account."
+                    android:textSize="26sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    />
+
+
+                <EditText
+                    android:id="@+id/nameEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:hint="Full Name"
+                    android:paddingLeft="10dp"
+                    android:theme="@style/EditText.Grey"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:inputType="textPersonName"
+                    android:singleLine="true"
+                    android:maxLength="30"/>
+
+                <EditText
+                    android:id="@+id/emailEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:hint="Email"
+                    android:paddingLeft="10dp"
+                    android:theme="@style/EditText.Grey"
+                    android:singleLine="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="30"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:layout_marginLeft="10dp"
+            android:text="Register"
+            android:enabled="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_corner_background"
+            />
+    </RelativeLayout>
+
+
+</RelativeLayout>

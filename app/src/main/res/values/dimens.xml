@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="denim_20">20dp</dimen>
+    <dimen name="login_edittext">18sp</dimen>
+    <dimen name="auth_button_corner_radius">5dp</dimen>
+    <dimen name="textsize_15">15sp</dimen>
+    <dimen name="card_25dp">25dp</dimen>
+    <dimen name="ll_mar40">40dp</dimen>
+    <dimen name="editpad5dp">5dp</dimen>
+    <dimen name="margin_signup">15dp</dimen>
+
+
+    <dimen name="top_menu_margin">6dp</dimen>
+    <dimen name="margin_top">5dp</dimen>
+    <dimen name="margin_left">10dp</dimen>
+    <dimen name="text_size_medium">16dp</dimen>
+
+    <dimen name="splash_size">25dp</dimen>
+    <dimen name="lab_size">11dp</dimen>
+
+    <dimen name="text_size_large">18dp</dimen>
+    <dimen name="text_size_vlarge">21dp</dimen>
+    <dimen name="contact_font">17dp</dimen>
+    <dimen name="nav_header_height">150dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="margin_small">10dp</dimen>
+    <dimen name="margin_vvlarge">21dp</dimen>
+    <dimen name="heading">15dp</dimen>
+    <dimen name="cardredius">8dp</dimen>
+    <dimen name="global_margin">20dp</dimen>
+    <dimen name="little_margin">2dp</dimen>
+    <dimen name="margin_bottom">90dp</dimen>
+
+    <dimen name="spacing_xsmall">2dp</dimen>
+    <dimen name="spacing_small">3dp</dimen>
+    <dimen name="spacing_medium">5dp</dimen>
+    <dimen name="spacing_xmedium">7dp</dimen>
+    <dimen name="spacing_middle">10dp</dimen>
+    <dimen name="spacing_large">15dp</dimen>
+    <dimen name="spacing_smlarge">18dp</dimen>
+    <dimen name="spacing_mlarge">20dp</dimen>
+    <dimen name="spacing_mxlarge">25dp</dimen>
+    <dimen name="spacing_xlarge">35dp</dimen>
+    <dimen name="spacing_xmlarge">40dp</dimen>
+    <dimen name="spacing_xxlarge">50dp</dimen>
+    <dimen name="spacing_xxxlarge">55dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+
+    <dimen name="text_sie">16dp</dimen>
+    <dimen name="text_ordrid">14dp</dimen>
+    <dimen name="text_ord">13dp</dimen>
+
+    <dimen name="custom_marker_image">36dp</dimen>
+    <dimen name="custom_marker_padding">2dp</dimen>
+    <dimen name="spinner_height">32dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+
+    <dimen name="p_text_size">12sp</dimen>
+    <dimen name="txt_size">10sp</dimen>
+    <dimen name="mid_text">16sp</dimen>
+    <dimen name="small_size">12sp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="margin_5dp">5dp</dimen>
+
+</resources>

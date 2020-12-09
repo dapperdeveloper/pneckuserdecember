@@ -1,0 +1,236 @@
+package com.callpneck.activity.registrationSecond.Activity;
+
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.callpneck.Language.ThemeUtils;
+import com.callpneck.R;
+import com.callpneck.SessionManager;
+import com.callpneck.activity.Database.MainData;
+import com.callpneck.activity.Database.RoomDB;
+import com.callpneck.activity.registrationSecond.Adapter.MyRestaurantMenuAdapter;
+import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ProductList;
+import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ShopDataList;
+import com.callpneck.activity.registrationSecond.api.ApiClient;
+import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.utils.InternetConnection;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.nex3z.notificationbadge.NotificationBadge;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ShopDetailActivity extends AppCompatActivity {
+
+
+    TextView shopNameTv, ratingsTv, dTimeTv, offerLabelTv;
+    String shopName, shopAddress,  rating, dTime, discount, discountMin;
+    ImageButton cartBtn;
+    //for test only
+    NotificationBadge notification_badge;
+    RecyclerView restaurantMenuRv;
+    List<ProductList> itemList;
+    MyRestaurantMenuAdapter adapter;
+    private SessionManager sessionManager;
+
+    private TextView cartCountTv, nodata;
+
+    String res_id = "";
+    String address;
+
+
+    RoomDB database;
+    List<MainData> dataList = new ArrayList<>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
+        setContentView(R.layout.activity_retaurant_detail);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        AppBarLayout appBarLayout = findViewById(R.id.app_bar);
+        notification_badge = findViewById(R.id.notification_badge);
+        restaurantMenuRv = findViewById(R.id.restaurantMenuRv);
+
+
+        shopNameTv = findViewById(R.id.shopNameTv);
+        ratingsTv = findViewById(R.id.ratingsTv);
+        dTimeTv = findViewById(R.id.dTimeTv);
+        offerLabelTv = findViewById(R.id.offerLabelTv);
+        cartCountTv = findViewById(R.id.cartCountTv);
+        cartBtn = findViewById(R.id.cartBtn);
+        nodata = findViewById(R.id.nodata);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null)
+        {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+        }
+
+        sessionManager = new SessionManager(this);
+        //store database value in data list
+        //Initialize database
+        database = RoomDB.getInstance(this);
+        dataList = database.mainDao().getAll();
+
+        final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsingToolbar);
+
+        if (getIntent() != null){
+            shopName = getIntent().getStringExtra("shopName");
+            shopAddress = getIntent().getStringExtra("shopAddress");
+            rating = getIntent().getStringExtra("ratings");
+            dTime = getIntent().getStringExtra("dTime");
+            discount = getIntent().getStringExtra("discount");
+            discountMin = getIntent().getStringExtra("discountMin");
+            res_id = getIntent().getStringExtra("res_id");
+            shopNameTv.setText(shopName);
+            ratingsTv.setText(rating);
+            dTimeTv.setText(dTime+" Mins");
+
+            if (discount.equalsIgnoreCase("0")){
+                offerLabelTv.setVisibility(View.GONE);
+            }
+            else {
+                offerLabelTv.setVisibility(View.VISIBLE);
+                offerLabelTv.setText("Get "+discount + "% off on order above Rs."+discountMin);
+            }
+
+
+
+        }
+
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+                if (scrollRange == -1){
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0){
+                    collapsingToolbarLayout.setTitle(shopName);
+                    isShow = false;
+                }else{
+                    collapsingToolbarLayout.setTitle("");
+                    isShow = true;
+                }
+            }
+        });
+
+
+        cartCount();
+
+        itemList = new ArrayList<>();
+
+        if (InternetConnection.checkConnection(ShopDetailActivity.this))
+       getProductList();
+
+
+       findViewById(R.id.backBtn).setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               onBackPressed();
+           }
+       });
+        cartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditCartActivity();
+            }
+        });
+
+        notification_badge.setText(String.valueOf(10));
+    }
+
+    public void cartCount() {
+        int count = dataList.size();
+        if(count<=0){
+            cartCountTv.setVisibility(View.GONE);
+        }else {
+            cartCountTv.setVisibility(View.VISIBLE);
+            cartCountTv.setText(""+count);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //store database value in data list
+        dataList = database.mainDao().getAll();
+    }
+
+    private void openEditCartActivity() {
+        Intent intent = new Intent(ShopDetailActivity.this, EditCartActivity.class);
+        intent.putExtra("res_id",res_id);
+        intent.putExtra("shopName",shopName);
+        intent.putExtra("shopAddress", shopAddress);
+        startActivity(intent);
+        overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+
+    }
+
+    private void getProductList() {
+        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
+        Call<ShopDataList> call = apiInterface.getProductList(res_id);
+        call.enqueue(new Callback<ShopDataList>() {
+            @Override
+            public void onResponse(Call<ShopDataList> call, Response<ShopDataList> response) {
+                ShopDataList model = response.body();
+                if (model != null && model.getSuccess() && model.getData().size()>0){
+                    itemList.clear();
+                    itemList = model.getData();
+                    adapter = new MyRestaurantMenuAdapter(ShopDetailActivity.this, itemList);
+                    restaurantMenuRv.setAdapter(adapter);
+                    nodata.setVisibility(View.GONE);
+                }
+                else {
+                    if (model != null && model.getData().size()==0){
+                        Toast.makeText(ShopDetailActivity.this, "Product Not Found", Toast.LENGTH_SHORT).show();
+                        nodata.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        Toast.makeText(ShopDetailActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                        nodata.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShopDataList> call, Throwable t) {
+
+                Log.d("TahseenKhan",t.getMessage());
+                nodata.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+    }
+}

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".3"
+            android:background="@color/appcolor">
+
+            <ImageView
+                android:id="@+id/img_pass"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/help" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/img_pass"
+                android:layout_marginLeft="10dp"
+                android:text="Helps"
+                android:textColor="@color/white"
+                android:textSize="35dp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".7"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:text="General queries and FAQ"
+                android:textColor="@color/black"
+                android:textSize="@dimen/denim_20"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="1. I have an issue with a order"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="2. I want to report an issue about a caption"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="3. Manage My Pneck account"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="4. I have an issue with Pneck Wallet"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="5. I am facing issues while booking a order"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/denim_20"
+                android:fontFamily="sans-serif"
+                android:text="6. My iaause is not mentioned above"
+                android:textColor="@color/black"
+                android:textSize="@dimen/contact_font" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

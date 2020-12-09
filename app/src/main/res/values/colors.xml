@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#20B2AA</color>
+    <color name="colorPrimaryDark">#20B2AA</color>
+    <color name="colorAccent">#0C0FE9</color>
+
+    <color name="primary_darker_600">#00ffff</color>
+
+    <color name="notification_color">#00ffff</color>
+    <color name="colorGrey1">#888888</color>
+    <color name="windowBackground">#eeeeee</color>
+
+    <color name="btn_back_color">#00ffff</color>
+    <color name="text_color">#0C0FE9</color>
+    <color name="my_color">#99000000</color>
+    <color name="trans_white">#99ffffff</color>
+
+    <color name="txt_color">#191919</color>
+    <color name="bg_color">#ececef</color>
+    <color name="dark_gray">#313030</color>
+    <color name="light_green">#14c167</color>
+    <string name="proceed" translatable="false">Proceed</string>
+    <color name="overlay_white">#656668</color>
+
+
+    <color name="colorWhite">#ffff</color>
+    <color name="colorGrey00">#f5f0f0</color>
+    <color name="colorGrey01">#c9c9c9</color>
+    <color name="colorGrey02">#959595</color>
+    <color name="colorBlack">#000</color>
+    <color name="colorGreen">#43a047</color>
+    <color name="colorRed">#F4511E</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="hint_color">#AEB0B2</color>
+    <color name="btn_color">#749F31</color>
+    <color name="white">#ffff</color>
+    <color name="forget_color">#878787</color>
+    <color name="black">#000000</color>
+    <color name="yellow">#FFC107</color>
+    <color name="appcolor">#1EB517</color>
+    <color name="redcolor">#b30000</color>
+    <color name="colorRouteLine">#FF4081</color>
+
+    <color name="overlay_dark_40">#66000000</color>
+    <color name="transparentcolor">#0D000000</color>
+
+    <color name="primary_50">#E0F7FA</color>
+    <color name="primary_100">#B2EBF2</color>
+    <color name="primary_200">#80DEEA</color>
+    <color name="primary_300">#00ffff</color>
+    <color name="primary_400">#00ffff</color>
+    <color name="primary_500">#00ffff</color>
+    <color name="primary_600">#00ffff</color>
+    <color name="primary_700">#00ffff</color>
+    <color name="primary_800">#00ffff</color>
+    <color name="primary_900">#00ffff</color>
+    <color name="primary_A100">#84FFFF</color>
+    <color name="primary_A200">#18FFFF</color>
+    <color name="primary_A400">#00E5FF</color>
+    <color name="primary_A700">#00B8D4</color>
+
+   <!-- <color name="primary_50">#E0F7FA</color>
+    <color name="primary_100">#B2EBF2</color>
+    <color name="primary_200">#80DEEA</color>
+    <color name="primary_300">#4DD0E1</color>
+    <color name="primary_400">#26C6DA</color>
+    <color name="primary_500">#00BCD4</color>
+    <color name="primary_600">#00ACC1</color>
+    <color name="primary_700">#0097A7</color>
+    <color name="primary_800">#00838F</color>
+    <color name="primary_900">#006064</color>
+    <color name="primary_A100">#84FFFF</color>
+    <color name="primary_A200">#18FFFF</color>
+    <color name="primary_A400">#00E5FF</color>
+    <color name="primary_A700">#00B8D4</color>-->
+
+   <!-- <color name="primary_50">#E8EAF6</color>
+    <color name="primary_100">#C5CAE9</color>
+    <color name="primary_200">#9FA8DA</color>
+    <color name="primary_300">#7986CB</color>
+    <color name="primary_400">#5C6BC0</color>
+    <color name="primary_500">#0C0FE9</color>
+    <color name="primary_600">#0205E4</color>
+    <color name="primary_700">#0205E4</color>
+    <color name="primary_800">#283593</color>
+    <color name="primary_900">#1A237E</color>
+    <color name="primary_A100">#8C9EFF</color>
+    <color name="primary_A200">#536DFE</color>
+    <color name="primary_A400">#3D5AFE</color>
+    <color name="primary_A700">#304FFE</color>-->
+
+
+    <color name="grey_3">#f7f7f7</color>
+    <color name="grey_5">#f2f2f2</color>
+    <color name="grey_10">#e6e6e6</color>
+    <color name="grey_20">#cccccc</color>
+    <color name="grey_40">#999999</color>
+    <color name="grey_60">#666666</color>
+    <color name="grey_80">#37474F</color>
+    <color name="grey_90">#263238</color>
+
+    <color name="White">#fff</color>
+    <color name="darkGrey">#424242</color>
+    <color name="blue1">#03a9f4</color>
+
+    <color name="grey_50">#FAFAFA</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_400">#BDBDBD</color>
+    <color name="grey_500">#9E9E9E</color>
+    <color name="grey_600">#757575</color>
+    <color name="grey_700">#616161</color>
+    <color name="grey_800">#424242</color>
+    <color name="grey_900">#212121</color>
+
+
+    <color name="warning_color">#F44E41</color>
+    <color name="colorPrimaryText">#000000</color>
+    <color name="colorSecondaryText">#979696</color>
+</resources>

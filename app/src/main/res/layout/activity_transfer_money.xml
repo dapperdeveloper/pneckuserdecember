@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="0dp"
+    tools:context=".activity.registrationSecond.Activity.TransferMoneyActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/top_view"
+        android:visibility="gone"
+        android:background="@color/black"
+        android:alpha="0.4"
+        android:orientation="vertical"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="230dp"
+        android:background="@drawable/card_shadow"
+        android:id="@+id/login_details_RL1_id">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/Goback"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_white_cross"
+            android:tint="@color/black"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send_money"
+                android:padding="3dp"
+                android:layout_margin="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/pneck_pay_it_s_safe_and_secure"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="@string/select_the_member_type_to_whom_you_would_like_to_transfer_the_wallet_balance"
+                android:textColor="@color/colorBlack"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="start"
+                android:layout_marginTop="16dp"/>
+
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="start">
+
+                <RadioButton
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user"
+                    android:buttonTint="@color/colorPrimary"
+                    android:layout_marginRight="@dimen/denim_20"
+                    android:textSize="16sp"
+                    android:padding="10dp"/>
+
+                <RadioButton
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/provider"
+                    android:buttonTint="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:padding="10dp"/>
+
+            </RadioGroup>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="22dp"
+                android:layout_marginTop="16dp"
+                style="@style/EditText.Grey"
+                android:hint="Enter Email or Phone"/>
+
+            <Button
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:text="@string/next"
+                android:enabled="false"
+                android:layout_margin="16dp"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                />
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</RelativeLayout>

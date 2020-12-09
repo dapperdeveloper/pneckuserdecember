@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/transparent"
+    android:layout_height="match_parent"
+    >
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:contentInsetStart="0dp"
+            android:layout_width="match_parent"
+            android:elevation="4dp"
+            android:layout_height="48dp"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:minHeight="48dp"
+            app:titleTextAppearance="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+            android:background="?attr/colorPrimary"
+            android:title="Select Language"
+            android:layout_marginStart="2dp"
+            >
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+    <ListView
+        android:layout_marginTop="8dp"
+        android:divider="@color/transparent"
+        android:layout_below="@+id/appbar"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/countrylistView3"
+        android:padding="8dp"
+        android:dividerHeight="14.0sp"
+        android:layout_margin="8dp"
+        android:layout_marginStart="2dp"
+        />
+</RelativeLayout>

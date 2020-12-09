@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/custom_marker_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/rlui"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:id="@+id/uirl"
+            android:background="@drawable/marker_image_new"
+            android:backgroundTint="#000000">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_dp"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:layout_centerInParent="true"
+                android:contentDescription="@null"
+                android:src="@drawable/userr"
+                app:civ_border_color="#fff"
+                app:civ_border_width="3dp"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="150dp"
+            android:layout_height="48dp"
+            android:padding="2dp"
+            android:visibility="gone"
+            android:id="@+id/ddrl">
+
+            <LinearLayout
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/tll"
+                android:background="#000000">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="32"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorWhite"
+                    android:id="@+id/dest_time"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="min"
+                    android:textAlignment="center"
+                    android:textSize="10sp"
+                    android:textColor="@color/colorWhite"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/tll"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/destname"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#F3F6FF"
+                    android:text="Charbagh"
+                    android:textAlignment="center"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="2dp"
+        android:layout_height="14dp"
+        android:layout_below="@+id/rlui"
+        android:layout_centerHorizontal="true"
+        android:background="#000000"/>
+
+
+</RelativeLayout>
