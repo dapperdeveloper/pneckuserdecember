@@ -232,7 +232,6 @@ public class ShopHomeActivity extends AppCompatActivity {
                 else {
 
                     cuisinesLayout.setVisibility(View.VISIBLE);
-
                     Toast.makeText(ShopHomeActivity.this, "No Result Found...!", Toast.LENGTH_SHORT).show();
                 }
             }

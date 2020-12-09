@@ -1,5 +1,7 @@
 package com.callpneck.activity.registrationSecond.helper;
 
+import com.callpneck.activity.registrationSecond.Model.sendMoneyResponse.UserData;
+
 import java.text.DecimalFormat;
 
 public class Constant {
@@ -21,4 +23,5 @@ public class Constant {
     public static Double WALLET_BALANCE = 0.0;
     public static Double SETTING_MINIMUM_AMOUNT_FOR_FREE_DELIVERY = 0.0;
     public static DecimalFormat decimalformatData = new DecimalFormat("0.00");
+    public static UserData user;
 }

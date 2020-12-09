@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ public class AddMoneyActivity extends AppCompatActivity implements PaymentResult
     private static final String TAG = CheckoutActivity.class.getSimpleName();
     View top_view;
     ImageView decreaseBtn, increaseBtn;
-    TextView moneyTv;
+    EditText moneyTv;
     CardView hundredBtn, threeHundredBtn, fiveHundredBtn;
     Button addMoneyBtn;
     public String razorPayId;
@@ -139,7 +140,6 @@ public class AddMoneyActivity extends AppCompatActivity implements PaymentResult
     private boolean validation(){
         boolean valid = true;
         totalAmount = moneyTv.getText().toString().trim();
-        amount = String.valueOf(Double.valueOf(totalAmount) * 100).split("\\.");
         if (TextUtils.isEmpty(totalAmount)) {
             Toast.makeText(AddMoneyActivity.this, "Please add some money!", Toast.LENGTH_SHORT).show();
             valid = false;
@@ -163,6 +163,7 @@ public class AddMoneyActivity extends AppCompatActivity implements PaymentResult
         return valid;
     }
     private void startAmount() {
+        amount = String.valueOf(Double.valueOf(totalAmount) * 100).split("\\.");
         /**
          * Instantiate Checkout
          */

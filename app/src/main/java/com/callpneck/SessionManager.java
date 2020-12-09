@@ -42,6 +42,9 @@ public class SessionManager {
 
     public static final String USER_PASS_WORD="user_pass_word";
 
+    public static final String RECEIVER_ID="receiver_id";
+
+
     public void saveUserMobileAndPass(String mobile,String pass){
         editor.putString(USER_PASS_WORD,pass);
         editor.putString(USER_MOBILE,mobile);
@@ -189,6 +192,14 @@ public class SessionManager {
 
     public String getUserMobile() {
         return pref.getString(USER_MOBILE, null);
+    }
+
+    public void setReceiverId(String receiverId) {
+        editor.putString(RECEIVER_ID, receiverId);
+        editor.commit();
+    }
+    public String getReceiverId() {
+        return pref.getString(RECEIVER_ID, null);
     }
 
     public void setUserMobile(String userMobile) {

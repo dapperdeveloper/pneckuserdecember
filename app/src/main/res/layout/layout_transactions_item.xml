@@ -37,13 +37,14 @@
             app:layout_constraintStart_toEndOf="@+id/recImgView"
             app:layout_constraintTop_toTopOf="parent">
 
+
             <TextView
                 android:id="@+id/userNameTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Amount credited by user via credit/debit."
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/dateTv"
@@ -61,10 +62,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rs.500"
+
             android:textColor="@color/black"
             android:textSize="20sp"
 
-            android:layout_marginRight="3dp"
+            android:layout_marginRight="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/divider"
             app:layout_constraintTop_toTopOf="parent" />

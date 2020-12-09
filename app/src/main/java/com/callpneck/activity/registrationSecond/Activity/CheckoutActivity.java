@@ -34,6 +34,7 @@ import com.callpneck.activity.registrationSecond.Model.RawData;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ResponseOrderSubmit.ResponseOrderSubmit;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ShopDataList;
 import com.callpneck.activity.registrationSecond.Model.getAddress.ResponseAddress;
+import com.callpneck.activity.registrationSecond.Model.walletOrder.WalletOrder;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
 import com.callpneck.activity.registrationSecond.helper.Constant;
@@ -166,7 +167,8 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                     } else {
                         usedBalance = Constant.WALLET_BALANCE;
                         tvWltBalance.setText(getString(R.string.remaining_wallet_balance) + Constant.SETTING_CURRENCY_SYMBOL + "0.0");
-                        lytPayOption.setVisibility(View.VISIBLE);
+                        lytPayOption.setVisibility(View.GONE);
+                        paymentMethod = "wallet";
                     }
                     subtotal = (subtotal - usedBalance);
                     tvWallet.setText("-" + Constant.SETTING_CURRENCY_SYMBOL + usedBalance);
@@ -183,13 +185,16 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
             @Override
             public void onClick(View view) {
                 if (validation()){
-                    if (paymentMethod.equals(getResources().getString(R.string.codpaytype)) || paymentMethod.equals("wallet")){
+                    if (paymentMethod.equals(getResources().getString(R.string.codpaytype))){
                         if (InternetConnection.checkConnection(CheckoutActivity.this))
                             PlaceOrderProcess();
                     }
                     else if (paymentMethod.equals(getString(R.string.razor_pay))){
                         if (InternetConnection.checkConnection(CheckoutActivity.this))
                             startPayment();
+                    }
+                    else if ( paymentMethod.equals("wallet")){
+                        OrderByWallet();
                     }
                 }
 
@@ -198,6 +203,47 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         setPaymentMethod();
 
 
+    }
+
+    private void OrderByWallet() {
+        progressDialog.setMessage("Ordering....");
+        progressDialog.show();
+        Call<WalletOrder> call = apiInterface.orderSubmitWallet(res_id, user_id, lati, longi, item_count, total_amount,
+                json, userName, userMobile, usr_address, userMail, usedBalance+"");
+
+        call.enqueue(new Callback<WalletOrder>() {
+            @Override
+            public void onResponse(Call<WalletOrder> call, Response<WalletOrder> response) {
+
+                try {
+                    WalletOrder orderSubmit  = response.body();
+                    if (orderSubmit != null && orderSubmit.getSuccess()){
+                        startActivity(new Intent(CheckoutActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        finish();
+                        progressDialog.dismiss();
+                    }
+                    else if(orderSubmit != null && !orderSubmit.getSuccess()) {
+                        progressDialog.dismiss();
+                        Toast.makeText(CheckoutActivity.this, orderSubmit.getMessage(), Toast.LENGTH_SHORT).show();
+                    }else {
+                        progressDialog.dismiss();
+                        Toast.makeText(CheckoutActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<WalletOrder> call, Throwable t) {
+                Toast.makeText(CheckoutActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
     }
 
     private void getUserDetails() {
@@ -231,6 +277,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         lytPayOption.setVisibility(View.VISIBLE);
         tvWltBalance.setText(getString(R.string.total_balance) + Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
         lytWallet.setVisibility(View.GONE);
+        paymentMethod ="";
         chWallet.setChecked(false);
         chWallet.setTag("false");
         SetDataTotal();

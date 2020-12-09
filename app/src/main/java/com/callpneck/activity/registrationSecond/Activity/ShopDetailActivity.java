@@ -90,7 +90,7 @@ public class ShopDetailActivity extends AppCompatActivity {
         //store database value in data list
         //Initialize database
         database = RoomDB.getInstance(this);
-        dataList = database.mainDao().getAll();
+//        dataList = database.mainDao().getAll();
 
         final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsingToolbar);
 
@@ -164,6 +164,8 @@ public class ShopDetailActivity extends AppCompatActivity {
     }
 
     public void cartCount() {
+        //store database value in data list
+        dataList = database.mainDao().getAll();
         int count = dataList.size();
         if(count<=0){
             cartCountTv.setVisibility(View.GONE);

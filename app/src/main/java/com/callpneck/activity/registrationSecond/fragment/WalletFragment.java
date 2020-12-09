@@ -1,5 +1,6 @@
 package com.callpneck.activity.registrationSecond.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +23,12 @@ import com.callpneck.activity.registrationSecond.Activity.TransferMoneyActivity;
 import com.callpneck.activity.registrationSecond.Adapter.MyTransactionAdapter;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.Model.Transaction;
+import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentList;
+import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentListResponse;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUser;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +48,7 @@ public class WalletFragment extends Fragment {
 
     RecyclerView transactionRv;
     MyTransactionAdapter adapter;
-    List<Transaction> transactionList;
+    List<PaymentList> transactionList;
     CardView addMoneyBtn, transferMoneyBtn, transactionBtn;
     TextView walletBlncTv;
     private SessionManager sessionManager;
@@ -71,19 +76,51 @@ public class WalletFragment extends Fragment {
         user_id = sessionManager.getUserid();
         transactionList = new ArrayList<>();
 
-       transactionList.add(new Transaction("send","Transferred Money to Jimmy(User) by Wallet","15 Sep 2020(Tue)","Rs.500"));
-        transactionList.add(new Transaction("receive","Amount credited by User via credit/debit","15 Sep 2020(Tue)","Rs.500"));
+        getTransactionHistory(user_id);
 
-        transactionList.add(new Transaction("receive","Amount credited by User via credit/debit","15 Sep 2020(Tue)","Rs.500"));
-        transactionList.add(new Transaction("send","Transferred Money to Jimmy(User) by Wallet","15 Sep 2020(Tue)","Rs.500"));
 
-        adapter = new MyTransactionAdapter(getContext(),transactionList);
-        transactionRv.setAdapter(adapter);
 
         getWalletBalance();
 
         clicks();
         return view;
+
+    }
+
+    private void getTransactionHistory(String user_id) {
+        ApiInterface apiInterface = ApiClient.getInstance(getContext()).getApi();
+        Call<PaymentListResponse> call = apiInterface.getPaymentList(user_id);
+        call.enqueue(new Callback<PaymentListResponse>() {
+            @Override
+            public void onResponse(Call<PaymentListResponse> call, Response<PaymentListResponse> response) {
+                try {
+
+                    PaymentListResponse model = response.body();
+                    if (model != null && model.getStatus()){
+                        transactionList.clear();
+                        transactionList = model.getPaymentList();
+                        adapter = new MyTransactionAdapter(getContext(),transactionList);
+                        transactionRv.setAdapter(adapter);
+                        showSnackBar(getActivity(), model.getMessage());
+                    }
+                    else if(model != null && !model.getStatus()){
+                        showSnackBar(getActivity(),model.getMessage());
+                    }
+                    else {
+                        showSnackBar(getActivity(),"Server Error");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<PaymentListResponse> call, Throwable t) {
+
+                showSnackBar(getActivity(), t.getMessage());
+            }
+        });
 
     }
 
@@ -154,5 +191,13 @@ public class WalletFragment extends Fragment {
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
 
+    }
+    public static void showSnackBar(Activity activity, String snackTitle) {
+        View Parentview=activity.findViewById(android.R.id.content);
+        Snackbar snackbar = Snackbar.make(Parentview, snackTitle, Snackbar.LENGTH_SHORT);
+        snackbar.show();
+        View view = snackbar.getView();
+        TextView txtv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+        txtv.setGravity(Gravity.CENTER_HORIZONTAL);
     }
 }

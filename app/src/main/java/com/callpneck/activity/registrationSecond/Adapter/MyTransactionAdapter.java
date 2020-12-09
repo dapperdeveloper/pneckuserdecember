@@ -11,18 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.callpneck.R;
+import com.callpneck.SessionManager;
 import com.callpneck.activity.registrationSecond.Model.Transaction;
+import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentList;
 
 import java.util.List;
 
 public class MyTransactionAdapter extends RecyclerView.Adapter<MyTransactionAdapter.MyViewHolder> {
 
     Context context;
-    List<Transaction> transactionList;
+    List<PaymentList> transactionList;
 
-    public MyTransactionAdapter(Context context, List<Transaction> transactionList) {
+    SessionManager sessionManager;
+    public MyTransactionAdapter(Context context, List<PaymentList> transactionList) {
         this.context = context;
         this.transactionList = transactionList;
+        sessionManager = new SessionManager(context);
     }
 
     @NonNull
@@ -37,16 +41,19 @@ public class MyTransactionAdapter extends RecyclerView.Adapter<MyTransactionAdap
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        Transaction transaction = transactionList.get(position);
-        holder.moneyTv.setText(transaction.getMoney());
-        holder.userNameTv.setText(transaction.getUserName());
-        holder.dateTv.setText(transaction.getDate());
-        if (transaction.getType().equals("send")){
+        PaymentList transaction = transactionList.get(position);
+        holder.moneyTv.setText(new StringBuilder("₹").append(transaction.getAmount()));
+
+
+        holder.dateTv.setText(transaction.getDates());
+        if (transaction.getStatus().equals("Send")){
             holder.recImgView.setImageResource(R.drawable.ic_send_money);
             holder.divider.setBackgroundColor(context.getResources().getColor(R.color.redcolor));
+            holder.userNameTv.setText("Transferred Money to "+transaction.getReceveName()+" By Wallet");
         }
-        else if(transaction.getType().equals("receive")){
+        else if(transaction.getStatus().equals("received")){
             holder.recImgView.setImageResource(R.drawable.ic_receive_money);
+            holder.userNameTv.setText("Received Money From "+transaction.getSenderName() +" By Wallet");
             holder.divider.setBackgroundColor(context.getResources().getColor(R.color.colorGreen));
         }
     }

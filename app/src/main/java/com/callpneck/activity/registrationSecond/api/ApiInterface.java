@@ -8,9 +8,13 @@ import com.callpneck.activity.registrationSecond.Model.foodDashboard.ResponseFoo
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ResponseOrderSubmit.ResponseOrderSubmit;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ShopDataList;
 import com.callpneck.activity.registrationSecond.Model.getAddress.ResponseAddress;
+import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentListResponse;
 import com.callpneck.activity.registrationSecond.Model.response.responseCategoryList.ModelProvider;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUser;
 import com.callpneck.activity.registrationSecond.Model.responseAddMoney.AddMoneyResponse;
+import com.callpneck.activity.registrationSecond.Model.responseAddMoney.SendMoneyResponse;
+import com.callpneck.activity.registrationSecond.Model.sendMoneyResponse.CheckUserForMoney;
+import com.callpneck.activity.registrationSecond.Model.walletOrder.WalletOrder;
 import com.squareup.okhttp.ResponseBody;
 
 import okhttp3.RequestBody;
@@ -87,6 +91,20 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("wallet_list")
     Call<GetWallet> getWallet(@Field("user_id") String user_id);
+    @FormUrlEncoded
+    @POST("payment_list")
+    Call<PaymentListResponse> getPaymentList(@Field("user_id") String user_id);
+
+    @FormUrlEncoded
+    @POST("money_send_check_user")
+    Call<CheckUserForMoney> checkUserForMoney(@Field("email_mobile") String email_mobile);
+
+    @FormUrlEncoded
+    @POST("money_send")
+    Call<SendMoneyResponse> sendMoneyToUser(@Field("user_id") String user_id ,
+                                            @Field("sender_id") String sender_id ,
+                                            @Field("recevied_id") String recevied_id,
+                                            @Field("send_amount") String send_amount);
 
     @FormUrlEncoded
     @POST("add_money")
@@ -149,6 +167,22 @@ public interface ApiInterface {
                                              @Field("mobile") String mobile,
                                              @Field("usr_address") String usr_address,
                                              @Field("email") String email
+    );
+
+    @FormUrlEncoded
+    @POST("getorder_wallet")
+    Call<WalletOrder> orderSubmitWallet(@Field("res_id") String res_id,
+                                        @Field("user_id") String user_id,
+                                        @Field("lati") String lati,
+                                        @Field("longi") String longi,
+                                        @Field("item_count") String item_count,
+                                        @Field("total_amount") String total_amount,
+                                        @Field("datas") String datas,
+                                        @Field("name") String name,
+                                        @Field("mobile") String mobile,
+                                        @Field("usr_address") String usr_address,
+                                        @Field("email") String email,
+                                        @Field("amount") String amount
     );
 
     @Multipart

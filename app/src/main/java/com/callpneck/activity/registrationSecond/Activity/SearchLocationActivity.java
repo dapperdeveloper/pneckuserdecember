@@ -185,7 +185,6 @@ public class SearchLocationActivity extends AppCompatActivity {
         public void afterTextChanged(Editable s) {
             if (isEditable && !s.toString().isEmpty() && s.length() > 2 && placesClient != null) {
                 getAutocompletePredictions(s.toString());
-
             }
 
         }
