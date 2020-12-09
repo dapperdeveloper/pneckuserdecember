@@ -250,37 +250,48 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(SubcategoryList item) {
                 if (item.getCate_type().equalsIgnoreCase("restaurant")) {
-                    Intent intent = new Intent(getContext(), ShopHomeActivity.class);
-                    intent.putExtra("categoryName", item.getTitle());
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null){
+                        Intent intent = new Intent(getContext(), ShopHomeActivity.class);
+                        intent.putExtra("categoryName", item.getTitle());
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                    }
+
 
                 } else if(item.getCate_type().equalsIgnoreCase("cab")){
-                    Intent intent = new Intent(getContext(), TaxiMainActivity.class);
-                    intent.putExtra("categoryName", item.getTitle());
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+                        Intent intent = new Intent(getContext(), TaxiMainActivity.class);
+                        intent.putExtra("categoryName", item.getTitle());
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                    }
                 }
                 else if(item.getCate_type().equalsIgnoreCase("provider")){
-                    Intent intent = new Intent(getContext(), ServiceDetailActivity.class);
-                    intent.putExtra("categoryName", item.getTitle());
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+                        Intent intent = new Intent(getContext(), ServiceDetailActivity.class);
+                        intent.putExtra("categoryName", item.getTitle());
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                    }
                 }
                 else if(item.getCate_type().equalsIgnoreCase("shop")){
-                    Intent intent = new Intent(getContext(), ProviderActivity.class);
-                    intent.putExtra("categoryName", item.getTitle());
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+                        Intent intent = new Intent(getContext(), ProviderActivity.class);
+                        intent.putExtra("categoryName", item.getTitle());
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                    }
                 }
                 else if(item.getCate_type().equalsIgnoreCase("delivery")){
-                    Intent intent = new Intent(getContext(), DeliveryMainActivity.class);
-                    intent.putExtra("categoryName", item.getTitle());
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+                        Intent intent = new Intent(getContext(), DeliveryMainActivity.class);
+                        intent.putExtra("categoryName", item.getTitle());
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                    }
                 }
                 else {
-                    Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Location not set", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -424,9 +435,8 @@ public class HomeFragment extends Fragment {
                 postalCode = addresses.get(0).getPostalCode();
                 knownName = addresses.get(0).getFeatureName();
                 locality = addresses.get(0).getSubLocality();
-
-                UserLatitude = "" + latitude;
-                UserLongitude = "" + longitude;
+                UserLatitude = "" + addresses.get(0).getLatitude();
+                UserLongitude = "" + addresses.get(0).getLongitude();
 
                 sessionManager.setUserLocation(UserLatitude, UserLongitude);
                 currentFullAddress = address;
