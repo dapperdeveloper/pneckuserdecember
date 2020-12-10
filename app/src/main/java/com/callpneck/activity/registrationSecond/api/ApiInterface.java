@@ -14,6 +14,7 @@ import com.callpneck.activity.registrationSecond.Model.response.responseOrder.Or
 import com.callpneck.activity.registrationSecond.Model.responseAddMoney.AddMoneyResponse;
 import com.callpneck.activity.registrationSecond.Model.responseAddMoney.SendMoneyResponse;
 import com.callpneck.activity.registrationSecond.Model.sendMoneyResponse.CheckUserForMoney;
+import com.callpneck.activity.registrationSecond.Model.userList.PneckUserList;
 import com.callpneck.activity.registrationSecond.Model.walletOrder.WalletOrder;
 import com.squareup.okhttp.ResponseBody;
 
@@ -194,4 +195,6 @@ public interface ApiInterface {
                                    @Part("category") RequestBody category);
 
 
+    @POST("pneck_user_list")
+    Call<PneckUserList> getPneckUserList();
 }

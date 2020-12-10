@@ -1,6 +1,7 @@
 package com.callpneck.activity.registrationSecond.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -9,6 +10,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
@@ -20,14 +22,21 @@ import android.widget.Toast;
 import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.SessionManager;
+import com.callpneck.activity.registrationSecond.Adapter.PneckUserListAdapter;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.Model.RawData;
 import com.callpneck.activity.registrationSecond.Model.responseAddMoney.SendMoneyResponse;
 import com.callpneck.activity.registrationSecond.Model.sendMoneyResponse.CheckUserForMoney;
+import com.callpneck.activity.registrationSecond.Model.userList.PneckList;
+import com.callpneck.activity.registrationSecond.Model.userList.PneckUserList;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
 import com.callpneck.activity.registrationSecond.helper.Constant;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,14 +44,16 @@ import retrofit2.Response;
 
 public class TransferMoneyActivity extends AppCompatActivity {
 
-    Button nextBtn,sendMoneyBtn;
-    EditText mailEt,moneyEt;
+    Button nextBtn;
+    EditText mailEt;
 
     String userMailOrNumber, user_id, money, receiverId;
-    LinearLayout checkingLayout, paymentLayout;
     ProgressDialog progressDialog;
-
     SessionManager sessionManager;
+    RecyclerView pneckUserRv;
+    PneckUserListAdapter adapter;
+    List<PneckList> pneckLists;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +63,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
 
         mailEt = findViewById(R.id.mailEt);
         nextBtn = findViewById(R.id.nextBtn);
-        checkingLayout = findViewById(R.id.checkingLayout);
-        paymentLayout = findViewById(R.id.paymentLayout);
-        moneyEt = findViewById(R.id.moneyEt);
-        sendMoneyBtn = findViewById(R.id.sendMoneyBtn);
+        pneckUserRv = findViewById(R.id.pneckUserRv);
 
         sessionManager = new SessionManager(this);
         progressDialog = new ProgressDialog(this);
@@ -64,31 +72,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
 
         user_id = sessionManager.getUserid();
 
-
-        findViewById(R.id.Goback).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        sendMoneyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                money = moneyEt.getText().toString().trim();
-                receiverId = sessionManager.getReceiverId();
-                if (TextUtils.isEmpty(money)){
-                    Toast.makeText(TransferMoneyActivity.this, "Enter money", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(receiverId)){
-                    Toast.makeText(TransferMoneyActivity.this, "Receiver id required", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                sendMoney(money,receiverId);
-
-            }
-        });
+        pneckLists = new ArrayList<>();
 
         mailEt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -117,19 +101,90 @@ public class TransferMoneyActivity extends AppCompatActivity {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mailEt.getText().toString().equals(sessionManager.getUserMail()) || mailEt.getText().toString().equals(sessionManager.getUserMobile())){
+                if (mailEt.getText().toString().trim().equals(sessionManager.getUserMail()) || mailEt.getText().toString().equals(sessionManager.getUserMobile())){
                     showSnackBar(TransferMoneyActivity.this, "You can not send money to yourself");
                 }else {
-                    checkingLayout.setVisibility(View.GONE);
-                    paymentLayout.setVisibility(View.VISIBLE);
+                    moneyDialog();
                 }
             }
         });
 
+        getPneckUserList();
+
 
     }
 
-    private void sendMoney(String money, String receiverId) {
+    private void getPneckUserList() {
+        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
+        Call<PneckUserList> call = apiInterface.getPneckUserList();
+        call.enqueue(new Callback<PneckUserList>() {
+            @Override
+            public void onResponse(Call<PneckUserList> call, Response<PneckUserList> response) {
+                try {
+                    PneckUserList model = response.body();
+                    if(model != null && model.getStatus()){
+                        pneckLists.clear();
+                        pneckLists = model.getPneckList();
+
+                        adapter = new PneckUserListAdapter(getApplicationContext(), pneckLists, new PneckUserListAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(PneckList item) {
+                                String mobile = item.getMobile();
+                                mailEt.setText(mobile);
+                            }
+                        });
+                        pneckUserRv.setAdapter(adapter);
+                    }
+                    else if (model != null && !model.getStatus()){
+                        showSnackBar(TransferMoneyActivity.this,model.getMessage());
+                    }
+                    else {
+                        showSnackBar(TransferMoneyActivity.this, "Server Error");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PneckUserList> call, Throwable t) {
+                showSnackBar(TransferMoneyActivity.this, t.getMessage());
+            }
+        });
+    }
+
+    private void moneyDialog() {
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+
+        View view = LayoutInflater.from(this).inflate(R.layout.botttom_dialog_send_money,null);
+        bottomSheetDialog.setContentView(view);
+        SessionManager sessionManager = new SessionManager(this);
+
+        EditText moneyEt =  view.findViewById(R.id.moneyEt);
+        Button  sendMoneyBtn = view.findViewById(R.id.sendMoneyBtn);
+
+        bottomSheetDialog.show();
+        sendMoneyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                money = moneyEt.getText().toString().trim();
+                receiverId = sessionManager.getReceiverId();
+                user_id = sessionManager.getUserid();
+                if (TextUtils.isEmpty(money)){
+                    Toast.makeText(TransferMoneyActivity.this, "Enter money", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(receiverId)){
+                    Toast.makeText(TransferMoneyActivity.this, "Receiver id required", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                sendMoney(user_id,money,receiverId);
+                bottomSheetDialog.dismiss();
+            }
+        });
+    }
+
+    private void sendMoney(String user_id,String money, String receiverId) {
         progressDialog.show();
         ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
         Call<SendMoneyResponse> call = apiInterface.sendMoneyToUser(user_id, user_id, receiverId, money);
@@ -181,7 +236,6 @@ public class TransferMoneyActivity extends AppCompatActivity {
                     else if(model != null && !model.getStatus()){
                         nextBtn.setEnabled(false);
                         mailEt.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                        showSnackBar(TransferMoneyActivity.this, model.getMessage());
                     }
                     else {
                         nextBtn.setEnabled(false);
