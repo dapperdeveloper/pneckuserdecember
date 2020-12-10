@@ -1,16 +1,22 @@
 package com.callpneck.activity.registrationSecond.fragment;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -33,6 +41,7 @@ import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.deliveryboy.DeliveryMainActivity;
 import com.callpneck.activity.registrationSecond.Activity.CheckoutActivity;
+import com.callpneck.activity.registrationSecond.Activity.HomeMapActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderActivity;
 import com.callpneck.activity.registrationSecond.Activity.SearchActivity;
 import com.callpneck.activity.registrationSecond.Activity.SearchLocationActivity;
@@ -47,11 +56,21 @@ import com.callpneck.model.dashboard.SubcategoryList;
 import com.callpneck.taxi.TaxiMainActivity;
 import com.callpneck.utils.AutoScrollViewPager;
 import com.callpneck.utils.InternetConnection;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -63,6 +82,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+import static com.callpneck.activity.registrationSecond.helper.Constant.LAUNCH_ADDRESS_SET_SCREEN;
+import static com.callpneck.activity.registrationSecond.helper.Constant.REQUEST_CHECK_SETTINGS;
 
 
 public class HomeFragment extends Fragment {
@@ -71,7 +94,7 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
         // Required empty public constructor
     }
-
+    public static final int PERMISSIONS_REQUEST_TOKEN = 2001;
     private String city = "";
     private String state = "";
     private String SubAdminAreaAfterState = "";
@@ -129,12 +152,12 @@ public class HomeFragment extends Fragment {
         categoryList = new ArrayList<>();
     }
 
-
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
         init(view);
         initView();
         loc = view.findViewById(R.id.loc);
@@ -142,33 +165,34 @@ public class HomeFragment extends Fragment {
         ll = view.findViewById(R.id.ll);
         locationBtn = view.findViewById(R.id.locationBtn);
 
-        getLocationPermission();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         sessionManager = new SessionManager(getContext());
-        getDeviceLocation();
 
         if (InternetConnection.checkConnection(getContext()))
         getData();
 
 
-        loc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getDeviceLocation();
-            }
-        });
+
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertDialog();
+                if (checkPermission()){
+                    settingsrequest();
+                }else {
+                    askForPermission();
+                }
             }
         });
 
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openSearchLocationActivity();
+                if (checkPermission()){
+                    settingsrequest();
+                }else {
+                    askForPermission();
+                }
             }
         });
         searchIcon.setOnClickListener(new View.OnClickListener() {
@@ -181,12 +205,195 @@ public class HomeFragment extends Fragment {
         return view;
 
     }
+    private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat
+                    .checkSelfPermission(getContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)+
+                    ContextCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.READ_EXTERNAL_STORAGE) + ContextCompat
+                    .checkSelfPermission(getContext(),
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                // Permission is not granted
+                return false;
+            }else {
+                return true;
+            }
+        }else {
+            return true;
+        }
+    }
+
+    public void askForPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if (ContextCompat
+                    .checkSelfPermission(getContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)+
+                    ContextCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.FOREGROUND_SERVICE)+
+                    ContextCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.READ_EXTERNAL_STORAGE) +  ContextCompat
+                    .checkSelfPermission(getContext(),
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale
+                        (getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) ||
+                        ActivityCompat.shouldShowRequestPermissionRationale
+                                (getActivity(), Manifest.permission.FOREGROUND_SERVICE)||
+                        ActivityCompat.shouldShowRequestPermissionRationale
+                                (getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) ||
+                        ActivityCompat.shouldShowRequestPermissionRationale
+                                (getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                    Snackbar snackbar = Snackbar
+                            .make(view.findViewById(R.id.main_layout), getString(R.string.PERMISSION_SNACK_BAR_MESSAGE), Snackbar.LENGTH_LONG);
+                    TextView snack_tv = (TextView)snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+                    snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary_800));
+                    snack_tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                    snack_tv.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                    snackbar.setAction(R.string.ENABLE, new View.OnClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.M)
+                        @Override
+                        public void onClick(View view) {
+                            requestPermissions(
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                            Manifest.permission.FOREGROUND_SERVICE,
+                                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    PERMISSIONS_REQUEST_TOKEN);
+                        }
+                    });
+                    snackbar.show();
+
+                }else {
+                    requestPermissions(
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.FOREGROUND_SERVICE,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            PERMISSIONS_REQUEST_TOKEN);
+                }
+
+            }
+        }else {
+            if (!GPSstatusCheck()) {
+                settingsrequest();
+            }
+        }
+    }
+    public boolean GPSstatusCheck() {
+        final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_TOKEN:
+                if (grantResults.length> 0) {
+
+
+                    boolean locationPemission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+                    if (locationPemission){
+                        if (InternetConnection.checkConnection(getContext())){
+
+                            settingsrequest();
+
+                        }else {
+                            Toast.makeText(getContext(),getResources().getString(R.string.CHECK_YOUR_INTERNET_CONNECTION),Toast.LENGTH_SHORT).show();
+                        }
+                    }else {
+                        Toast.makeText(getContext(),"Permission Denied can't post Global post.",Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+                break;
+        }
+    }
+    private SettingsClient mSettingsClient;
+    private LocationRequest mLocationRequest;
+    private LocationSettingsRequest mLocationSettingsRequest;
+    // location updates interval - 10sec
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
+
+
+    public void settingsrequest() {
+
+        mSettingsClient = LocationServices.getSettingsClient(getActivity());
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        mLocationSettingsRequest = builder.build();
+
+        mSettingsClient
+                .checkLocationSettings(mLocationSettingsRequest)
+                .addOnSuccessListener(getActivity(), new OnSuccessListener<LocationSettingsResponse>() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                        Log.i("TAG", "All location settings are satisfied.");
+
+
+                        //noinspection MissingPermission
+                        openSearchLocationActivity();
+
+                    }
+                })
+                .addOnFailureListener(getActivity(), new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        int statusCode = ((ApiException) e).getStatusCode();
+                        switch (statusCode) {
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                Log.i("TAG", "Location settings are not satisfied. Attempting to upgrade " +
+                                        "location settings ");
+                                try {
+                                    // Show the dialog by calling startResolutionForResult(), and check the
+                                    // result in onActivityResult().
+                                    ResolvableApiException rae = (ResolvableApiException) e;
+                                    rae.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
+                                } catch (IntentSender.SendIntentException sie) {
+                                    Log.i("TAG", "PendingIntent unable to execute request.");
+                                }
+                                break;
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                String errorMessage = "Location settings are inadequate, and cannot be " +
+                                        "fixed here. Fix in Settings.";
+                                Log.e("TAG", errorMessage);
+
+                                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                });
+    }
+
+
+
+
 
     private void openSearchLocationActivity() {
         Intent intent = new Intent(getActivity(), SearchLocationActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,LAUNCH_ADDRESS_SET_SCREEN);
         getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
     }
+
 
     private void alertDialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
@@ -219,18 +426,22 @@ public class HomeFragment extends Fragment {
         mainDashboardCall.enqueue(new Callback<MainDashboard>() {
             @Override
             public void onResponse(Call<MainDashboard> call, Response<MainDashboard> response) {
-                mainDashboard = response.body();
-                if (mainDashboard.getResponse().getData().getSubcategoryList().size()>0 && mainDashboard != null){
-                    loadCategoryView(mainDashboard.getResponse().getData().getSubcategoryList());
+                try {
+                    mainDashboard = response.body();
+                    if (mainDashboard.getResponse().getData().getSubcategoryList().size()>0 && mainDashboard != null){
+                        loadCategoryView(mainDashboard.getResponse().getData().getSubcategoryList());
+                    }
+
+                    if (mainDashboard.getResponse().getData().getBannerSliderImages().size()>0 && mainDashboard != null){
+                        loadBanner(mainDashboard.getResponse().getData().getBannerSliderImages());
+
+                    }
+
+                    progressBar.setVisibility(View.GONE);
+                }catch (Exception e){
+                    progressBar.setVisibility(View.GONE);
                 }
 
-
-                if (mainDashboard.getResponse().getData().getBannerSliderImages().size()>0 && mainDashboard != null){
-                    loadBanner(mainDashboard.getResponse().getData().getBannerSliderImages());
-
-                }
-
-                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -361,99 +572,26 @@ public class HomeFragment extends Fragment {
     //get current user location
 
 
+
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        mLocationPermissionGranted = false;
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mLocationPermissionGranted = true;
-
-                }
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==REQUEST_CHECK_SETTINGS){
+            if (resultCode==RESULT_OK) {
+                openSearchLocationActivity();
+            }else if (resultCode==RESULT_CANCELED){
+                Log.e("TAG","location enabl cancled"+data.getExtras());
             }
         }
-    }
-
-    private void getLocationPermission() {
-        if (ContextCompat.checkSelfPermission(getContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-    }
-
-    private void getDeviceLocation() {
-        Log.e("skjlksfjsfs", "inside getDeviceLocation ");
-        Toast.makeText(getContext(), "Getting current location", Toast.LENGTH_SHORT).show();
-        try {
-            if (mLocationPermissionGranted) {
-                Task locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = (Location) task.getResult();
-                            if (mLastKnownLocation != null) {
-                                getCompleteAddressString(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
-                            }
-
-                        } else {
-                            Log.d("Seraj", "Current location is null. Using defaults.");
-                            Log.e("Seraj", "Exception: %s", task.getException());
-
-                        }
-                    }
-                });
-            }
-        } catch (SecurityException e) {
-            Log.e("location_get_error", e.getMessage());
-        }
-    }
-
-    private void getCompleteAddressString(double latitude, double longitude) {
-
-        try {
-            Geocoder geocoder;
-            List<Address> addresses;
-            geocoder = new Geocoder(getContext(), Locale.getDefault());
-            addresses = geocoder.getFromLocation(latitude, longitude, 1);
-
-            if (addresses.size() > 0) {
-
-                String address = addresses.get(0).getAddressLine(0);
-                city = addresses.get(0).getLocality();
-                state = addresses.get(0).getAdminArea();
-                country = addresses.get(0).getCountryName();
-                postalCode = addresses.get(0).getPostalCode();
-                knownName = addresses.get(0).getFeatureName();
-                locality = addresses.get(0).getSubLocality();
-                UserLatitude = "" + addresses.get(0).getLatitude();
-                UserLongitude = "" + addresses.get(0).getLongitude();
-
+        else if (requestCode==LAUNCH_ADDRESS_SET_SCREEN){
+            if (data!=null&&data.hasExtra("user_complete_address")){
+                addressTv.setText(data.getStringExtra("user_complete_address"));
+                UserLatitude=data.getStringExtra("user_latitude");
+                UserLongitude=data.getStringExtra("user_longitude");
                 sessionManager.setUserLocation(UserLatitude, UserLongitude);
-                currentFullAddress = address;
-                Log.d("Seraj", address);
-                addressTv.setText(address);
-
-                Log.e("CURRENTADDRESS", "Latitude AAAAAA is called...." + UserLatitude.toString());
-                Log.e("CURRENTADDRESS", "Longitude AAAAAA  is called...." + UserLongitude.toString());
-                Log.e("CURRENTADDRESS", "address AAAAAA is called...." + address.toString());
-                //CompleteAddress.setSelection(CompleteAddress.getText().length());
-
             }
-
-        } catch (Exception e) {
-            Log.e("kjfksfsfsf", "this is error exception " + e.getMessage());
         }
-
     }
 
     //end user current location

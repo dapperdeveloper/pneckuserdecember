@@ -44,6 +44,11 @@ import com.callpneck.activity.registrationSecond.Activity.NotificationsActivity;
 import com.callpneck.activity.registrationSecond.Activity.OrderListActivity;
 import com.callpneck.activity.registrationSecond.Activity.TransferMoneyActivity;
 import com.callpneck.activity.registrationSecond.Activity.WorkMapActivity;
+import com.callpneck.activity.registrationSecond.Model.GetWallet;
+import com.callpneck.activity.registrationSecond.api.ApiClient;
+import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.helper.Constant;
+import com.callpneck.utils.ApiConfig;
 
 import org.json.JSONObject;
 
@@ -51,22 +56,25 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class ProfileFragment extends Fragment {
     ImageButton editProfileBtn;
 
-RelativeLayout logoutLayout, myBookingRBtn,myOrderRBtn, notificationsBtn, favouriteBtn, inviteRBtn, emergencyContactBtn,  changeCurrencyBtn
-        ,changeLanguageBtn, paymentMethodBtn, myWalletBtn, addMoneyBtn, sendMoneyBtn,
-        addHomeBtn, addWorkBtn, personalDetailBtn,
-        aboutUsBtn, privacyPolicyBtn, termNConditionBtn, feedbackBtn, contactUsBtn;
-LinearLayout inviteAndEarnBtn, topUpBtn, walletBtn, bookingBtn;
-View view;
+    RelativeLayout logoutLayout, myBookingRBtn, notificationsBtn,  inviteRBtn, emergencyContactBtn,  changeCurrencyBtn
+            ,changeLanguageBtn, paymentMethodBtn, myWalletBtn, addMoneyBtn, sendMoneyBtn,
+            addHomeBtn, addWorkBtn, personalDetailBtn,
+            aboutUsBtn, privacyPolicyBtn, termNConditionBtn, feedbackBtn, contactUsBtn;
+    LinearLayout inviteAndEarnBtn, topUpBtn, walletBtn, bookingBtn;
+    View view;
     private SessionManager sessionManager;
 
     String myMobile, myName;
     TextView user_name, user_mobile;
     CircleImageView circleImageView;
 
+    public TextView walletBlncTv;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -84,47 +92,15 @@ View view;
         activity= getActivity();
         view=inflater.inflate(R.layout.fragment_profile, container, false);
 
+        initView(view);
+
         sessionManager = new SessionManager(getContext());
         myMobile = sessionManager.getUserMobile();
         myName = sessionManager.getUserName();
-
-
-        user_name = (TextView) view.findViewById(R.id.textView2);
-        user_mobile = (TextView) view.findViewById(R.id.mobile_no);
-        circleImageView = view.findViewById(R.id.circleImageView);
-        editProfileBtn = view.findViewById(R.id.editProfileBtn);
-        logoutLayout=view.findViewById(R.id.logout_rel_layout);
-        inviteAndEarnBtn = view.findViewById(R.id.inviteAndEarnBtn);
-        topUpBtn = view.findViewById(R.id.topUpBtn);
-        walletBtn = view.findViewById(R.id.walletBtn);
-        bookingBtn = view.findViewById(R.id.bookingBtn);
-        myBookingRBtn = view.findViewById(R.id.myBookingRBtn);
-        myOrderRBtn = view.findViewById(R.id.myOrderRBtn);
-        notificationsBtn = view.findViewById(R.id.notificationsBtn);
-        favouriteBtn = view.findViewById(R.id.favouriteBtn);
-        inviteRBtn = view.findViewById(R.id.inviteRBtn);
-        emergencyContactBtn = view.findViewById(R.id.emergencyContactBtn);
-        changeCurrencyBtn = view.findViewById(R.id.changeCurrencyBtn);
-        changeLanguageBtn = view.findViewById(R.id.changeLanguageBtn);
-        //
-        paymentMethodBtn = view.findViewById(R.id.paymentMethodBtn);
-        //
-        myWalletBtn = view.findViewById(R.id.myWalletBtn);
-        addMoneyBtn = view.findViewById(R.id.addMoneyBtn);
-        sendMoneyBtn = view.findViewById(R.id.sendMoneyBtn);
-
-        aboutUsBtn = view.findViewById(R.id.aboutUsBtn);
-        privacyPolicyBtn = view.findViewById(R.id.privacyPolicyBtn);
-        termNConditionBtn = view.findViewById(R.id.termNConditionBtn);
-        contactUsBtn = view.findViewById(R.id.contactUsBtn);
-        feedbackBtn = view.findViewById(R.id.feedbackBtn);
-        personalDetailBtn = view.findViewById(R.id.personalDetailBtn);
-
-        addHomeBtn = view.findViewById(R.id.addHomeBtn);
-        addWorkBtn = view.findViewById(R.id.addWorkBtn);
-
         user_name.setText(myName);
         user_mobile.setText("+91 "+myMobile);
+
+        getWalletBalance();
 
         try {
             Glide.with(activity).load(sessionManager.getUserImage()).placeholder(R.drawable.ic_profile).into(circleImageView);
@@ -132,6 +108,35 @@ View view;
             e.printStackTrace();
         }
 
+        clickListeners();
+
+        return view;
+    }
+
+
+
+    private void getWalletBalance() {
+        ApiInterface apiInterface = ApiClient.getInstance(getContext()).getApi();
+        Call<GetWallet> call = apiInterface.getWallet(sessionManager.getUserid());
+        call.enqueue(new Callback<GetWallet>() {
+            @Override
+            public void onResponse(Call<GetWallet> call, retrofit2.Response<GetWallet> response) {
+                GetWallet getWallet = response.body();
+                if (getWallet != null && getWallet.getStatus()){
+                    walletBlncTv.setText("₹"+getWallet.getAmount()+"");
+                }
+                else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetWallet> call, Throwable t) {
+                Log.d("WalletBalance", t.getMessage());
+            }
+        });
+    }
+    private void clickListeners() {
         addHomeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -255,26 +260,14 @@ View view;
                 openInviteFriendActivity();
             }
         });
-        favouriteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openFavouriteActivity();
-            }
-        });
+
         notificationsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openNotificationActivity();
             }
         });
-        myOrderRBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), OrderListActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
-            }
-        });
+
         myBookingRBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -317,7 +310,6 @@ View view;
             }
         });
 
-        return view;
     }
 
     private void openLanguageActivity() {
@@ -462,5 +454,40 @@ View view;
                 Log.v("logout_user", "inside error block  " + error.getMessage());
             }
         };
+    }
+
+    private void initView(View view) {
+        walletBlncTv = view.findViewById(R.id.walletBlncTv);
+        user_name = (TextView) view.findViewById(R.id.textView2);
+        user_mobile = (TextView) view.findViewById(R.id.mobile_no);
+        circleImageView = view.findViewById(R.id.circleImageView);
+        editProfileBtn = view.findViewById(R.id.editProfileBtn);
+        logoutLayout=view.findViewById(R.id.logout_rel_layout);
+        inviteAndEarnBtn = view.findViewById(R.id.inviteAndEarnBtn);
+        topUpBtn = view.findViewById(R.id.topUpBtn);
+        walletBtn = view.findViewById(R.id.walletBtn);
+        bookingBtn = view.findViewById(R.id.bookingBtn);
+        myBookingRBtn = view.findViewById(R.id.myBookingRBtn);
+        notificationsBtn = view.findViewById(R.id.notificationsBtn);
+        inviteRBtn = view.findViewById(R.id.inviteRBtn);
+        emergencyContactBtn = view.findViewById(R.id.emergencyContactBtn);
+        changeCurrencyBtn = view.findViewById(R.id.changeCurrencyBtn);
+        changeLanguageBtn = view.findViewById(R.id.changeLanguageBtn);
+        //
+        paymentMethodBtn = view.findViewById(R.id.paymentMethodBtn);
+        //
+        myWalletBtn = view.findViewById(R.id.myWalletBtn);
+        addMoneyBtn = view.findViewById(R.id.addMoneyBtn);
+        sendMoneyBtn = view.findViewById(R.id.sendMoneyBtn);
+
+        aboutUsBtn = view.findViewById(R.id.aboutUsBtn);
+        privacyPolicyBtn = view.findViewById(R.id.privacyPolicyBtn);
+        termNConditionBtn = view.findViewById(R.id.termNConditionBtn);
+        contactUsBtn = view.findViewById(R.id.contactUsBtn);
+        feedbackBtn = view.findViewById(R.id.feedbackBtn);
+        personalDetailBtn = view.findViewById(R.id.personalDetailBtn);
+
+        addHomeBtn = view.findViewById(R.id.addHomeBtn);
+        addWorkBtn = view.findViewById(R.id.addWorkBtn);
     }
 }

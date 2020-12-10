@@ -136,13 +136,18 @@ public class WalletFragment extends Fragment {
         call.enqueue(new Callback<GetWallet>() {
             @Override
             public void onResponse(Call<GetWallet> call, Response<GetWallet> response) {
-                GetWallet getWallet = response.body();
-                if (getWallet != null && getWallet.getStatus()){
-                    walletBlncTv.setText("₹"+getWallet.getAmount()+"");
-                }
-                else {
+                try {
+                    GetWallet getWallet = response.body();
+                    if (getWallet != null && getWallet.getStatus()){
+                        walletBlncTv.setText("₹"+getWallet.getAmount()+"");
+                    }
+                    else {
 
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+
             }
 
             @Override

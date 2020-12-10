@@ -121,6 +121,7 @@
                                     android:layout_margin="16dp"/>
 
                                 <TextView
+                                    android:id="@+id/walletBlncTv"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Rs.0.00"
@@ -302,87 +303,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="?android:attr/listDivider" />
-                    <RelativeLayout
-                        android:id="@+id/myOrderRBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
 
-                        <ImageView
-                            android:id="@+id/fc"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="2dp"
-                            android:layout_marginBottom="2dp"
-                            android:padding="6dp"
-                            android:background="@drawable/shape_circle01"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/ic_booking"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/my_order"
-                            android:textColor="@color/black"
-                            android:layout_toRightOf="@+id/fc"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="10dp"
-                            />
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/forward_arrow"/>
-                    </RelativeLayout>
-
-                    <View
-                        android:id="@+id/dividerc"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="?android:attr/listDivider" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/h"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="2dp"
-                            android:layout_marginBottom="2dp"
-                            android:padding="6dp"
-                            android:background="@drawable/shape_circle01"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/ic_busines_profile"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/business_profile"
-                            android:textColor="@color/black"
-                            android:layout_toRightOf="@+id/h"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="10dp"
-                            />
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/forward_arrow"/>
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="?android:attr/listDivider" />
 
                     <RelativeLayout
                         android:id="@+id/notificationsBtn"
@@ -426,46 +348,6 @@
                         android:background="?android:attr/listDivider" />
 
 
-                    <RelativeLayout
-                        android:id="@+id/favouriteBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/j"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="2dp"
-                            android:layout_marginBottom="2dp"
-                            android:layout_centerVertical="true"
-                            android:padding="6dp"
-                            android:background="@drawable/shape_circle01"
-                            android:src="@drawable/ic_favorite_provider"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/favourite_provider"
-                            android:textColor="@color/black"
-                            android:layout_toRightOf="@+id/j"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="10dp"
-                            />
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/forward_arrow"/>
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="?android:attr/listDivider" />
 
                     <RelativeLayout
                         android:id="@+id/inviteRBtn"

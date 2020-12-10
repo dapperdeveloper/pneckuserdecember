@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.callpneck.R;
 import com.callpneck.SessionManager;
+import com.callpneck.activity.registrationSecond.MainScreenActivity;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.helper.Constant;
@@ -100,6 +101,7 @@ public class ApiConfig {
                    GetWallet getWallet = response.body();
                    if (getWallet != null && getWallet.getStatus()){
                        Constant.WALLET_BALANCE = Double.parseDouble(getWallet.getAmount()+"");
+
 //                       tvWltBalance.setText(getString(R.string.total_balance) + Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
                    }
                }catch (Exception e){

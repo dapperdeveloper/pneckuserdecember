@@ -3,40 +3,116 @@ package com.callpneck.activity.registrationSecond.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
+import com.callpneck.SessionManager;
+import com.callpneck.activity.registrationSecond.Adapter.MoneyInAdapter;
+import com.callpneck.activity.registrationSecond.Adapter.MoneyOutAdapter;
+import com.callpneck.activity.registrationSecond.Adapter.MyTransactionAdapter;
+import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentList;
+import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentListResponse;
+import com.callpneck.activity.registrationSecond.api.ApiClient;
+import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TransactionsActivity extends AppCompatActivity {
 
     private TextView tabAllTv,tabMoneyInTv, tabMoneyOutTv, noTransactionTv;
     private RecyclerView allRv, moneyInRv, moneyOutRv;
     private RelativeLayout allRl, moneyInRl, moneyOutRl;
-
+    private SessionManager sessionManager;
+    String user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_my_transactions);
+        init();
+        sessionManager=new SessionManager(this);
+        user_id = sessionManager.getUserid();
+        transactionList = new ArrayList<>();
+        showAllUI();
+        getTransactionHistory(user_id);
 
-
+        clickListeners();
         findViewById(R.id.Goback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        init();
-        showAllUI();
+
+
+    }
+    List<PaymentList> transactionList;
+    MyTransactionAdapter adapter;
+    MoneyInAdapter moneyInAdapter;
+    MoneyOutAdapter moneyOutAdapter;
+    private void getTransactionHistory(String user_id) {
+        transactionList = new ArrayList<>();
+        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
+        Call<PaymentListResponse> call = apiInterface.getPaymentList(user_id);
+        call.enqueue(new Callback<PaymentListResponse>() {
+            @Override
+            public void onResponse(Call<PaymentListResponse> call, Response<PaymentListResponse> response) {
+                try {
+
+                    PaymentListResponse model = response.body();
+                    if (model != null && model.getStatus()){
+                        transactionList.clear();
+                        transactionList = model.getPaymentList();
+                        adapter = new MyTransactionAdapter(TransactionsActivity.this,transactionList);
+                        allRv.setAdapter(adapter);
+                        showSnackBar(TransactionsActivity.this, model.getMessage());
+                    }
+                    else if(model != null && !model.getStatus()){
+                        showSnackBar(TransactionsActivity.this,model.getMessage());
+                    }
+                    else {
+                        showSnackBar(TransactionsActivity.this,"Server Error");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<PaymentListResponse> call, Throwable t) {
+
+                showSnackBar(TransactionsActivity.this, t.getMessage());
+            }
+        });
+    }
+    public static void showSnackBar(Activity activity, String snackTitle) {
+        View Parentview=activity.findViewById(android.R.id.content);
+        Snackbar snackbar = Snackbar.make(Parentview, snackTitle, Snackbar.LENGTH_SHORT);
+        snackbar.show();
+        View view = snackbar.getView();
+        TextView txtv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+        txtv.setGravity(Gravity.CENTER_HORIZONTAL);
+    }
+    private void clickListeners() {
         tabAllTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //load all
                 showAllUI();
+                getTransactionHistory(user_id);
             }
         });
         tabMoneyInTv.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +120,7 @@ public class TransactionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //load moneyIn
                 showInUI();
+                getMoneyInHistory(user_id);
             }
         });
         tabMoneyOutTv.setOnClickListener(new View.OnClickListener() {
@@ -51,9 +128,83 @@ public class TransactionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //load moneyOut
                 showOutUI();
+                getMoneyOutHistory(user_id);
             }
         });
+    }
 
+    private void getMoneyOutHistory(String user_id) {
+        transactionList = new ArrayList<>();
+        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
+        Call<PaymentListResponse> call = apiInterface.getPaymentList(user_id);
+        call.enqueue(new Callback<PaymentListResponse>() {
+            @Override
+            public void onResponse(Call<PaymentListResponse> call, Response<PaymentListResponse> response) {
+                try {
+
+                    PaymentListResponse model = response.body();
+                    if (model != null && model.getStatus()){
+                        transactionList.clear();
+                        transactionList = model.getPaymentList();
+                        moneyOutAdapter = new MoneyOutAdapter(TransactionsActivity.this,transactionList);
+                        moneyOutRv.setAdapter(moneyOutAdapter);
+                        showSnackBar(TransactionsActivity.this, model.getMessage());
+                    }
+                    else if(model != null && !model.getStatus()){
+                        showSnackBar(TransactionsActivity.this,model.getMessage());
+                    }
+                    else {
+                        showSnackBar(TransactionsActivity.this,"Server Error");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<PaymentListResponse> call, Throwable t) {
+
+                showSnackBar(TransactionsActivity.this, t.getMessage());
+            }
+        });
+    }
+
+    private void getMoneyInHistory(String user_id) {
+        transactionList = new ArrayList<>();
+        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
+        Call<PaymentListResponse> call = apiInterface.getPaymentList(user_id);
+        call.enqueue(new Callback<PaymentListResponse>() {
+            @Override
+            public void onResponse(Call<PaymentListResponse> call, Response<PaymentListResponse> response) {
+                try {
+
+                    PaymentListResponse model = response.body();
+                    if (model != null && model.getStatus()){
+                        transactionList.clear();
+                        transactionList = model.getPaymentList();
+                        moneyInAdapter = new MoneyInAdapter(TransactionsActivity.this,transactionList);
+                        moneyInRv.setAdapter(moneyInAdapter);
+                        showSnackBar(TransactionsActivity.this, model.getMessage());
+                    }
+                    else if(model != null && !model.getStatus()){
+                        showSnackBar(TransactionsActivity.this,model.getMessage());
+                    }
+                    else {
+                        showSnackBar(TransactionsActivity.this,"Server Error");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<PaymentListResponse> call, Throwable t) {
+
+                showSnackBar(TransactionsActivity.this, t.getMessage());
+            }
+        });
     }
 
     private void showOutUI() {

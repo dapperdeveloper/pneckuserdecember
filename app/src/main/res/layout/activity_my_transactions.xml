@@ -89,6 +89,7 @@
             android:id="@+id/allRv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            tools:listitem="@layout/layout_transactions_item"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
 
@@ -96,6 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:visibility="gone"
             android:gravity="center"
             android:text="All"
             android:layout_centerInParent="true"
@@ -114,14 +116,14 @@
             android:id="@+id/moneyInRv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:reverseLayout="true"
-            app:stackFromEnd="true"
+            tools:listitem="@layout/layout_transactions_item"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:visibility="gone"
             android:text="Money In"
             android:layout_centerInParent="true"
             android:textColor="@color/black"/>
@@ -138,14 +140,14 @@
             android:id="@+id/moneyOutRv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:reverseLayout="true"
-            app:stackFromEnd="true"
+            tools:listitem="@layout/layout_transactions_item"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:visibility="gone"
             android:text="Money Out"
             android:layout_centerInParent="true"
             android:textColor="@color/black"/>

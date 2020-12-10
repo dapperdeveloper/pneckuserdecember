@@ -62,6 +62,7 @@ public class SearchLocationActivity extends AppCompatActivity {
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private String destination_latti;
     private String destination_longi;
+    private String destination_address;
     AutocompleteSessionToken token;
     Boolean isEditable = true;
     private static final LatLngBounds BOUNDS_INDIA = new LatLngBounds(new LatLng(-0, 0), new LatLng(0, 0));
@@ -105,6 +106,7 @@ public class SearchLocationActivity extends AppCompatActivity {
 
 
     }
+    String address;
 
     public void onItemClickAddressRecycler(int position){
         if (mAutoCompleteAdapter.getItemCount() == 0) return;
@@ -117,16 +119,14 @@ public class SearchLocationActivity extends AppCompatActivity {
             Log.d("Tahseenduration",addresses.get(0).getAddressLine(0));
            destination_latti=""+addresses.get(0).getLatitude();
             destination_longi=""+addresses.get(0).getLongitude();
-
+             address = addresses.get(0).getAddressLine(0);
             sessionManager.setUserLocation(destination_latti, destination_longi);
             Log.d("Tahseenduration",destination_latti+"/"+destination_longi);
 
-
             String s = destination_latti+ destination_longi;
+            destination_address = address;
             showSnackBar(SearchLocationActivity.this,s);
-
-
-
+            SaveUserAddress(destination_latti, destination_longi, destination_address);
 
         } catch (IOException e) {
             // e.printStackTrace();
@@ -135,6 +135,14 @@ public class SearchLocationActivity extends AppCompatActivity {
         }
     }
 
+    private void SaveUserAddress(String destination_latti, String destination_longi, String destination_address) {
+        Intent intent=new Intent();
+        intent.putExtra("user_latitude",destination_latti);
+        intent.putExtra("user_longitude",destination_longi);
+        intent.putExtra("user_complete_address",destination_address);
+        setResult(2,intent);
+        finish();
+    }
 
     private void clickListeners() {
 
