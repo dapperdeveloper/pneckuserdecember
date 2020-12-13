@@ -23,7 +23,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.GoogleMapTrackingAddressSet"></activity>
+        <activity android:name=".activity.registrationSecond.Activity.FullScreenImageActivity"></activity>
+        <activity android:name=".activity.GoogleMapTrackingAddressSet" />
         <activity android:name=".activity.deliveryboy.DeliveryMainActivity" />
         <activity android:name=".activity.registrationSecond.Activity.OrderPlacedActivity" />
         <activity android:name=".activity.registrationSecond.Activity.MapsActivity" />

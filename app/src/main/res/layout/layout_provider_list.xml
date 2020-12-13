@@ -115,21 +115,31 @@
                        app:layout_constraintStart_toStartOf="parent"
                        app:layout_constraintTop_toTopOf="parent" />
 
-                   <TextView
-                       android:id="@+id/moreBtn"
+                   <LinearLayout
+                       android:id="@+id/lvl_offer"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:layout_alignParentEnd="true"
-                       android:layout_alignParentBottom="true"
-                       android:layout_gravity="end"
-                       android:background="@color/colorPrimaryDark"
-                       android:drawableRight="@drawable/ic_baseline_arrow_forward_24"
-                       android:padding="@dimen/editpad5dp"
-                       android:text="More Details"
-                       android:textColor="@color/white"
+                       android:background="@drawable/ic_discount_shape"
+                       android:gravity="center"
+                       android:layout_marginRight="8dp"
                        app:layout_constraintBottom_toBottomOf="parent"
                        app:layout_constraintEnd_toEndOf="parent"
-                       app:layout_constraintTop_toTopOf="parent" />
+                       app:layout_constraintTop_toTopOf="parent">
+
+                       <TextView
+                           android:id="@+id/moreBtn"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_gravity="center"
+                           android:text="View Profile"
+                           android:padding="4dp"
+                           android:drawableEnd="@drawable/right_arrow"
+                           android:textColor="@color/colorWhite"
+                           android:drawableTint="@color/white"
+                           android:textSize="14dp"
+                           android:textStyle="bold" />
+                   </LinearLayout>
+
 
                </androidx.constraintlayout.widget.ConstraintLayout>
 

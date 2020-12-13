@@ -1,6 +1,7 @@
 package com.callpneck.activity.registrationSecond.api;
 
 
+import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.Model.addressResponse.AddAddressResponse;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductResponse;
@@ -186,15 +187,20 @@ public interface ApiInterface {
                                         @Field("amount") String amount
     );
 
-    @Multipart
+    @FormUrlEncoded
     @POST("userNearByVendorList")
-    Call<ModelProvider> vendorList(@Part("user_id") RequestBody user_id,
-                                   @Part("ep_token") RequestBody ep_token,
-                                   @Part("curr_lat") RequestBody curr_lat,
-                                   @Part("curr_long") RequestBody curr_long,
-                                   @Part("category") RequestBody category);
+    Call<ModelProvider> vendorList(@Field("user_id") String user_id,
+                                   @Field("ep_token") String ep_token,
+                                   @Field("curr_lat") String curr_lat,
+                                   @Field("curr_long") String curr_long,
+                                   @Field("category") String category);
 
 
     @POST("pneck_user_list")
     Call<PneckUserList> getPneckUserList();
+
+    @FormUrlEncoded
+    @POST("show_services_gallery")
+    Call<ServiceGalleyResponse> getGallery(@Field("vendor_id") String vendor_id);
+
 }

@@ -149,6 +149,10 @@ dependencies {
     //room database
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    //PhotoView
+    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+    implementation 'com.karumi:dexter:6.2.1'
+
 
     //foR razorpay
     implementation 'com.razorpay:checkout:1.5.13'

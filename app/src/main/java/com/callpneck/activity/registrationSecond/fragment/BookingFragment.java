@@ -24,6 +24,7 @@ import com.callpneck.R;
 import com.callpneck.Requests.CustomRequest;
 import com.callpneck.Requests.JsonUTF8Request;
 import com.callpneck.SessionManager;
+import com.callpneck.activity.AppController;
 import com.callpneck.activity.SideMenuScreens.MyUserOrderList;
 import com.callpneck.activity.registrationSecond.Adapter.OrderUserAdapter;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ShopDataList;
@@ -98,19 +99,21 @@ public class BookingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //load booking
+                if (AppController.isConnected(getActivity()))
                 showBookingUI();
             }
         });
         tabOrdersTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (InternetConnection.checkConnection(getContext()))
+                if (AppController.isConnected(getActivity()))
                     getUserOrderList();
                 //load orders
                 showOrdersUI();
             }
         });
 
+        if (AppController.isConnected(getActivity()))
         checkINDatabase();
 
         return view;

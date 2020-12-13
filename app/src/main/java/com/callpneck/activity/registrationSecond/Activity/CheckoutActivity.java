@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.callpneck.R;
 import com.callpneck.SessionManager;
+import com.callpneck.activity.AppController;
 import com.callpneck.activity.Database.MainData;
 import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
@@ -186,14 +187,15 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
             public void onClick(View view) {
                 if (validation()){
                     if (paymentMethod.equals(getResources().getString(R.string.codpaytype))){
-                        if (InternetConnection.checkConnection(CheckoutActivity.this))
+                        if (AppController.isConnected(CheckoutActivity.this))
                             PlaceOrderProcess();
                     }
                     else if (paymentMethod.equals(getString(R.string.razor_pay))){
-                        if (InternetConnection.checkConnection(CheckoutActivity.this))
+                        if (AppController.isConnected(CheckoutActivity.this))
                             startPayment();
                     }
                     else if ( paymentMethod.equals("wallet")){
+                        if (AppController.isConnected(CheckoutActivity.this))
                         OrderByWallet();
                     }
                 }

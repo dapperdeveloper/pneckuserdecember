@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.activity.registrationSecond.Adapter.AdapterReview;
@@ -25,15 +26,14 @@ public class ProviderDetailActivity extends AppCompatActivity {
     RelativeLayout serviceRl, galleryRl, reviewRl;
     RecyclerView  galleryRv, reviewRv;
 
-
     ArrayList<ModelReview> reviewList;
     AdapterReview adapterReview;
+    String shopId, shopName, shopAvatar, shopRating;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_provider_detail);
         ThemeUtils.setLanguage(this);
-        setContentView(R.layout.activity_service_detail);
 
         tabServiceTv = findViewById(R.id.tabServiceTv);
         tabGalleryTv = findViewById(R.id.tabGalleryTv);
@@ -43,6 +43,14 @@ public class ProviderDetailActivity extends AppCompatActivity {
         reviewRl = findViewById(R.id.reviewRl);
         galleryRv = findViewById(R.id.galleryRv);
         reviewRv = findViewById(R.id.reviewRv);
+
+
+        if (getIntent() != null){
+            shopId = getIntent().getStringExtra("shopId");
+            shopName = getIntent().getStringExtra("shopName");
+            shopAvatar = getIntent().getStringExtra("shopAvatar");
+            shopRating = getIntent().getStringExtra("shopRating");
+        }
 
         findViewById(R.id.Goback).setOnClickListener(new View.OnClickListener() {
             @Override

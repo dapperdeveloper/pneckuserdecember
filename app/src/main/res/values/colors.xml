@@ -44,6 +44,7 @@
 
     <color name="overlay_dark_40">#66000000</color>
     <color name="transparentcolor">#0D000000</color>
+    <color name="colorTranfar">#7FFBFAFA</color>
 
     <color name="primary_50">#E0F7FA</color>
     <color name="primary_100">#B2EBF2</color>

@@ -55,6 +55,7 @@
             android:layout_marginBottom="16dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/shopAvatarIv"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
                 app:civ_border_color="@color/white"
@@ -69,6 +70,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/shopNameTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
@@ -80,6 +82,7 @@
                     />
 
                 <RatingBar
+                    android:id="@+id/rating_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:numStars="5"
@@ -93,7 +96,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:text="View Profile"
+                    android:text="@string/about_us"
                     android:padding="5dp"
                     android:textSize="14sp"
                     android:layout_marginLeft="@dimen/editpad5dp"
@@ -126,7 +129,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/SERVICE"
+            android:text="@string/products"
             android:background="@drawable/shape_rect04"
             android:textColor="@color/black"/>
         <TextView
@@ -161,7 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/layout_service_item"
+            tools:listitem="@layout/layout_shop_item"
             />
 
         <TextView
@@ -183,14 +186,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/galleryRv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:reverseLayout="true"
-            app:stackFromEnd="true"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/grid_view"
+            android:numColumns="auto_fit"
+            android:gravity="center"
+            android:columnWidth="100dp"
+            android:stretchMode="columnWidth"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            >
+        </GridView>
         <TextView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
+import com.callpneck.activity.AppController;
 import com.callpneck.activity.Database.MainData;
 import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Adapter.MyRestaurantListAdapter;
@@ -110,7 +111,7 @@ public class ShopHomeActivity extends AppCompatActivity {
         latitude = sessionManager.getUserLatitude();
         longitude = sessionManager.getUserLongitude();
 
-        if (InternetConnection.checkConnection(ShopHomeActivity.this)){
+        if (AppController.isConnected(ShopHomeActivity.this)){
             loadCategoryData();
             if (validation())
                 loadShopData();
@@ -148,7 +149,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 String selected = Constants.productsCategory1[which];
 
                                 if(selected.equals("All")){
-                                    if (InternetConnection.checkConnection(ShopHomeActivity.this))
+                                    if (AppController.isConnected(ShopHomeActivity.this))
                                     {
                                         if (validation())
                                             loadShopData();
@@ -157,7 +158,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                     titleTv.setText(selected);
                                 }
                                 if(selected.equals("High To Low")){
-                                    if (InternetConnection.checkConnection(ShopHomeActivity.this))
+                                    if (AppController.isConnected(ShopHomeActivity.this))
                                     {
                                         if (validation())
                                             loadShopHighToLowData();
@@ -166,7 +167,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                     titleTv.setText(selected);
                                 }
                                 if(selected.equals("Offer")){
-                                    if (InternetConnection.checkConnection(ShopHomeActivity.this))
+                                    if (AppController.isConnected(ShopHomeActivity.this))
                                     {
                                         if (validation())
                                         loadShopOfferData();
@@ -174,7 +175,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                     titleTv.setText(selected);
                                 }
                                 if(selected.equals("Low To High")){
-                                    if (InternetConnection.checkConnection(ShopHomeActivity.this))
+                                    if (AppController.isConnected(ShopHomeActivity.this))
                                     {
                                         if (validation())
                                             loadShopLowToHighData();
@@ -183,7 +184,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                     titleTv.setText(selected);
                                 }
                                 if(selected.equals("Delivery Time")){
-                                    if (InternetConnection.checkConnection(ShopHomeActivity.this))
+                                    if (AppController.isConnected(ShopHomeActivity.this))
                                     {
                                         if (validation())
                                         loadShopByDeliveryTime();
@@ -192,7 +193,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                     titleTv.setText(selected);
                                 }
                                 if(selected.equals("Ratings")){
-                                    if (InternetConnection.checkConnection(ShopHomeActivity.this))
+                                    if (AppController.isConnected(ShopHomeActivity.this))
                                     {
                                         if (validation())
                                         loadShopByRatings();
@@ -201,7 +202,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                     titleTv.setText(selected);
                                 }
                                 if(selected.equals("Relevance")){
-                                    if (InternetConnection.checkConnection(ShopHomeActivity.this))
+                                    if (AppController.isConnected(ShopHomeActivity.this))
                                     {
                                         if (validation())
                                         loadShopByRelevance();
@@ -254,12 +255,12 @@ public class ShopHomeActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable != null && !editable.toString().trim().isEmpty()){
+                    if (AppController.isConnected(ShopHomeActivity.this))
                     getProductDetail(editable.toString());
                     cuisinesLayout.setVisibility(View.GONE);
                 }
 
                 else {
-
                     cuisinesLayout.setVisibility(View.VISIBLE);
                    showSnackBar(ShopHomeActivity.this,"No Result Found...!");
                 }

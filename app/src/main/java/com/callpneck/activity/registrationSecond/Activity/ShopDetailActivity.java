@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
+import com.callpneck.activity.AppController;
 import com.callpneck.activity.Database.MainData;
 import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Adapter.MyRestaurantMenuAdapter;
@@ -143,7 +144,7 @@ public class ShopDetailActivity extends AppCompatActivity {
 
         itemList = new ArrayList<>();
 
-        if (InternetConnection.checkConnection(ShopDetailActivity.this))
+        if (AppController.isConnected(ShopDetailActivity.this))
        getProductList();
 
 

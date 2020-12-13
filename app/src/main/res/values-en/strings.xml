@@ -463,6 +463,7 @@
     <string name="type_message_here">Type message here</string>
     <string name="submit_feedback">SUBMIT FEEDBACK</string>
     <string name="directionkey">AIzaSyBTbcRRCLbhqeMVVGD5fnUevHfxj2MdgdI</string>
+    <string name="products">Products</string>
     //end taxi string
 
 </resources>

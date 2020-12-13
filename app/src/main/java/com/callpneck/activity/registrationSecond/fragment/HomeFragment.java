@@ -39,10 +39,12 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.bumptech.glide.Glide;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
+import com.callpneck.activity.AppController;
 import com.callpneck.activity.deliveryboy.DeliveryMainActivity;
 import com.callpneck.activity.registrationSecond.Activity.CheckoutActivity;
 import com.callpneck.activity.registrationSecond.Activity.HomeMapActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderActivity;
+import com.callpneck.activity.registrationSecond.Activity.ProviderDetailActivity;
 import com.callpneck.activity.registrationSecond.Activity.SearchActivity;
 import com.callpneck.activity.registrationSecond.Activity.SearchLocationActivity;
 import com.callpneck.activity.registrationSecond.Activity.ServiceDetailActivity;
@@ -74,6 +76,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -105,6 +108,7 @@ public class HomeFragment extends Fragment {
     private String currentFullAddress = "";
     private String UserLatitude = "";
     private String UserLongitude = "";
+    private double latitude, longitude;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLastKnownLocation = null;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2002;
@@ -131,6 +135,8 @@ public class HomeFragment extends Fragment {
     TabLayout tabview;
     private Context mContext;
     MyCustomPagerAdapter myCustomPagerAdapter;
+    private static final int LOCATION_REQUEST_CODE = 100;
+    private String[] locationPermission;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,10 +175,8 @@ public class HomeFragment extends Fragment {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         sessionManager = new SessionManager(getContext());
 
-        if (InternetConnection.checkConnection(getContext()))
+        if (AppController.isConnected(getActivity()))
         getData();
-
-
 
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +188,12 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+
+        if(checkLocationPermission()){
+            detectLocation();
+        }else {
+            requestLocationPermission();
+        }
 
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,6 +215,17 @@ public class HomeFragment extends Fragment {
         return view;
 
     }
+
+    private boolean checkLocationPermission(){
+        boolean result = ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION) ==
+                (PackageManager.PERMISSION_GRANTED);
+        return result;
+    }
+    private void requestLocationPermission(){
+        ActivityCompat.requestPermissions(getActivity(),locationPermission,LOCATION_REQUEST_CODE);
+    }
+
     private boolean checkPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat
@@ -224,7 +245,6 @@ public class HomeFragment extends Fragment {
             return true;
         }
     }
-
     public void askForPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -301,8 +321,6 @@ public class HomeFragment extends Fragment {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_TOKEN:
                 if (grantResults.length> 0) {
-
-
                     boolean locationPemission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
 
                     if (locationPemission){
@@ -319,7 +337,57 @@ public class HomeFragment extends Fragment {
 
                 }
                 break;
+            case LOCATION_REQUEST_CODE:{
+                if(grantResults.length >0){
+                    boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if(locationAccepted){
+
+                        detectLocation();
+                    }else {
+                        Toast.makeText(getContext(), "Location permission is necessary.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            break;
         }
+    }
+
+
+    @SuppressLint("MissingPermission")
+    private void detectLocation() {
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this);
+
+        mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+
+                Location location = task.getResult();
+                if(location != null){
+
+                    Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+
+                        latitude = addresses.get(0).getLatitude();
+                        longitude = addresses.get(0).getLongitude();
+                        String city = addresses.get(0).getLocality();
+                        String state = addresses.get(0).getAdminArea();
+                        String country = addresses.get(0).getCountryName();
+                        String address = addresses.get(0).getAddressLine(0);
+                        sessionManager.setUserScreenAddress(address);
+                        sessionManager.setUserLocation( latitude+"", ""+longitude);
+                        addressTv.setText(sessionManager.getUserScreenAddress());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            }
+        });
+
     }
     private SettingsClient mSettingsClient;
     private LocationRequest mLocationRequest;
@@ -479,7 +547,7 @@ public class HomeFragment extends Fragment {
                 }
                 else if(item.getCate_type().equalsIgnoreCase("provider")){
                     if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
-                        Intent intent = new Intent(getContext(), ServiceDetailActivity.class);
+                        Intent intent = new Intent(getContext(), ProviderDetailActivity.class);
                         intent.putExtra("categoryName", item.getTitle());
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
@@ -586,10 +654,12 @@ public class HomeFragment extends Fragment {
         }
         else if (requestCode==LAUNCH_ADDRESS_SET_SCREEN){
             if (data!=null&&data.hasExtra("user_complete_address")){
-                addressTv.setText(data.getStringExtra("user_complete_address"));
+                String address =data.getStringExtra("user_complete_address");
                 UserLatitude=data.getStringExtra("user_latitude");
                 UserLongitude=data.getStringExtra("user_longitude");
+                sessionManager.setUserScreenAddress(address);
                 sessionManager.setUserLocation(UserLatitude, UserLongitude);
+                addressTv.setText(sessionManager.getUserScreenAddress());
             }
         }
     }

@@ -3,14 +3,23 @@ package com.callpneck.activity.registrationSecond.Model;
 public class Banner {
 
      private int image;
-     String name;
+     String name, inStock;
 
     public Banner() {
     }
 
-    public Banner(int image, String name) {
+    public Banner(int image, String name, String inStock) {
         this.image = image;
         this.name = name;
+        this.inStock = inStock;
+    }
+
+    public String getInStock() {
+        return inStock;
+    }
+
+    public void setInStock(String inStock) {
+        this.inStock = inStock;
     }
 
     public int getImage() {

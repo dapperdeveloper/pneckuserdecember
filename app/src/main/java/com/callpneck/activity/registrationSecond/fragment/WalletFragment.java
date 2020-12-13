@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.callpneck.R;
 import com.callpneck.SessionManager;
+import com.callpneck.activity.AppController;
 import com.callpneck.activity.registrationSecond.Activity.AddMoneyActivity;
 import com.callpneck.activity.registrationSecond.Activity.TransactionsActivity;
 import com.callpneck.activity.registrationSecond.Activity.TransferMoneyActivity;
@@ -28,6 +29,7 @@ import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentLis
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUser;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.utils.InternetConnection;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -76,10 +78,12 @@ public class WalletFragment extends Fragment {
         user_id = sessionManager.getUserid();
         transactionList = new ArrayList<>();
 
+        if (AppController.isConnected(getActivity()))
         getTransactionHistory(user_id);
 
 
 
+        if (AppController.isConnected(getActivity()))
         getWalletBalance();
 
         clicks();

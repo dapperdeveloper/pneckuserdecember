@@ -35,6 +35,7 @@ public class SessionManager {
     public static final String IS_LOGGED_IN="is_logged_in";
     private static final String CURRENT_USER_PROFILE_PIC="current_user_profile_pic";
     public static final String USER_LATITUDE="user_latitude";
+    public static final String USER_SCREEN_ADDRESS = "user_screen_address";
     public static final String USER_LONGITUDE="user_longitude";
 
 
@@ -97,6 +98,10 @@ public class SessionManager {
         editor.putString(LANGUAGE, language);
         editor.commit();
     }
+    public void setUserScreenAddress(String screenAddress) {
+        editor.putString(USER_SCREEN_ADDRESS, screenAddress);
+        editor.commit();
+    }
 
     public String getCurrentOrderResponse(){
         return pref.getString(CURRENT_ORDER_RESPONSE,"");
@@ -106,6 +111,7 @@ public class SessionManager {
         editor.commit();
         return true;
     }
+
 
     public boolean setUserLocation(String latitude,String longitude){
         editor.putString(USER_LONGITUDE, ""+longitude);
@@ -125,6 +131,9 @@ public class SessionManager {
 
     public String getUserLatitude(){
         return pref.getString(USER_LATITUDE,"");
+    }
+    public String getUserScreenAddress(){
+        return pref.getString(USER_SCREEN_ADDRESS,"");
     }
     public String getUserLongitude(){
         return pref.getString(USER_LONGITUDE,"");

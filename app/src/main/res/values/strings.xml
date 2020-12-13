@@ -502,4 +502,5 @@
     <string name="total_amt">Subtotal</string>
     <string name="free">Free</string>
     <string name="remaining_wallet_balance">Remaining Wallet Balance:&#160;</string>
+    <string name="products">Products</string>
 </resources>
