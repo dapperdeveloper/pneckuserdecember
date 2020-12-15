@@ -3,12 +3,16 @@ package com.callpneck.activity.registrationSecond.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,16 +21,20 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
+import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
+import com.callpneck.activity.Database.MainData;
+import com.callpneck.activity.Database.RoomDB;
+
 import com.callpneck.activity.registrationSecond.Adapter.AdapterReview;
 import com.callpneck.activity.registrationSecond.Adapter.ImageAdapter;
 import com.callpneck.activity.registrationSecond.Adapter.MyServicesAdapter;
 import com.callpneck.activity.registrationSecond.Adapter.ShopProductAdapter;
-import com.callpneck.activity.registrationSecond.Model.Banner;
 import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.ModelReview;
 import com.callpneck.activity.registrationSecond.Model.ModelServices;
-import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ShopDataList;
+import com.callpneck.activity.registrationSecond.Model.Product;
+import com.callpneck.activity.registrationSecond.Model.ProductModel;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
 
@@ -37,9 +45,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ServiceDetailActivity extends AppCompatActivity {
 
+    private TextView cartCountTv;
+    ImageButton cartBtn;
     TextView tabServiceTv, tabGalleryTv, tabReviewsTv, shopNameTv, nameTitle;
     RelativeLayout serviceRl, galleryRl, reviewRl;
     RecyclerView serviceRv,  reviewRv;
@@ -53,12 +64,14 @@ public class ServiceDetailActivity extends AppCompatActivity {
     String shopId, shopName, shopAvatar, shopRating, shopDescription;
     List<String> galleryList;
     ImageAdapter imageAdapter;
-
+    private SessionManager sessionManager;
     //ProductList
-    List<Banner> productList;
+    private List<Product> productList;
     ShopProductAdapter shopProductAdapter;
-
-
+    List<Product> mainPorudctList = new ArrayList<>();
+    private ProgressDialog progressDialog;
+    RoomDB database;
+    List<MainData> dataList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +90,8 @@ public class ServiceDetailActivity extends AppCompatActivity {
         reviewRv = findViewById(R.id.reviewRv);
         nameTitle = findViewById(R.id.nameTitle);
         grid_view = findViewById(R.id.grid_view);
+        cartCountTv = findViewById(R.id.cartCountTv);
+        cartBtn = findViewById(R.id.cartBtn);
 
         if (getIntent() != null){
             shopId = getIntent().getStringExtra("shopId");
@@ -95,7 +110,15 @@ public class ServiceDetailActivity extends AppCompatActivity {
             shopNameTv.setText(shopName);
             nameTitle.setText(shopName+" Details");
         }
+        sessionManager=new SessionManager(ServiceDetailActivity.this);
+        database = RoomDB.getInstance(this);
 
+        productList = new ArrayList<>();
+        serviceRv.setHasFixedSize(true);
+        shopProductAdapter= new ShopProductAdapter(this,productList);
+        serviceRv.setAdapter(shopProductAdapter);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCanceledOnTouchOutside(false);
         shopDescription = "Buy cosmetics & beauty products online from Nykaa, the online shopping beauty store. Browse makeup, health products & more from top beauty brands.";
 
         findViewById(R.id.Goback).setOnClickListener(new View.OnClickListener() {
@@ -110,7 +133,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
                 openServiceDescriptionActivity();
             }
         });
-
+        cartCount();
         servicesList = new ArrayList<>();
         reviewList = new ArrayList<>();
         showServicesUI();
@@ -138,26 +161,58 @@ public class ServiceDetailActivity extends AppCompatActivity {
             }
         });
 
-        //loadServices();
-
-        loadProductList();
-
+        getProduct();
         loadReviews();
 
 
 
     }
-
-    private void loadProductList() {
-        productList = new ArrayList<>();
-        productList.add(new Banner(R.drawable.abcdp,"New Inspiron 14 5402 Laptop", "inStock"));
-        productList.add(new Banner(R.drawable.banner,"Mi Notebook 14 Horizon Gray","OutOfStock"));
-        productList.add(new Banner(R.drawable.abcdp,"New Inspiron 14 5402 Laptop","inStock"));
-        shopProductAdapter = new ShopProductAdapter(this,productList);
-        serviceRv.setAdapter(shopProductAdapter);
-
+    public void cartCount() {
+        //store database value in data list
+        dataList = database.mainDao().getAll();
+        int count = dataList.size();
+        if(count<=0){
+            cartCountTv.setVisibility(View.GONE);
+        }else {
+            Toast.makeText(this, ""+count, Toast.LENGTH_SHORT).show();
+            cartCountTv.setVisibility(View.VISIBLE);
+            cartCountTv.setText(""+count);
+        }
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //store database value in data list
+        dataList = database.mainDao().getAll();
+    }
+
+    private void getProduct() {
+        progressDialog.setMessage("adding");
+        progressDialog.show();
+        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
+        Call<ProductModel> call = apiInterface.getProduct(shopId);
+        call.enqueue(new Callback<ProductModel>() {
+            @Override
+            public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
+                try {
+                    ProductModel model = response.body();
+                    progressDialog.dismiss();
+                    productList.addAll(model.getProductList());
+                    shopProductAdapter.notifyDataSetChanged();
+                }catch (Exception e){
+
+                }
+
+            }
+            @Override
+            public void onFailure(Call<ProductModel> call, Throwable t) {
+                Toast.makeText(ServiceDetailActivity.this, "Failed to Upload", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
+    }
+
 
     private void getGalleryImage() {
         galleryList = new ArrayList<>();
@@ -214,15 +269,6 @@ public class ServiceDetailActivity extends AppCompatActivity {
         reviewRv.setAdapter(adapterReview);
     }
 
-    private void loadServices() {
-        servicesList.add(new ModelServices("Service #1","Rs.560.00"));
-        servicesList.add(new ModelServices("Service #2","Rs.450.00"));
-        servicesList.add(new ModelServices("Service #3","Rs.390.00"));
-        servicesList.add(new ModelServices("Service #4","Rs.300.00"));
-        adapter = new MyServicesAdapter(this,servicesList);
-        serviceRv.setAdapter(adapter);
-    }
-
     private void showServicesUI() {
         serviceRl.setVisibility(View.VISIBLE);
         galleryRl.setVisibility(View.GONE);
@@ -262,12 +308,45 @@ public class ServiceDetailActivity extends AppCompatActivity {
         tabServiceTv.setTextColor(getResources().getColor(R.color.black));
         tabServiceTv.setBackgroundColor(getResources().getColor(android.R.color.transparent));
     }
+
     @Override
     public void onBackPressed() {
-        finish();
-        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        if (dataList.size()>0){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("All item in cart will be delete.");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //delete all data from database
+                    database.mainDao().reset(dataList);
+                    //notify when all data is deleted
+                    dataList.clear();
+                    dataList.addAll(database.mainDao().getAll());
+                    onBackPressed();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            builder.create();
+            builder.show();
+        }
+        else {
+            super.onBackPressed();
+            overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        }
+        }
 
-    }
+    //    @Override
+//    public void onBackPressed() {
+//
+//        finish();
+//        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+//
+//    }
 
 
 }

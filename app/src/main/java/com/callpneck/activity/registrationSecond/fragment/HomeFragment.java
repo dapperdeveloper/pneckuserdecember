@@ -620,9 +620,14 @@ public class HomeFragment extends Fragment {
         public Object instantiateItem(ViewGroup container, final int position) {
             View itemView = layoutInflater.inflate(R.layout.layout_banner_look, container, false);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.image_look_book);
+            try {
+                Glide.with(mContext).load(bannerDatumList.get(position).getImage()).placeholder(R.drawable.pneck_icon).into(imageView);
+            }catch (Exception e){
 
-            Glide.with(mContext).load(bannerDatumList.get(position).getImage()).placeholder(R.drawable.pneck_icon).into(imageView);
+            }
+
             container.addView(itemView);
+            if (bannerDatumList.get(position).getImage()!=null)
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

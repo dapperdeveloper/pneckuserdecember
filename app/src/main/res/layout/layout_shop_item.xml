@@ -34,9 +34,10 @@
 
                 <ImageView
                     android:id="@+id/img_icon"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="130dp"
                     android:layout_gravity="center"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/abcdp" />
 
                 <LinearLayout
@@ -58,7 +59,7 @@
 
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="250dp"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
@@ -119,7 +120,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Add To Cart"
+                    android:text="Add To "
+                    android:drawableRight="@drawable/ic_cart"
                     android:textSize="16sp"
                     android:padding="8dp"
                     android:textColor="@color/colorPrimary"

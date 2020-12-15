@@ -3,6 +3,7 @@ package com.callpneck.activity.registrationSecond.api;
 
 import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
+import com.callpneck.activity.registrationSecond.Model.ProductModel;
 import com.callpneck.activity.registrationSecond.Model.addressResponse.AddAddressResponse;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductResponse;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ResponseFoodHome;
@@ -202,5 +203,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("show_services_gallery")
     Call<ServiceGalleyResponse> getGallery(@Field("vendor_id") String vendor_id);
+
+    @FormUrlEncoded
+    @POST("productList")
+    Call<ProductModel> getProduct(@Field("user_id") String user_id);
 
 }

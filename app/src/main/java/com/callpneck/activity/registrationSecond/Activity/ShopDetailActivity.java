@@ -1,5 +1,7 @@
 package com.callpneck.activity.registrationSecond.Activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -232,8 +234,32 @@ public class ShopDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        if (dataList.size()>0){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("All item in cart will be delete.");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //delete all data from database
+                    database.mainDao().reset(dataList);
+                    //notify when all data is deleted
+                    dataList.clear();
+                    dataList.addAll(database.mainDao().getAll());
+                    onBackPressed();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            builder.create();
+            builder.show();
+        }
+        else {
+            super.onBackPressed();
+            overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        }
     }
 }
