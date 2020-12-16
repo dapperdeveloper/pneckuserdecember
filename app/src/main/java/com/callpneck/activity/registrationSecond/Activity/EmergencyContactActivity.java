@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,10 +16,22 @@ import android.widget.Toast;
 
 import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
+import com.callpneck.SessionManager;
 import com.callpneck.activity.registrationSecond.Adapter.MyEmergencyContactAdapter;
 import com.callpneck.activity.registrationSecond.Model.EmergencyContact;
+import com.callpneck.activity.registrationSecond.Model.addContact.AddEmegencyContact;
+import com.callpneck.activity.registrationSecond.Model.addContact.DeleteContact;
+import com.callpneck.activity.registrationSecond.Model.showContact.ShowContactList;
+import com.callpneck.activity.registrationSecond.Model.showContact.ShowEmegencyContact;
+import com.callpneck.activity.registrationSecond.api.ApiClient;
+import com.callpneck.activity.registrationSecond.api.ApiInterface;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EmergencyContactActivity extends AppCompatActivity {
 
@@ -27,10 +40,10 @@ public class EmergencyContactActivity extends AppCompatActivity {
     private RecyclerView contactListRv;
     private LinearLayout posterLayout;
     MyEmergencyContactAdapter adapter;
-    List<EmergencyContact>  contactList;
-    EmergencyContact emergencyContact;
-
-
+    List<ShowContactList>  contactList;
+    SessionManager sessionManager;
+    String user_id;
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +52,11 @@ public class EmergencyContactActivity extends AppCompatActivity {
 
         contactListRv = findViewById(R.id.contactListRv);
         posterLayout = findViewById(R.id.posterLayout);
-
-
+        sessionManager = new SessionManager(this);
+        dialog = new ProgressDialog(this);
+        dialog.setTitle("Please Wait....");
+        dialog.setCanceledOnTouchOutside(false);
+        user_id = sessionManager.getUserid();
 
 
         findViewById(R.id.Goback).setOnClickListener(new View.OnClickListener() {
@@ -58,6 +74,92 @@ public class EmergencyContactActivity extends AppCompatActivity {
             }
         });
 
+        contactList = new ArrayList<>();
+        contactListRv.setHasFixedSize(true);
+        adapter = new MyEmergencyContactAdapter(this,contactList);
+        contactListRv.setAdapter(adapter);
+        getContactList();
+
+    }
+
+    public void deleteImage(int id)
+    {
+        getProductDelete(id);
+    }
+
+    private void getProductDelete(int id) {
+        dialog.setMessage("Deleting...");
+        dialog.show();
+        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
+        Call<DeleteContact> call = apiInterface.deleteContact(id+"");
+        call.enqueue(new Callback<DeleteContact>() {
+            @Override
+            public void onResponse(Call<DeleteContact> call, Response<DeleteContact> response) {
+                DeleteContact model = response.body();
+                dialog.dismiss();
+                if(model.getSuccess())
+                {
+                    contactList = adapter.getCurrentList();
+                    for(int i=0;i<contactList.size();i++)
+                    {
+                        if(contactList.get(i).getId()==id)
+                        {
+                            Toast.makeText(EmergencyContactActivity.this,   model.getMessage(), Toast.LENGTH_SHORT).show();
+                            contactList.remove(i);
+                            adapter.notifyItemRemoved(i);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+                else
+                {
+                    onBackPressed();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<DeleteContact> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getContactList() {
+        dialog.show();
+        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
+        Call<ShowEmegencyContact> call = apiInterface.showEmergencyNumber(user_id);
+        call.enqueue(new Callback<ShowEmegencyContact>() {
+            @Override
+            public void onResponse(Call<ShowEmegencyContact> call, Response<ShowEmegencyContact> response) {
+                try {
+                    ShowEmegencyContact model = response.body();
+                    if (model != null && model.getSuccess()){
+                        contactList.addAll(model.getData());
+                        adapter.notifyDataSetChanged();
+                        posterLayout.setVisibility(View.GONE);
+                        dialog.dismiss();
+                    }
+                    else if (model !=null && !model.getSuccess()){
+                        posterLayout.setVisibility(View.VISIBLE);
+                        dialog.dismiss();
+                    }
+                    else {
+                        dialog.dismiss();
+                        posterLayout.setVisibility(View.VISIBLE);
+                    }
+
+                }catch (Exception e){
+                    dialog.dismiss();
+                    posterLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShowEmegencyContact> call, Throwable t) {
+                posterLayout.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void pickContact() {
@@ -82,7 +184,6 @@ public class EmergencyContactActivity extends AppCompatActivity {
     }
 
     private void contactPicked(Intent data) {
-
         Cursor cursor = null;
         try {
             String phoneNo = null;
@@ -96,10 +197,45 @@ public class EmergencyContactActivity extends AppCompatActivity {
             phoneNo = cursor.getString(phoneIndex);
             nameUser = cursor.getString(name);
 
-            Toast.makeText(this, ""+nameUser+" \n"+ phoneNo, Toast.LENGTH_SHORT).show();
+            submitEmergencyContact(phoneNo+"",nameUser+"");
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void submitEmergencyContact(String phoneNumber, String name) {
+        dialog.setMessage("Contact is adding.....");
+        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
+        Call<AddEmegencyContact> call = apiInterface.addEmergencyNumber(user_id,name, phoneNumber);
+        call.enqueue(new Callback<AddEmegencyContact>() {
+            @Override
+            public void onResponse(Call<AddEmegencyContact> call, Response<AddEmegencyContact> response) {
+                try {
+                    AddEmegencyContact model = response.body();
+                    if (model != null && model.getSuccess()){
+                        Toast.makeText(EmergencyContactActivity.this, ""+model.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                    else if (model != null && !model.getSuccess()){
+                        Toast.makeText(EmergencyContactActivity.this, ""+model.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                    else {
+                        dialog.dismiss();
+                        Toast.makeText(EmergencyContactActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                    }
+                }catch (Exception e){
+                    dialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddEmegencyContact> call, Throwable t) {
+                dialog.dismiss();
+                Toast.makeText(EmergencyContactActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override

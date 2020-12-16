@@ -4,6 +4,8 @@ package com.callpneck.activity.registrationSecond.api;
 import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.Model.ProductModel;
+import com.callpneck.activity.registrationSecond.Model.addContact.AddEmegencyContact;
+import com.callpneck.activity.registrationSecond.Model.addContact.DeleteContact;
 import com.callpneck.activity.registrationSecond.Model.addressResponse.AddAddressResponse;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductResponse;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ResponseFoodHome;
@@ -16,6 +18,7 @@ import com.callpneck.activity.registrationSecond.Model.response.responseOrder.Or
 import com.callpneck.activity.registrationSecond.Model.responseAddMoney.AddMoneyResponse;
 import com.callpneck.activity.registrationSecond.Model.responseAddMoney.SendMoneyResponse;
 import com.callpneck.activity.registrationSecond.Model.sendMoneyResponse.CheckUserForMoney;
+import com.callpneck.activity.registrationSecond.Model.showContact.ShowEmegencyContact;
 import com.callpneck.activity.registrationSecond.Model.userList.PneckUserList;
 import com.callpneck.activity.registrationSecond.Model.walletOrder.WalletOrder;
 import com.squareup.okhttp.ResponseBody;
@@ -255,5 +258,18 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("productList")
     Call<ProductModel> getProduct(@Field("user_id") String user_id);
+
+    @FormUrlEncoded
+    @POST("emergency_contact")
+    Call<AddEmegencyContact> addEmergencyNumber(@Field("user_id") String user_id,
+                                        @Field("name")String name,
+                                        @Field("number") String number);
+
+    @FormUrlEncoded
+    @POST("emergency_contact_list")
+    Call<ShowEmegencyContact> showEmergencyNumber(@Field("user_id") String user_id);
+    @FormUrlEncoded
+    @POST("emergency_contact_delete")
+    Call<DeleteContact> deleteContact(@Field("id") String id);
 
 }
