@@ -2,7 +2,6 @@ package com.callpneck.activity.registrationSecond.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,10 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,13 +31,10 @@ import com.callpneck.activity.registrationSecond.Model.foodDashboard.Cuisines;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductFood;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductResponse;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ResponseFoodHome;
-import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ShopDataList;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
 import com.callpneck.utils.Constants;
-import com.callpneck.utils.InternetConnection;
 import com.google.android.material.snackbar.Snackbar;
-import com.nex3z.notificationbadge.NotificationBadge;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -297,7 +291,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
                                 startActivity(intent);
-                                overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
                             }
                         });
@@ -347,7 +341,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
                                 startActivity(intent);
-                                overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
                             }
                         });
@@ -390,7 +384,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
                                 startActivity(intent);
-                                overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
                             }
                         });
@@ -434,7 +428,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
                                 startActivity(intent);
-                                overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
                             }
                         });
@@ -477,7 +471,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
                                 startActivity(intent);
-                                overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
                             }
                         });
@@ -521,7 +515,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
                                 startActivity(intent);
-                                overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
                             }
                         });
@@ -565,7 +559,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
                                 startActivity(intent);
-                                overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
                             }
                         });
@@ -610,7 +604,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
                                 startActivity(intent);
-                                overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
                             }
                         });
@@ -708,7 +702,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                             intent.putExtra("discount", item.getDiscount());
                             intent.putExtra("discountMin", item.getDiscountMin());
                             startActivity(intent);
-                            overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                            overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
                         }
                     });
@@ -728,7 +722,7 @@ public class ShopHomeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
 
     }
 }

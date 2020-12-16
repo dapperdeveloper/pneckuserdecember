@@ -3,8 +3,6 @@ package com.callpneck.activity.registrationSecond.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,17 +25,13 @@ import com.callpneck.activity.registrationSecond.Model.foodDashboard.productList
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ShopDataList;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
-import com.callpneck.utils.InternetConnection;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -192,7 +186,7 @@ public class ShopDetailActivity extends AppCompatActivity {
         intent.putExtra("shopName",shopName);
         intent.putExtra("shopAddress", shopAddress);
         startActivity(intent);
-        overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
     }
 
@@ -259,7 +253,7 @@ public class ShopDetailActivity extends AppCompatActivity {
         }
         else {
             super.onBackPressed();
-            overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+            overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
         }
     }
 }

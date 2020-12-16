@@ -3,6 +3,7 @@ package com.callpneck.activity.registrationSecond.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -45,7 +47,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class ServiceDetailActivity extends AppCompatActivity {
 
@@ -61,7 +62,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
     ArrayList<ModelReview> reviewList;
     AdapterReview adapterReview;
     RatingBar rating_bar;
-    String shopId, shopName, shopAvatar, shopRating, shopDescription;
+    String shopId, shopName,shopAddress, shopAvatar, shopRating, shopDescription;
     List<String> galleryList;
     ImageAdapter imageAdapter;
     private SessionManager sessionManager;
@@ -98,6 +99,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
             shopName = getIntent().getStringExtra("shopName");
             shopAvatar = getIntent().getStringExtra("shopAvatar");
             shopRating = getIntent().getStringExtra("shopRating");
+            shopAddress = getIntent().getStringExtra("shopAddress");
             try {
                 float rating = Float.parseFloat(shopRating);
                 rating_bar.setRating(rating);
@@ -105,11 +107,16 @@ public class ServiceDetailActivity extends AppCompatActivity {
                 rating_bar.setRating(1.5f);
             }
 
-
             Glide.with(this).load(shopAvatar).placeholder(R.drawable.ic_user_replace).into(shopAvatarIv);
             shopNameTv.setText(shopName);
             nameTitle.setText(shopName+" Details");
+            final ObjectAnimator animation = ObjectAnimator.ofFloat(shopAvatarIv, "rotationY", 0.0f, 360f);  // HERE 360 IS THE ANGLE OF ROTATE, YOU CAN USE 90, 180 IN PLACE OF IT,  ACCORDING TO YOURS REQUIREMENT
+            animation.setDuration(1000); // HERE 500 IS THE DURATION OF THE ANIMATION, YOU CAN INCREASE OR DECREASE ACCORDING TO YOURS REQUIREMENT
+            animation.setInterpolator(new AccelerateDecelerateInterpolator());
+            animation.start();
         }
+
+
         sessionManager=new SessionManager(ServiceDetailActivity.this);
         database = RoomDB.getInstance(this);
 
@@ -137,11 +144,21 @@ public class ServiceDetailActivity extends AppCompatActivity {
         servicesList = new ArrayList<>();
         reviewList = new ArrayList<>();
         showServicesUI();
+
+        clickListeners();
+        getProduct();
+        loadReviews();
+
+
+
+    }
+
+    private void clickListeners() {
         tabServiceTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-               showServicesUI();
+                showServicesUI();
             }
         });
         tabGalleryTv.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +167,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
 
                 showGalleryUI();
                 if (AppController.isConnected(ServiceDetailActivity.this))
-                getGalleryImage();
+                    getGalleryImage();
             }
         });
         tabReviewsTv.setOnClickListener(new View.OnClickListener() {
@@ -160,12 +177,20 @@ public class ServiceDetailActivity extends AppCompatActivity {
                 showReviewUI();
             }
         });
-
-        getProduct();
-        loadReviews();
-
-
-
+        cartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditCartActivity();
+            }
+        });
+    }
+    private void openEditCartActivity() {
+        Intent intent = new Intent(ServiceDetailActivity.this, EditShopCartActivity.class);
+        intent.putExtra("res_id",shopId);
+        intent.putExtra("shopName",shopName);
+        intent.putExtra("shopAddress", shopAddress);
+        startActivity(intent);
+        overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
     public void cartCount() {
         //store database value in data list
@@ -258,7 +283,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(ServiceDetailActivity.this, ServiceDetailDescriptionActivity.class);
         intent.putExtra("shopDescription", shopDescription);
         startActivity(intent);
-        overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void loadReviews() {
@@ -336,7 +361,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
         }
         else {
             super.onBackPressed();
-            overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+            overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
         }
         }
 

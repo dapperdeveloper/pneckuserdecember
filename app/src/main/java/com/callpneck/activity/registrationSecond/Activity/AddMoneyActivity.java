@@ -5,31 +5,23 @@ import androidx.cardview.widget.CardView;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.callpneck.R;
 import com.callpneck.SessionManager;
-import com.callpneck.activity.registrationSecond.Model.RawData;
 import com.callpneck.activity.registrationSecond.Model.responseAddMoney.AddMoneyResponse;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
 import com.callpneck.activity.registrationSecond.helper.Constant;
 import com.razorpay.Checkout;
-import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
@@ -271,7 +263,7 @@ public class AddMoneyActivity extends AppCompatActivity implements PaymentResult
     public void onBackPressed() {
         top_view.setVisibility(View.GONE);
         finish();
-        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
 
     }
 

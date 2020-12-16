@@ -1,25 +1,25 @@
 package com.callpneck.activity.registrationSecond.Activity;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.Database.MainData;
 import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Adapter.MyCartAdapter;
+import com.callpneck.activity.registrationSecond.Adapter.MyShopCartAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditCartActivity extends AppCompatActivity {
+public class EditShopCartActivity extends AppCompatActivity {
 
     RecyclerView recycler_cart;
     public TextView txt_total_price, shopNameTv, shopAddressTv;
@@ -30,17 +30,16 @@ public class EditCartActivity extends AppCompatActivity {
 
     RoomDB database;
 
-    MyCartAdapter adapter;
+    MyShopCartAdapter adapter;
 
     public double allTotalPrice =0.00;
-    String res_id = "";
+    String shop_id = "";
     String shopName, shopAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeUtils.setLanguage(this);
-        setContentView(R.layout.activity_edit_cart);
+        setContentView(R.layout.activity_edit_shop_cart);
         recycler_cart = findViewById(R.id.cartRv);
         txt_total_price =findViewById(R.id.txt_total_price);
         checkoutBtn = findViewById(R.id.checkoutBtn);
@@ -49,7 +48,7 @@ public class EditCartActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
         if (getIntent() != null){
-            res_id = getIntent().getStringExtra("res_id");
+            shop_id = getIntent().getStringExtra("res_id");
             shopName = getIntent().getStringExtra("shopName");
             shopAddress = getIntent().getStringExtra("shopAddress");
             shopNameTv.setText(shopName);
@@ -84,7 +83,7 @@ public class EditCartActivity extends AppCompatActivity {
         txt_total_price.setText("Rs." + allTotalPrice);
 
         //Initialize adapter
-        adapter = new MyCartAdapter(dataList, EditCartActivity.this);
+        adapter = new MyShopCartAdapter(dataList, EditShopCartActivity.this);
 
         recycler_cart.setAdapter(adapter);
 
@@ -102,12 +101,11 @@ public class EditCartActivity extends AppCompatActivity {
     }
 
     private void openCheckoutActivity() {
-        Intent intent = new Intent(EditCartActivity.this, CheckoutActivity.class);
-        intent.putExtra("res_id",res_id);
+        Intent intent = new Intent(EditShopCartActivity.this, CheckoutShopActivity.class);
+        intent.putExtra("res_id", shop_id);
         intent.putExtra("total_amount",allTotalPrice+"");
         startActivity(intent);
         overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
-
     }
 
 
@@ -117,5 +115,4 @@ public class EditCartActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
 
     }
-
 }

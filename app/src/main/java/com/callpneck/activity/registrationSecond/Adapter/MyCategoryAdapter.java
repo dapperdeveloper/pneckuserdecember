@@ -1,10 +1,12 @@
 package com.callpneck.activity.registrationSecond.Adapter;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -105,6 +107,11 @@ public class MyCategoryAdapter extends RecyclerView.Adapter<MyCategoryAdapter.My
                     listener.onItemClick(item);
                 }
             });
+
+            final ObjectAnimator animation = ObjectAnimator.ofFloat(img_category_item, "rotationY", 0.0f, 360f);  // HERE 360 IS THE ANGLE OF ROTATE, YOU CAN USE 90, 180 IN PLACE OF IT,  ACCORDING TO YOURS REQUIREMENT
+            animation.setDuration(1000); // HERE 500 IS THE DURATION OF THE ANIMATION, YOU CAN INCREASE OR DECREASE ACCORDING TO YOURS REQUIREMENT
+            animation.setInterpolator(new AccelerateDecelerateInterpolator());
+            animation.start();
         }
 
 

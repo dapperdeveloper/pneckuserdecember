@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,15 +22,12 @@ import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.registrationSecond.Adapter.PneckUserListAdapter;
-import com.callpneck.activity.registrationSecond.Model.GetWallet;
-import com.callpneck.activity.registrationSecond.Model.RawData;
 import com.callpneck.activity.registrationSecond.Model.responseAddMoney.SendMoneyResponse;
 import com.callpneck.activity.registrationSecond.Model.sendMoneyResponse.CheckUserForMoney;
 import com.callpneck.activity.registrationSecond.Model.userList.PneckList;
 import com.callpneck.activity.registrationSecond.Model.userList.PneckUserList;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
-import com.callpneck.activity.registrationSecond.helper.Constant;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -286,7 +282,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
 
     }
 

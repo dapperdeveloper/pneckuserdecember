@@ -41,13 +41,10 @@ import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
 import com.callpneck.activity.deliveryboy.DeliveryMainActivity;
-import com.callpneck.activity.registrationSecond.Activity.CheckoutActivity;
-import com.callpneck.activity.registrationSecond.Activity.HomeMapActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderDetailActivity;
 import com.callpneck.activity.registrationSecond.Activity.SearchActivity;
 import com.callpneck.activity.registrationSecond.Activity.SearchLocationActivity;
-import com.callpneck.activity.registrationSecond.Activity.ServiceDetailActivity;
 import com.callpneck.activity.registrationSecond.Activity.ShopHomeActivity;
 import com.callpneck.activity.registrationSecond.Adapter.MyCategoryAdapter;
 import com.callpneck.activity.registrationSecond.Model.Category;
@@ -459,7 +456,7 @@ public class HomeFragment extends Fragment {
     private void openSearchLocationActivity() {
         Intent intent = new Intent(getActivity(), SearchLocationActivity.class);
         startActivityForResult(intent,LAUNCH_ADDRESS_SET_SCREEN);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
 
@@ -483,7 +480,7 @@ public class HomeFragment extends Fragment {
     private void openSearchActivity() {
         Intent intent = new Intent(getActivity(), SearchActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void getData() {
@@ -533,7 +530,7 @@ public class HomeFragment extends Fragment {
                         Intent intent = new Intent(getContext(), ShopHomeActivity.class);
                         intent.putExtra("categoryName", item.getTitle());
                         startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                     }
 
 
@@ -542,7 +539,7 @@ public class HomeFragment extends Fragment {
                         Intent intent = new Intent(getContext(), TaxiMainActivity.class);
                         intent.putExtra("categoryName", item.getTitle());
                         startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                     }
                 }
                 else if(item.getCate_type().equalsIgnoreCase("provider")){
@@ -550,7 +547,7 @@ public class HomeFragment extends Fragment {
                         Intent intent = new Intent(getContext(), ProviderDetailActivity.class);
                         intent.putExtra("categoryName", item.getTitle());
                         startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                     }
                 }
                 else if(item.getCate_type().equalsIgnoreCase("shop")){
@@ -558,7 +555,7 @@ public class HomeFragment extends Fragment {
                         Intent intent = new Intent(getContext(), ProviderActivity.class);
                         intent.putExtra("categoryName", item.getTitle());
                         startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                     }
                 }
                 else if(item.getCate_type().equalsIgnoreCase("delivery")){
@@ -566,7 +563,7 @@ public class HomeFragment extends Fragment {
                         Intent intent = new Intent(getContext(), DeliveryMainActivity.class);
                         intent.putExtra("categoryName", item.getTitle());
                         startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                     }
                 }
                 else {

@@ -53,12 +53,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CheckoutActivity extends AppCompatActivity implements PaymentResultListener {
-
+public class CheckoutShopActivity extends AppCompatActivity implements PaymentResultListener {
 
     private static final String TAG = CheckoutActivity.class.getSimpleName();
     CheckBox chWallet, chHome, chWork,chLocation;
@@ -94,9 +94,10 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_checkout);
+        setContentView(R.layout.activity_checkout_shop);
+
         listTv = findViewById(R.id.listTv);
-        tvConfirmOrder  = findViewById(R.id.tvConfirmOrder);
+        tvConfirmOrder = findViewById(R.id.tvConfirmOrder);
         rbCod = findViewById(R.id.rbcod);
         rbRazorPay = findViewById(R.id.rbRazorPay);
         lytPayOption = findViewById(R.id.lytPayOption);
@@ -117,7 +118,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         tvTaxAmt = findViewById(R.id.tvTaxAmt);
         tvTaxPercent = findViewById(R.id.tvTaxPercent);
         tvDeliveryCharge = findViewById(R.id.tvDeliveryCharge);
-        if (getIntent() != null){
+        if (getIntent() != null) {
             res_id = getIntent().getStringExtra("res_id");
             total_amount = getIntent().getStringExtra("total_amount");
         }
@@ -139,7 +140,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getUserDetails();
 
-        ApiConfig.getWalletBalance(CheckoutActivity.this, sessionManager);
+        ApiConfig.getWalletBalance(CheckoutShopActivity.this, sessionManager);
 
         chWallet.setTag("false");
         SetDataTotal();
@@ -182,32 +183,28 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         tvConfirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validation()){
-                    if (paymentMethod.equals(getResources().getString(R.string.codpaytype))){
-                        if (AppController.isConnected(CheckoutActivity.this))
+                if (validation()) {
+                    if (paymentMethod.equals(getResources().getString(R.string.codpaytype))) {
+                        if (AppController.isConnected(CheckoutShopActivity.this))
                             PlaceOrderProcess();
-                    }
-                    else if (paymentMethod.equals(getString(R.string.razor_pay))){
-                        if (AppController.isConnected(CheckoutActivity.this))
+                    } else if (paymentMethod.equals(getString(R.string.razor_pay))) {
+                        if (AppController.isConnected(CheckoutShopActivity.this))
                             startPayment();
-                    }
-                    else if ( paymentMethod.equals("wallet")){
-                        if (AppController.isConnected(CheckoutActivity.this))
-                        OrderByWallet();
+                    } else if (paymentMethod.equals("wallet")) {
+                        if (AppController.isConnected(CheckoutShopActivity.this))
+                            OrderByWallet();
                     }
                 }
 
             }
         });
         setPaymentMethod();
-
-
     }
 
     private void OrderByWallet() {
         progressDialog.setMessage("Ordering....");
         progressDialog.show();
-        Call<WalletOrder> call = apiInterface.orderSubmitWallet(res_id, user_id, lati, longi, item_count, total_amount,
+        Call<WalletOrder> call = apiInterface.orderShopSubmitWallet(res_id, user_id, lati, longi, item_count, total_amount,
                 json, userName, userMobile, usr_address, userMail, usedBalance+"");
 
         call.enqueue(new Callback<WalletOrder>() {
@@ -217,16 +214,16 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                 try {
                     WalletOrder orderSubmit  = response.body();
                     if (orderSubmit != null && orderSubmit.getSuccess()){
-                        startActivity(new Intent(CheckoutActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        startActivity(new Intent(CheckoutShopActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         finish();
                         progressDialog.dismiss();
                     }
                     else if(orderSubmit != null && !orderSubmit.getSuccess()) {
                         progressDialog.dismiss();
-                        Toast.makeText(CheckoutActivity.this, orderSubmit.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CheckoutShopActivity.this, orderSubmit.getMessage(), Toast.LENGTH_SHORT).show();
                     }else {
                         progressDialog.dismiss();
-                        Toast.makeText(CheckoutActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CheckoutShopActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -239,7 +236,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
 
             @Override
             public void onFailure(Call<WalletOrder> call, Throwable t) {
-                Toast.makeText(CheckoutActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutShopActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -313,7 +310,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         json = gson.toJson(rawData);
         if(TextUtils.isEmpty(user_id)){
             Toast.makeText(this, "user_id is required", Toast.LENGTH_SHORT).show();
-
+            valid =false;
         }
         else if(TextUtils.isEmpty(longi)){
             Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
@@ -340,11 +337,11 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
             valid = false;
         }
         else if (TextUtils.isEmpty(paymentMethod)) {
-            Toast.makeText(CheckoutActivity.this, "Please select payment method!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CheckoutShopActivity.this, "Please select payment method!", Toast.LENGTH_SHORT).show();
             valid = false;
         }
         else if (TextUtils.isEmpty(json)) {
-            Toast.makeText(CheckoutActivity.this, "Please some product payment method!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CheckoutShopActivity.this, "Please some product payment method!", Toast.LENGTH_SHORT).show();
             valid = false;
         }
         return valid;
@@ -436,7 +433,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                     progressDialog.dismiss();
                 }
                 else {
-                    Toast.makeText(CheckoutActivity.this, "No Address added yet", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutShopActivity.this, "No Address added yet", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
             }
@@ -444,7 +441,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
             @Override
             public void onFailure(Call<ResponseAddress> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(CheckoutActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutShopActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -464,14 +461,14 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                 }
                 else {
                     progressDialog.dismiss();
-                    Toast.makeText(CheckoutActivity.this, "No Address added yet", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutShopActivity.this, "No Address added yet", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseAddress> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(CheckoutActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutShopActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -524,7 +521,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
             razorPayId = razorpayPaymentID;
             PlaceOrder(res_id, user_id, lati, longi, item_count, total_amount,
                     json, userName, userMobile, usr_address, userMail, paymentMethod, razorPayId,"Success");
-            startActivity(new Intent(CheckoutActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            startActivity(new Intent(CheckoutShopActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             finish();
 
         } catch (Exception e) {
@@ -534,7 +531,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     }
 
     private void PlaceOrder(String res_id, String user_id, String lati, String longi, String item_count, String total_amount, String json, String userName, String userMobile, String usr_address, String userMail, String paymentMethod, String razorPayId, String success) {
-        Call<ResponseOrderSubmit> call = apiInterface.orderSubmit(res_id, user_id, lati, longi, item_count, total_amount,
+        Call<ResponseOrderSubmit> call = apiInterface.orderShopSubmit(res_id, user_id, lati, longi, item_count, total_amount,
                 json, userName, userMobile, usr_address, userMail, paymentMethod, razorPayId, success);
 
         call.enqueue(new Callback<ResponseOrderSubmit>() {
@@ -544,14 +541,14 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                 ResponseOrderSubmit orderSubmit  = response.body();
 
                 if (orderSubmit != null && orderSubmit.getSuccess()){
-                    Toast.makeText(CheckoutActivity.this, ""+orderSubmit.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutShopActivity.this, ""+orderSubmit.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 else {
                     if (orderSubmit == null && !orderSubmit.getSuccess() ){
-                        Toast.makeText(CheckoutActivity.this, ""+orderSubmit.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CheckoutShopActivity.this, ""+orderSubmit.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        Toast.makeText(CheckoutActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CheckoutShopActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
                     }
                 }
                 progressDialog.dismiss();
@@ -559,7 +556,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
 
             @Override
             public void onFailure(Call<ResponseOrderSubmit> call, Throwable t) {
-                Toast.makeText(CheckoutActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutShopActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -582,7 +579,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     private void PlaceOrderProcess() {
         progressDialog.setMessage("Ordering....");
         progressDialog.show();
-        Call<ResponseOrderSubmit> call = apiInterface.orderSubmitCod(res_id, user_id, lati, longi, item_count, total_amount,
+        Call<ResponseOrderSubmit> call = apiInterface.orderShopSubmitCod(res_id, user_id, lati, longi, item_count, total_amount,
                 json, userName, userMobile, usr_address, userMail);
 
         call.enqueue(new Callback<ResponseOrderSubmit>() {
@@ -591,18 +588,18 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
 
                 ResponseOrderSubmit orderSubmit  = response.body();
                 if (orderSubmit != null && orderSubmit.getSuccess()){
-                    startActivity(new Intent(CheckoutActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                    startActivity(new Intent(CheckoutShopActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                     finish();
                 }
                 else {
-                    Toast.makeText(CheckoutActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutShopActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<ResponseOrderSubmit> call, Throwable t) {
-                Toast.makeText(CheckoutActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutShopActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -623,7 +620,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                 Location location = task.getResult();
                 if(location != null){
 
-                    Geocoder geocoder = new Geocoder(CheckoutActivity.this, Locale.getDefault());
+                    Geocoder geocoder = new Geocoder(CheckoutShopActivity.this, Locale.getDefault());
                     try {
                         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
 
@@ -681,4 +678,6 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         finish();
         overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
     }
-}
+
+    }
+

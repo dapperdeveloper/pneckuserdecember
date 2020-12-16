@@ -3,22 +3,22 @@ package com.callpneck.activity.registrationSecond.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.activity.registrationSecond.Adapter.AdapterReview;
-import com.callpneck.activity.registrationSecond.Adapter.MyServicesAdapter;
 import com.callpneck.activity.registrationSecond.Model.ModelReview;
-import com.callpneck.activity.registrationSecond.Model.ModelServices;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProviderDetailActivity extends AppCompatActivity {
 
@@ -28,7 +28,8 @@ public class ProviderDetailActivity extends AppCompatActivity {
 
     ArrayList<ModelReview> reviewList;
     AdapterReview adapterReview;
-    String shopId, shopName, shopAvatar, shopRating;
+    String shopId, shopName, shopAvatar, shopRating, shopAddress;
+    CircleImageView shopAvatarIv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,13 +44,19 @@ public class ProviderDetailActivity extends AppCompatActivity {
         reviewRl = findViewById(R.id.reviewRl);
         galleryRv = findViewById(R.id.galleryRv);
         reviewRv = findViewById(R.id.reviewRv);
+        shopAvatarIv = findViewById(R.id.shopAvatarIv);
 
 
-        if (getIntent() != null){
+        if (getIntent() != null) {
             shopId = getIntent().getStringExtra("shopId");
             shopName = getIntent().getStringExtra("shopName");
             shopAvatar = getIntent().getStringExtra("shopAvatar");
             shopRating = getIntent().getStringExtra("shopRating");
+            shopAddress = getIntent().getStringExtra("shopAddress");
+            final ObjectAnimator animation = ObjectAnimator.ofFloat(shopAvatarIv, "rotationY", 0.0f, 360f);  // HERE 360 IS THE ANGLE OF ROTATE, YOU CAN USE 90, 180 IN PLACE OF IT,  ACCORDING TO YOURS REQUIREMENT
+            animation.setDuration(1000); // HERE 500 IS THE DURATION OF THE ANIMATION, YOU CAN INCREASE OR DECREASE ACCORDING TO YOURS REQUIREMENT
+            animation.setInterpolator(new AccelerateDecelerateInterpolator());
+            animation.start();
         }
 
         findViewById(R.id.Goback).setOnClickListener(new View.OnClickListener() {
@@ -93,7 +100,7 @@ public class ProviderDetailActivity extends AppCompatActivity {
     private void openServiceDescriptionActivity() {
         Intent intent = new Intent(ProviderDetailActivity.this, ServiceDetailDescriptionActivity.class);
         startActivity(intent);
-        overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void loadReviews() {
@@ -145,7 +152,7 @@ public class ProviderDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
 
     }
 }

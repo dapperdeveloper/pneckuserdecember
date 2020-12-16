@@ -244,10 +244,15 @@ public class BookingFragment extends Fragment {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+                try {
+                    error.printStackTrace();
 //                progressBar.setVisibility(View.GONE);
-                Toast.makeText(getContext(), R.string.SOMETHING_WENT_WRONG, Toast.LENGTH_LONG).show();
-                Log.v("user_order_list", "inside error block  " + error.getMessage());
+                    Toast.makeText(getContext(), R.string.SOMETHING_WENT_WRONG, Toast.LENGTH_LONG).show();
+                    Log.v("user_order_list", "inside error block  " + error.getMessage());
+                }catch (Exception e){
+
+                }
+
             }
         };
     }

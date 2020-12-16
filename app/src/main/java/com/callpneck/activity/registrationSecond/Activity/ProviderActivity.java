@@ -1,52 +1,34 @@
 package com.callpneck.activity.registrationSecond.Activity;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
+import com.callpneck.activity.Database.MainData;
+import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Adapter.MyProviderAdapter;
 import com.callpneck.activity.registrationSecond.Model.response.responseCategoryList.ModelProvider;
 import com.callpneck.activity.registrationSecond.Model.response.responseCategoryList.Vendor;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,7 +43,8 @@ public class ProviderActivity extends AppCompatActivity {
     String user_id, ep_token, curr_lat, curr_long, category;
     SessionManager sessionManager;
     private AVLoadingIndicatorView progressBar;
-
+    RoomDB database;
+    List<MainData> dataList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +68,13 @@ public class ProviderActivity extends AppCompatActivity {
         });
 
         sessionManager = new SessionManager(this);
+        //Initialize database
+        database = RoomDB.getInstance(this);
+        //store database value in data list
+        dataList = database.mainDao().getAll();
+        if (dataList != null)
+            deleteItemFromCart();
         //init permission
-
         user_id = sessionManager.getUserid();
         ep_token = sessionManager.getUserToken();
         curr_lat = sessionManager.getUserLatitude();
@@ -95,6 +83,14 @@ public class ProviderActivity extends AppCompatActivity {
         if (AppController.isConnected(ProviderActivity.this))
             if (validation())
             getProviderDetail(user_id, ep_token, curr_lat,curr_long);
+    }
+    private void deleteItemFromCart() {
+        //delete all data from database
+        database.mainDao().reset(dataList);
+        //notify when all data is deleted
+        dataList.clear();
+        dataList.addAll(database.mainDao().getAll());
+
     }
 
     private boolean validation(){
@@ -110,6 +106,7 @@ public class ProviderActivity extends AppCompatActivity {
 
         return valid;
     }
+
     private  void showSnackBar(Activity activity, String snackTitle) {
         View Parentview=activity.findViewById(android.R.id.content);
         Snackbar snackbar = Snackbar.make(Parentview, snackTitle, Snackbar.LENGTH_SHORT);
@@ -118,6 +115,7 @@ public class ProviderActivity extends AppCompatActivity {
         TextView txtv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
         txtv.setGravity(Gravity.CENTER_HORIZONTAL);
     }
+
     private void getProviderDetail(String user_id, String ep_token, String curr_lat, String curr_long) {
         providerList = new ArrayList<>();
         ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
@@ -142,6 +140,7 @@ public class ProviderActivity extends AppCompatActivity {
                                         intent.putExtra("shopName", item.getShopTitle()+"");
                                         intent.putExtra("shopAvatar", item.getImage()+"");
                                         intent.putExtra("shopRating", item.getRating()+"");
+                                        intent.putExtra("shopAddress", item.getCurrLocAddress()+"");
                                         startActivity(intent);
                                     }
                                     else {
@@ -150,6 +149,7 @@ public class ProviderActivity extends AppCompatActivity {
                                         intent.putExtra("shopName", item.getShopTitle()+"");
                                         intent.putExtra("shopAvatar", item.getImage()+"");
                                         intent.putExtra("shopRating", item.getRating()+"");
+                                        intent.putExtra("shopAddress", item.getCurrLocAddress()+"");
                                         startActivity(intent);
                                     }
 
@@ -192,7 +192,7 @@ public class ProviderActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
 
     }
 }

@@ -41,14 +41,11 @@ import com.callpneck.Language.LanguageSettingActivity;
 import com.callpneck.activity.registrationSecond.Activity.MyBookingActivity;
 import com.callpneck.activity.registrationSecond.Activity.MyWalletActivity;
 import com.callpneck.activity.registrationSecond.Activity.NotificationsActivity;
-import com.callpneck.activity.registrationSecond.Activity.OrderListActivity;
 import com.callpneck.activity.registrationSecond.Activity.TransferMoneyActivity;
 import com.callpneck.activity.registrationSecond.Activity.WorkMapActivity;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
-import com.callpneck.activity.registrationSecond.helper.Constant;
-import com.callpneck.utils.ApiConfig;
 
 import org.json.JSONObject;
 
@@ -182,7 +179,7 @@ public class ProfileFragment extends Fragment {
                 bundle.putString("url","http://pneck.in/termsandconditions");
                 bundle.putBoolean("is_privacy",false);
                 LaunchActivityClass.LaunchWebScreen(getActivity(),bundle);
-                getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
             }
         });
         privacyPolicyBtn.setOnClickListener(new View.OnClickListener() {
@@ -192,14 +189,14 @@ public class ProfileFragment extends Fragment {
                 bundle.putString("url","http://pneck.in/termsandconditions");
                 bundle.putBoolean("is_privacy",true);
                 LaunchActivityClass.LaunchWebScreen(getActivity(),bundle);
-                getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
             }
         });
         aboutUsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LaunchActivityClass.LaunchAboutUs(getActivity());
-                getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
             }
         });
         addMoneyBtn.setOnClickListener(new View.OnClickListener() {
@@ -273,7 +270,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MyBookingActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
             }
         });
         bookingBtn.setOnClickListener(new View.OnClickListener() {
@@ -281,7 +278,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MyBookingActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
             }
         });
         walletBtn.setOnClickListener(new View.OnClickListener() {
@@ -315,7 +312,7 @@ public class ProfileFragment extends Fragment {
     private void openLanguageActivity() {
         Intent intent = new Intent(getActivity(), LanguageSettingActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
 
@@ -323,7 +320,7 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(getActivity(), HomeMapActivity.class);
         intent.putExtra("home","homeAddress");
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
 
@@ -331,71 +328,71 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(getActivity(), WorkMapActivity.class);
         intent.putExtra("work","workAddress");
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openFeedbackActivity() {
         Intent intent = new Intent(getActivity(), UserFeedbackScreen.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openHelpActivity() {
         Intent intent = new Intent(getActivity(), HelpScreen.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openEditProfileActivity() {
         Intent intent = new Intent(getActivity(), EditProfileScreen.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openTransferMoneyActivity() {
         Intent intent = new Intent(getActivity(), TransferMoneyActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openWalletActivity() {
         Intent intent = new Intent(getActivity(), MyWalletActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openEmergencyContactActivity() {
 
         Intent intent = new Intent(getActivity(), EmergencyContactActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openFavouriteActivity() {
 
         Intent intent = new Intent(getActivity(), FavouriteProviderActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openNotificationActivity() {
 
         Intent intent = new Intent(getActivity(), NotificationsActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openInviteFriendActivity() {
         Intent intent = new Intent(getActivity(), InviteFriendActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openAddMoneyActivity() {
 
         Intent intent = new Intent(getActivity(), AddMoneyActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
     }
 

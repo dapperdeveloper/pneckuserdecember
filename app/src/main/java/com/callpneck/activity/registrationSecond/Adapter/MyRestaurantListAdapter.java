@@ -1,9 +1,11 @@
 package com.callpneck.activity.registrationSecond.Adapter;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +66,8 @@ public class MyRestaurantListAdapter extends RecyclerView.Adapter<MyRestaurantLi
             txt_name_shopping_item = itemView.findViewById(R.id.txt_name_shopping_item);
             view = itemView.findViewById(R.id.view);
             view.setVisibility(View.GONE);
+
+
         }
             public void bind(final Cuisines item, final OnItemClickListener listener) {
                 txt_name_shopping_item.setText(item.getName());
@@ -73,6 +77,11 @@ public class MyRestaurantListAdapter extends RecyclerView.Adapter<MyRestaurantLi
                         listener.onItemClick(item);
                     }
                 });
+                final ObjectAnimator animation = ObjectAnimator.ofFloat(img_category_item, "rotationY", 0.0f, 360f);  // HERE 360 IS THE ANGLE OF ROTATE, YOU CAN USE 90, 180 IN PLACE OF IT,  ACCORDING TO YOURS REQUIREMENT
+                animation.setDuration(1000); // HERE 500 IS THE DURATION OF THE ANIMATION, YOU CAN INCREASE OR DECREASE ACCORDING TO YOURS REQUIREMENT
+                animation.setInterpolator(new AccelerateDecelerateInterpolator());
+                animation.start();
+
             }
 
     }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -23,13 +24,10 @@ import com.callpneck.activity.registrationSecond.Activity.TransactionsActivity;
 import com.callpneck.activity.registrationSecond.Activity.TransferMoneyActivity;
 import com.callpneck.activity.registrationSecond.Adapter.MyTransactionAdapter;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
-import com.callpneck.activity.registrationSecond.Model.Transaction;
 import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentList;
 import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentListResponse;
-import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUser;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
-import com.callpneck.utils.InternetConnection;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -105,13 +103,11 @@ public class WalletFragment extends Fragment {
                         transactionList = model.getPaymentList();
                         adapter = new MyTransactionAdapter(getContext(),transactionList);
                         transactionRv.setAdapter(adapter);
-                        showSnackBar(getActivity(), model.getMessage());
                     }
                     else if(model != null && !model.getStatus()){
-                        showSnackBar(getActivity(),model.getMessage());
                     }
                     else {
-                        showSnackBar(getActivity(),"Server Error");
+
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -122,7 +118,6 @@ public class WalletFragment extends Fragment {
             @Override
             public void onFailure(Call<PaymentListResponse> call, Throwable t) {
 
-                showSnackBar(getActivity(), t.getMessage());
             }
         });
 
@@ -185,28 +180,20 @@ public class WalletFragment extends Fragment {
     private void openTransactionActivty() {
         Intent intent = new Intent(getActivity(), TransactionsActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openTransferMoneyActivity() {
         Intent intent = new Intent(getActivity(), TransferMoneyActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void openAddMoneyActivity() {
 
         Intent intent = new Intent(getActivity(), AddMoneyActivity.class);
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
-    }
-    public static void showSnackBar(Activity activity, String snackTitle) {
-        View Parentview=activity.findViewById(android.R.id.content);
-        Snackbar snackbar = Snackbar.make(Parentview, snackTitle, Snackbar.LENGTH_SHORT);
-        snackbar.show();
-        View view = snackbar.getView();
-        TextView txtv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
-        txtv.setGravity(Gravity.CENTER_HORIZONTAL);
     }
 }

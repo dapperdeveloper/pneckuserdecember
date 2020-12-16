@@ -29,10 +29,8 @@ import com.callpneck.LaunchActivityClass;
 import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.SessionManager;
-import com.callpneck.activity.registrationSecond.Model.RawData;
 import com.callpneck.activity.registrationSecond.Model.addressResponse.AddAddressResponse;
 import com.callpneck.activity.registrationSecond.Model.getAddress.ResponseAddress;
-import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUser;
 import com.callpneck.activity.registrationSecond.api.ApiClient;
 import com.callpneck.activity.registrationSecond.api.ApiInterface;
 import com.callpneck.utils.InternetConnection;
@@ -47,10 +45,6 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -426,7 +420,7 @@ public class HomeMapActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
 
     }
 }

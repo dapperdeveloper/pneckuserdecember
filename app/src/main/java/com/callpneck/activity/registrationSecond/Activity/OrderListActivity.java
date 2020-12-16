@@ -13,9 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.callpneck.Language.LanguageSettingActivity;
 import com.callpneck.R;
-import com.callpneck.activity.Vendor.DisplayCompleteVendor;
 import com.callpneck.activity.registrationSecond.MainScreenActivity;
 import com.callpneck.activity.registrationSecond.Model.OrderTracker;
 import com.callpneck.activity.registrationSecond.fragment.OrderTrackerListFragment;
@@ -113,7 +111,7 @@ public class OrderListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
 
     }
 

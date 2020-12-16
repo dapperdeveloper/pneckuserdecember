@@ -58,7 +58,7 @@ public class SubCategoryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SubCategoryActivity.this, ProviderActivity.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
             }
         });
     }
@@ -74,7 +74,7 @@ public class SubCategoryActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.in_from_top, R.anim.out_from_bottom);
+        overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
 
     }
 

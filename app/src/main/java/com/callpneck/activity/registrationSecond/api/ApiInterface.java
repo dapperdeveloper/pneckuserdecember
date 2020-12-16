@@ -156,6 +156,23 @@ public interface ApiInterface {
                                           @Field("razorPayId") String razorPayId,
                                           @Field("success") String success
     );
+    @FormUrlEncoded
+    @POST("getorder_shop")
+    Call<ResponseOrderSubmit> orderShopSubmit(@Field("res_id") String res_id,
+                                          @Field("user_id") String user_id,
+                                          @Field("lati") String lati,
+                                          @Field("longi") String longi,
+                                          @Field("item_count") String item_count,
+                                          @Field("total_amount") String total_amount,
+                                          @Field("datas") String datas,
+                                          @Field("name") String name,
+                                          @Field("mobile") String mobile,
+                                          @Field("usr_address") String usr_address,
+                                          @Field("email") String email,
+                                          @Field("payment_method") String payment_method,
+                                          @Field("razorPayId") String razorPayId,
+                                          @Field("success") String success
+    );
 
     @FormUrlEncoded
     @POST("getorder_cod")
@@ -173,8 +190,39 @@ public interface ApiInterface {
     );
 
     @FormUrlEncoded
+    @POST("getorder_cod_shop")
+    Call<ResponseOrderSubmit> orderShopSubmitCod(@Field("res_id") String res_id,
+                                             @Field("user_id") String user_id,
+                                             @Field("lati") String lati,
+                                             @Field("longi") String longi,
+                                             @Field("item_count") String item_count,
+                                             @Field("total_amount") String total_amount,
+                                             @Field("datas") String datas,
+                                             @Field("name") String name,
+                                             @Field("mobile") String mobile,
+                                             @Field("usr_address") String usr_address,
+                                             @Field("email") String email
+    );
+
+    @FormUrlEncoded
     @POST("getorder_wallet")
     Call<WalletOrder> orderSubmitWallet(@Field("res_id") String res_id,
+                                        @Field("user_id") String user_id,
+                                        @Field("lati") String lati,
+                                        @Field("longi") String longi,
+                                        @Field("item_count") String item_count,
+                                        @Field("total_amount") String total_amount,
+                                        @Field("datas") String datas,
+                                        @Field("name") String name,
+                                        @Field("mobile") String mobile,
+                                        @Field("usr_address") String usr_address,
+                                        @Field("email") String email,
+                                        @Field("amount") String amount
+    );
+
+    @FormUrlEncoded
+    @POST("getorder_wallet_shop")
+    Call<WalletOrder> orderShopSubmitWallet(@Field("res_id") String res_id,
                                         @Field("user_id") String user_id,
                                         @Field("lati") String lati,
                                         @Field("longi") String longi,

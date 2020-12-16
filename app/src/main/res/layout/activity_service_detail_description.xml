@@ -55,6 +55,7 @@
             android:layout_marginBottom="16dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/shopAvatarIv"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
                 app:civ_border_color="@color/white"
