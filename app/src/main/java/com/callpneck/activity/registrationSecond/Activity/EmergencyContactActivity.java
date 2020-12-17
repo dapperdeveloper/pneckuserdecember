@@ -14,10 +14,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.callpneck.Language.LanguageSettingActivity;
 import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.registrationSecond.Adapter.MyEmergencyContactAdapter;
+import com.callpneck.activity.registrationSecond.MainScreenActivity;
 import com.callpneck.activity.registrationSecond.Model.EmergencyContact;
 import com.callpneck.activity.registrationSecond.Model.addContact.AddEmegencyContact;
 import com.callpneck.activity.registrationSecond.Model.addContact.DeleteContact;
@@ -134,7 +136,7 @@ public class EmergencyContactActivity extends AppCompatActivity {
             public void onResponse(Call<ShowEmegencyContact> call, Response<ShowEmegencyContact> response) {
                 try {
                     ShowEmegencyContact model = response.body();
-                    if (model != null && model.getSuccess()){
+                    if (model != null && model.getSuccess() && model.getData().size()>0){
                         contactList.addAll(model.getData());
                         adapter.notifyDataSetChanged();
                         posterLayout.setVisibility(View.GONE);
@@ -214,6 +216,9 @@ public class EmergencyContactActivity extends AppCompatActivity {
                     AddEmegencyContact model = response.body();
                     if (model != null && model.getSuccess()){
                         Toast.makeText(EmergencyContactActivity.this, ""+model.getMessage(), Toast.LENGTH_SHORT).show();
+                        Intent refresh = new Intent(EmergencyContactActivity.this, EmergencyContactActivity.class);
+                        refresh.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //Set this flag
+                        startActivity(refresh);
                         dialog.dismiss();
                     }
                     else if (model != null && !model.getSuccess()){

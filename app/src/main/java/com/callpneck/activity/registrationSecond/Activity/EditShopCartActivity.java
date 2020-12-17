@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.Database.MainData;
@@ -39,6 +40,7 @@ public class EditShopCartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_edit_shop_cart);
         recycler_cart = findViewById(R.id.cartRv);
         txt_total_price =findViewById(R.id.txt_total_price);

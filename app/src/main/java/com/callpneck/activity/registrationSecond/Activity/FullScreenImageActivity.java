@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -18,6 +19,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_full_screen_image);
         fullScreenImageView = findViewById(R.id.fullScreenImageView);
 

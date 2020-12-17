@@ -33,8 +33,9 @@ public class ProviderDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_provider_detail);
         ThemeUtils.setLanguage(this);
+        setContentView(R.layout.activity_provider_detail);
+
 
         tabServiceTv = findViewById(R.id.tabServiceTv);
         tabGalleryTv = findViewById(R.id.tabGalleryTv);

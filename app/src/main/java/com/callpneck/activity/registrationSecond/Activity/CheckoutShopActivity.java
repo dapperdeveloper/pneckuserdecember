@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
@@ -94,6 +95,7 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_checkout_shop);
 
         listTv = findViewById(R.id.listTv);

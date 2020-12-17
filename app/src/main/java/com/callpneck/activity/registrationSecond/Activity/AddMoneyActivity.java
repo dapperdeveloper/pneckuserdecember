@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.registrationSecond.Model.responseAddMoney.AddMoneyResponse;
@@ -49,7 +50,7 @@ public class AddMoneyActivity extends AppCompatActivity implements PaymentResult
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_add_money);
 
         top_view=findViewById(R.id.top_view);

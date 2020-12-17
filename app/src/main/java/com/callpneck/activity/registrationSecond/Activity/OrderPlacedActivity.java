@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.activity.Database.MainData;
 import com.callpneck.activity.Database.RoomDB;
@@ -26,6 +27,7 @@ public class OrderPlacedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_order_placed);
 
         toolbar = findViewById(R.id.toolbar);

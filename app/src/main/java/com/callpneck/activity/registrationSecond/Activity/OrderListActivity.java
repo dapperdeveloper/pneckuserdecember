@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.activity.registrationSecond.MainScreenActivity;
 import com.callpneck.activity.registrationSecond.Model.OrderTracker;
@@ -37,6 +38,7 @@ public class OrderListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_order_list);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

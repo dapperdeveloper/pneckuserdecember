@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.registrationSecond.Adapter.PlaceAutoCompleteSearchActivityAdapter;
@@ -67,6 +68,7 @@ public class SearchLocationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_search_location);
 
         Places.initialize(getApplicationContext(), "AIzaSyBTbcRRCLbhqeMVVGD5fnUevHfxj2MdgdI");

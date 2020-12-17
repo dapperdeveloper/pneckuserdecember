@@ -1,10 +1,13 @@
 package com.callpneck.activity.registrationSecond.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,8 +45,18 @@ public class MyEmergencyContactAdapter extends RecyclerView.Adapter<MyEmergencyC
 
         holder.nameTv.setText(emergencyContact.getName());
         holder.phoneTv.setText(emergencyContact.getNumber());
+        holder.call_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCallCustomer(emergencyContact.getNumber()+"");
+            }
+        });
     }
 
+    private void setCallCustomer(String providerNum){
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", providerNum, null));
+        context.startActivity(intent);
+    }
     @Override
     public int getItemCount() {
         return contactList.size();
@@ -58,11 +71,13 @@ public class MyEmergencyContactAdapter extends RecyclerView.Adapter<MyEmergencyC
 
         TextView nameTv, phoneTv;
         ImageView deleteBtn;
+        LinearLayout call_layout;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTv = itemView.findViewById(R.id.nameTv);
             phoneTv = itemView.findViewById(R.id.phoneTv);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
+            call_layout = itemView.findViewById(R.id.call_layout);
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

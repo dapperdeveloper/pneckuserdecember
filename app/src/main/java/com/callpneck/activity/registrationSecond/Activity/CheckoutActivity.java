@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
@@ -75,7 +76,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     String name, image, price, cost, quantity;
     String deliveryCharge = "0";
     double usedBalance = 0;
-    String user_id, res_id, userName ,userMobile, usr_address, userMail , longi, lati,  item_count, total_amount;
+    String user_id="", res_id="", userName="" ,userMobile="", usr_address="", userMail="" , longi="", lati="",  item_count="", total_amount="";
     ProgressDialog progressDialog;
     String label = "";
     Gson gson;
@@ -94,6 +95,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_checkout);
         listTv = findViewById(R.id.listTv);
         tvConfirmOrder  = findViewById(R.id.tvConfirmOrder);
@@ -588,16 +590,25 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         call.enqueue(new Callback<ResponseOrderSubmit>() {
             @Override
             public void onResponse(Call<ResponseOrderSubmit> call, Response<ResponseOrderSubmit> response) {
+                try{
+                    ResponseOrderSubmit orderSubmit  = response.body();
+                    if (orderSubmit != null && orderSubmit.getSuccess()){
+                        startActivity(new Intent(CheckoutActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        finish();
 
-                ResponseOrderSubmit orderSubmit  = response.body();
-                if (orderSubmit != null && orderSubmit.getSuccess()){
-                    startActivity(new Intent(CheckoutActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                    finish();
+                    }
+                    else if (orderSubmit != null && !orderSubmit.getSuccess()) {
+                        progressDialog.dismiss();
+                        Toast.makeText(CheckoutActivity.this, ""+orderSubmit.getMessage(), Toast.LENGTH_SHORT).show();
+                    }else {
+                        progressDialog.dismiss();
+                        Toast.makeText(CheckoutActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                    }
+
+                }catch (Exception e){
+                    progressDialog.dismiss();
                 }
-                else {
-                    Toast.makeText(CheckoutActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                }
-                progressDialog.dismiss();
+
             }
 
             @Override
