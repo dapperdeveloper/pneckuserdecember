@@ -4,6 +4,7 @@ package com.callpneck.activity.registrationSecond.api;
 import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.Model.ProductModel;
+import com.callpneck.activity.registrationSecond.Model.VenderDetailModel.VendorDetail;
 import com.callpneck.activity.registrationSecond.Model.addContact.AddEmegencyContact;
 import com.callpneck.activity.registrationSecond.Model.addContact.DeleteContact;
 import com.callpneck.activity.registrationSecond.Model.addressResponse.AddAddressResponse;
@@ -268,8 +269,14 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("emergency_contact_list")
     Call<ShowEmegencyContact> showEmergencyNumber(@Field("user_id") String user_id);
+
     @FormUrlEncoded
     @POST("emergency_contact_delete")
     Call<DeleteContact> deleteContact(@Field("id") String id);
+
+    @FormUrlEncoded
+    @POST("VendorDetail")
+    Call<VendorDetail> vendorDetail(@Field("vendor_id") String vendor_id);
+
 
 }

@@ -62,7 +62,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
     ArrayList<ModelReview> reviewList;
     AdapterReview adapterReview;
     RatingBar rating_bar;
-    String shopId, shopName,shopAddress, shopAvatar, shopRating, shopDescription;
+    String shopId, shopName,shopAddress, shopAvatar, shopRating, shopDescription, category;
     List<String> galleryList;
     ImageAdapter imageAdapter;
     private SessionManager sessionManager;
@@ -100,6 +100,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
             shopAvatar = getIntent().getStringExtra("shopAvatar");
             shopRating = getIntent().getStringExtra("shopRating");
             shopAddress = getIntent().getStringExtra("shopAddress");
+            category = getIntent().getStringExtra("categoryName");
             try {
                 float rating = Float.parseFloat(shopRating);
                 rating_bar.setRating(rating);
@@ -189,6 +190,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
         intent.putExtra("res_id",shopId);
         intent.putExtra("shopName",shopName);
         intent.putExtra("shopAddress", shopAddress);
+
         startActivity(intent);
         overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
@@ -281,7 +283,12 @@ public class ServiceDetailActivity extends AppCompatActivity {
 
     private void openServiceDescriptionActivity() {
         Intent intent = new Intent(ServiceDetailActivity.this, ServiceDetailDescriptionActivity.class);
-        intent.putExtra("shopDescription", shopDescription);
+        intent.putExtra("shopId", shopId);
+        intent.putExtra("shopName", shopName);
+        intent.putExtra("shopAvatar", shopAvatar);
+        intent.putExtra("shopRating", shopRating);
+        intent.putExtra("shopAddress", shopAddress);
+        intent.putExtra("categoryName", category);
         startActivity(intent);
         overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }

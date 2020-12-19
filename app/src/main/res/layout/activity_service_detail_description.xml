@@ -70,6 +70,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/shopNameTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
@@ -153,6 +154,7 @@
                     android:textColor="@color/black"
                     />
                 <TextView
+                    android:id="@+id/professionTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
@@ -170,9 +172,10 @@
                     android:textColor="@color/black"
                     />
                 <TextView
+                    android:id="@+id/addressTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
+                    android:maxLines="2"
                     android:text="Mandi Samiti Najibabad Bijnor Uttar Pradesh, Uttar Pradesh"
                     android:layout_marginLeft="16dp"
                     android:padding="3dp"
@@ -187,12 +190,14 @@
                     android:textColor="@color/black"
                     />
                 <TextView
+                    android:id="@+id/working_daysTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
                     android:text="Sunday, Monday, Tuesday, Wednesday, Thursday, Friday and Saturday,"
                     android:layout_marginLeft="16dp"
                     android:padding="3dp"
+                    android:maxLines="2"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -204,6 +209,7 @@
                     android:textColor="@color/black"
                     />
                 <TextView
+                    android:id="@+id/openTimeTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
@@ -212,6 +218,7 @@
                     android:padding="3dp"
                     />
                 <TextView
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Closing Time-"
@@ -221,6 +228,7 @@
                     android:textColor="@color/black"
                     />
                 <TextView
+                    android:id="@+id/closingTimeTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
@@ -239,6 +247,7 @@
                     android:textColor="@color/black"
                     />
                 <TextView
+                    android:id="@+id/websiteTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"

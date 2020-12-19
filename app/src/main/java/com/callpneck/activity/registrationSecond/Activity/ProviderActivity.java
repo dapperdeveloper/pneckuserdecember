@@ -141,6 +141,7 @@ public class ProviderActivity extends AppCompatActivity {
                                         intent.putExtra("shopAvatar", item.getImage()+"");
                                         intent.putExtra("shopRating", item.getRating()+"");
                                         intent.putExtra("shopAddress", item.getCurrLocAddress()+"");
+                                        intent.putExtra("categoryName", category);
                                         startActivity(intent);
                                     }
                                     else {
@@ -150,6 +151,7 @@ public class ProviderActivity extends AppCompatActivity {
                                         intent.putExtra("shopAvatar", item.getImage()+"");
                                         intent.putExtra("shopRating", item.getRating()+"");
                                         intent.putExtra("shopAddress", item.getCurrLocAddress()+"");
+                                        intent.putExtra("categoryName", category);
                                         startActivity(intent);
                                     }
 
