@@ -1,5 +1,6 @@
 package com.callpneck.activity.registrationSecond.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -26,6 +27,8 @@ import com.callpneck.Requests.JsonUTF8Request;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
 import com.callpneck.activity.SideMenuScreens.MyUserOrderList;
+import com.callpneck.activity.TrackOrder.TrackOrderActivity;
+import com.callpneck.activity.registrationSecond.Activity.TransferMoneyActivity;
 import com.callpneck.activity.registrationSecond.Adapter.OrderUserAdapter;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ShopDataList;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUser;
@@ -57,7 +60,7 @@ public class BookingFragment extends Fragment {
     private List<OrderUserList> orderUserList;
     private RelativeLayout bookingRl, orderRl;
 
-    private ProgressBar progressBar, orderProgressBar;
+    private ProgressBar progressBar;
 
     private SessionManager sessionManager;
     private RecyclerView bookingRv;
@@ -120,42 +123,37 @@ public class BookingFragment extends Fragment {
     }
 
     private void getUserOrderList() {
-        orderProgressBar.setVisibility(View.VISIBLE);
         orderUserList = new ArrayList<>();
         ApiInterface apiInterface = ApiClient.getInstance(getContext()).getApi();
         Call<OrderUser> call = apiInterface.getUserOrderList(user_id);
         call.enqueue(new Callback<OrderUser>() {
             @Override
             public void onResponse(Call<OrderUser> call, retrofit2.Response<OrderUser> response) {
-                OrderUser orderUser = response.body();
-                if (orderUser != null && orderUser.getData().size()>0 && orderUser.getErrorCode()==0){
-                    orderUserList.clear();
-                    orderUserList = orderUser.getData();
-                    orderRv.setAdapter(new OrderUserAdapter(getContext(), orderUserList, new OrderUserAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(OrderUserList item) {
+                try {
+                    OrderUser orderUser = response.body();
+                    if (orderUser != null && orderUser.getData().size()>0 && orderUser.getErrorCode()==0){
+                        orderUserList.clear();
+                        orderUserList = orderUser.getData();
+                        orderRv.setAdapter(new OrderUserAdapter(getContext(), orderUserList, new OrderUserAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(OrderUserList item) {
 
-                        }
-                    }));
-                    progressBar.setVisibility(View.GONE);
-                }
-                else {
-                    if (orderUser == null){
-                        orderProgressBar.setVisibility(View.GONE);
-                        noOrderTv.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        orderProgressBar.setVisibility(View.GONE);
-                        noOrderTv.setVisibility(View.VISIBLE);
+                                Intent intent = new Intent(getActivity(), TrackOrderActivity.class);
+                                startActivity(intent);
+                                getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                            }
+                        }));
                     }
                 }
-                orderProgressBar.setVisibility(View.GONE);
+                catch (Exception e){
+                    noOrderTv.setVisibility(View.VISIBLE);
+                }
+
             }
 
             @Override
             public void onFailure(Call<OrderUser> call, Throwable t) {
                 noOrderTv.setVisibility(View.VISIBLE);
-                orderProgressBar.setVisibility(View.GONE);
             }
         });
 
@@ -266,7 +264,6 @@ public class BookingFragment extends Fragment {
         orderRv = view.findViewById(R.id.orderRv);
         bookingRv = view.findViewById(R.id.bookingRv);
         progressBar=view.findViewById(R.id.progress_bar);
-        orderProgressBar=view.findViewById(R.id.progress_bar2);
         emptyView=view.findViewById(R.id.noBookingTv);
 
     }

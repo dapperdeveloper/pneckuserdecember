@@ -12,9 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.callpneck.R;
-import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductFood;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUserList;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -60,11 +58,11 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
         TextView shopNameTv, orderStatusTv, orderType, orderIdTv,
                 totalAmountTv, addressTv,  dateOfOrderTv;
         CircleImageView productIv;
-        Button vieDetailBtn;
+        Button trackOrderBtn, viewDetailsBtn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            vieDetailBtn = itemView.findViewById(R.id.button2);
+            trackOrderBtn = itemView.findViewById(R.id.button2);
             productIv = itemView.findViewById(R.id.productIv);
             shopNameTv = itemView.findViewById(R.id.textView3);
             orderStatusTv = itemView.findViewById(R.id.textView5);
@@ -73,7 +71,7 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
             totalAmountTv = itemView.findViewById(R.id.textView8);
             addressTv = itemView.findViewById(R.id.addressTv);
             dateOfOrderTv = itemView.findViewById(R.id.textView9);
-
+            viewDetailsBtn = itemView.findViewById(R.id.viewDetails);
         }
 
         public void bind(final OrderUserList item, OnItemClickListener listener){
@@ -85,15 +83,25 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
             if (status.equalsIgnoreCase("Cancelled")){
                 orderStatusTv.setTextColor(context.getResources().getColor(R.color.white));
                 orderStatusTv.setBackgroundColor(context.getResources().getColor(R.color.red));
+                viewDetailsBtn.setVisibility(View.VISIBLE);
+                trackOrderBtn.setVisibility(View.GONE);
+            }
+            else if (status.equalsIgnoreCase("Delivered")){
+                orderStatusTv.setTextColor(context.getResources().getColor(R.color.white));
+                orderStatusTv.setBackgroundColor(context.getResources().getColor(R.color.blue1));
+                viewDetailsBtn.setVisibility(View.VISIBLE);
+                trackOrderBtn.setVisibility(View.GONE);
             }
             else {
+                viewDetailsBtn.setVisibility(View.GONE);
+                trackOrderBtn.setVisibility(View.VISIBLE);
                 orderStatusTv.setTextColor(context.getResources().getColor(R.color.white));
                 orderStatusTv.setBackgroundColor(context.getResources().getColor(R.color.light_green));
             }
             orderStatusTv.setText(status);
             totalAmountTv.setText(new StringBuilder("Rs.").append(item.getTotalAmount()));
             Glide.with(context).load(item.getResImage()).placeholder(R.drawable.pneck_logo).into(productIv);
-            vieDetailBtn.setOnClickListener(new View.OnClickListener() {
+            trackOrderBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     listener.onItemClick(item);

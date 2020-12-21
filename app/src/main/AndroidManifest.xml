@@ -23,7 +23,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.registrationSecond.Activity.CheckoutShopActivity"></activity>
+        <activity android:name=".activity.TrackOrder.TrackOrderActivity"
+            android:theme="@style/DarkActionBar"></activity>
+        <activity android:name=".activity.registrationSecond.Activity.CheckoutShopActivity" />
         <activity android:name=".activity.registrationSecond.Activity.EditShopCartActivity" />
         <activity android:name=".activity.registrationSecond.Activity.FullScreenImageActivity" />
         <activity android:name=".activity.GoogleMapTrackingAddressSet" />
