@@ -13,10 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.callpneck.R;
-import com.callpneck.activity.registrationSecond.Model.Category;
-import com.callpneck.activity.registrationSecond.Model.FoodShop;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductFood;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
 
 import java.util.List;
 

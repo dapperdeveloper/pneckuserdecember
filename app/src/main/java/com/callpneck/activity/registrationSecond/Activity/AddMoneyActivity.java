@@ -19,8 +19,8 @@ import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.registrationSecond.Model.responseAddMoney.AddMoneyResponse;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.activity.registrationSecond.helper.Constant;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
@@ -209,8 +209,7 @@ public class AddMoneyActivity extends AppCompatActivity implements PaymentResult
 
     private void addMoneyApi(String razorPayId, String user_id, String userName, String userMail,String userMobile, String totalAmount) {
         progressDialog.show();
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<AddMoneyResponse> call = apiInterface.addMoney(user_id, userName, userMail, userMobile, totalAmount,razorPayId);
+        Call<AddMoneyResponse> call = APIClient.getInstance().addMoney(user_id, userName, userMail, userMobile, totalAmount,razorPayId);
         call.enqueue(new Callback<AddMoneyResponse>() {
             @Override
             public void onResponse(Call<AddMoneyResponse> call, Response<AddMoneyResponse> response) {

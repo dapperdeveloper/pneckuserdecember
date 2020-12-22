@@ -2,7 +2,6 @@ package com.callpneck.activity.registrationSecond.Model.search.SearchClient;
 
 import android.content.Context;
 
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

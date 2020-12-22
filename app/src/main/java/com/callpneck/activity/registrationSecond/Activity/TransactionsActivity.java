@@ -18,8 +18,8 @@ import com.callpneck.activity.registrationSecond.Adapter.MoneyOutAdapter;
 import com.callpneck.activity.registrationSecond.Adapter.MyTransactionAdapter;
 import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentList;
 import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentListResponse;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -64,8 +64,7 @@ public class TransactionsActivity extends AppCompatActivity {
     MoneyOutAdapter moneyOutAdapter;
     private void getTransactionHistory(String user_id) {
         transactionList = new ArrayList<>();
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<PaymentListResponse> call = apiInterface.getPaymentList(user_id);
+        Call<PaymentListResponse> call = APIClient.getInstance().getPaymentList(user_id);
         call.enqueue(new Callback<PaymentListResponse>() {
             @Override
             public void onResponse(Call<PaymentListResponse> call, Response<PaymentListResponse> response) {
@@ -135,8 +134,7 @@ public class TransactionsActivity extends AppCompatActivity {
 
     private void getMoneyOutHistory(String user_id) {
         transactionList = new ArrayList<>();
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<PaymentListResponse> call = apiInterface.getPaymentList(user_id);
+        Call<PaymentListResponse> call = APIClient.getInstance().getPaymentList(user_id);
         call.enqueue(new Callback<PaymentListResponse>() {
             @Override
             public void onResponse(Call<PaymentListResponse> call, Response<PaymentListResponse> response) {
@@ -172,8 +170,7 @@ public class TransactionsActivity extends AppCompatActivity {
 
     private void getMoneyInHistory(String user_id) {
         transactionList = new ArrayList<>();
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<PaymentListResponse> call = apiInterface.getPaymentList(user_id);
+        Call<PaymentListResponse> call = APIClient.getInstance().getPaymentList(user_id);
         call.enqueue(new Callback<PaymentListResponse>() {
             @Override
             public void onResponse(Call<PaymentListResponse> call, Response<PaymentListResponse> response) {

@@ -8,16 +8,13 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.callpneck.R;
-import com.callpneck.activity.registrationSecond.Model.Category;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.Cuisines;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
 
 import java.util.List;
 

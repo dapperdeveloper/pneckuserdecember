@@ -21,8 +21,8 @@ import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Adapter.MyProviderAdapter;
 import com.callpneck.activity.registrationSecond.Model.response.responseCategoryList.ModelProvider;
 import com.callpneck.activity.registrationSecond.Model.response.responseCategoryList.Vendor;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.google.android.material.snackbar.Snackbar;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -118,9 +118,8 @@ public class ProviderActivity extends AppCompatActivity {
 
     private void getProviderDetail(String user_id, String ep_token, String curr_lat, String curr_long) {
         providerList = new ArrayList<>();
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
         Log.d("TahseenVendorList","user_id-"+ user_id +"ep_token-"+ ep_token +"longitude-"+ curr_long +"latitute-"+ curr_lat +"category-"+category);
-        Call<ModelProvider> call = apiInterface.vendorList(user_id,ep_token, curr_lat, curr_long, category);
+        Call<ModelProvider> call = APIClient.getInstance().vendorList(user_id,ep_token, curr_lat, curr_long, category);
         call.enqueue(new Callback<ModelProvider>() {
             @Override
             public void onResponse(Call<ModelProvider> call, Response<ModelProvider> response) {

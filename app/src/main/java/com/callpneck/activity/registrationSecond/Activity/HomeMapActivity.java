@@ -31,8 +31,8 @@ import com.callpneck.Language.ThemeUtils;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.registrationSecond.Model.addressResponse.AddAddressResponse;
 import com.callpneck.activity.registrationSecond.Model.getAddress.ResponseAddress;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.utils.InternetConnection;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -70,8 +70,6 @@ public class HomeMapActivity extends AppCompatActivity {
     String homeAddress, address;
     ProgressDialog progressDialog;
 
-    ApiInterface apiInterface;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +82,6 @@ public class HomeMapActivity extends AppCompatActivity {
         if (getIntent() !=null){
             homeAddress = getIntent().getStringExtra("home");
         }
-        apiInterface = ApiClient.getInstance(this).getApi();
         sessionManager = new SessionManager(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Please Wait.....");
@@ -128,7 +125,7 @@ public class HomeMapActivity extends AppCompatActivity {
 
     private void getHomeAddress() {
         progressDialog.show();
-        Call<ResponseAddress> call = apiInterface.getHomeAddress(user_id);
+        Call<ResponseAddress> call = APIClient.getInstance().getHomeAddress(user_id);
         call.enqueue(new Callback<ResponseAddress>() {
             @Override
             public void onResponse(Call<ResponseAddress> call, Response<ResponseAddress> response) {
@@ -155,8 +152,7 @@ public class HomeMapActivity extends AppCompatActivity {
 
     private void updateData() {
         progressDialog.show();
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<AddAddressResponse> call = apiInterface.addUserHomeAddress(address, userLatitude, userLongitude,homeAddress, user_id);
+        Call<AddAddressResponse> call = APIClient.getInstance().addUserHomeAddress(address, userLatitude, userLongitude,homeAddress, user_id);
         call.enqueue(new Callback<AddAddressResponse>() {
             @Override
             public void onResponse(Call<AddAddressResponse> call, Response<AddAddressResponse> response) {

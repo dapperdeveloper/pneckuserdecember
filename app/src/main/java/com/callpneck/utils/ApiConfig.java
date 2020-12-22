@@ -1,30 +1,16 @@
 package com.callpneck.utils;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 
-import com.callpneck.R;
 import com.callpneck.SessionManager;
-import com.callpneck.activity.registrationSecond.MainScreenActivity;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.activity.registrationSecond.helper.Constant;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -92,8 +78,7 @@ public class ApiConfig {
 
     public static double getWalletBalance(final Activity activity, SessionManager session) {
 
-        com.callpneck.activity.registrationSecond.api.ApiInterface apiInterface = ApiClient.getInstance(activity).getApi();
-        Call<GetWallet> call = apiInterface.getWallet(session.getUserid());
+        Call<GetWallet> call = APIClient.getInstance().getWallet(session.getUserid());
         call.enqueue(new Callback<GetWallet>() {
             @Override
             public void onResponse(Call<GetWallet> call, Response<GetWallet> response) {

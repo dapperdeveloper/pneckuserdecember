@@ -1,16 +1,13 @@
 package com.callpneck.activity.registrationSecond.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +23,8 @@ import com.callpneck.activity.registrationSecond.Adapter.MyTransactionAdapter;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentList;
 import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentListResponse;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
-import com.google.android.material.snackbar.Snackbar;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,8 +86,7 @@ public class WalletFragment extends Fragment {
     }
 
     private void getTransactionHistory(String user_id) {
-        ApiInterface apiInterface = ApiClient.getInstance(getContext()).getApi();
-        Call<PaymentListResponse> call = apiInterface.getPaymentList(user_id);
+        Call<PaymentListResponse> call = APIClient.getInstance().getPaymentList(user_id);
         call.enqueue(new Callback<PaymentListResponse>() {
             @Override
             public void onResponse(Call<PaymentListResponse> call, Response<PaymentListResponse> response) {
@@ -130,8 +125,7 @@ public class WalletFragment extends Fragment {
     }
 
     private void getWalletBalance() {
-        ApiInterface apiInterface = ApiClient.getInstance(getContext()).getApi();
-        Call<GetWallet> call = apiInterface.getWallet(user_id);
+        Call<GetWallet> call = APIClient.getInstance().getWallet(user_id);
         call.enqueue(new Callback<GetWallet>() {
             @Override
             public void onResponse(Call<GetWallet> call, Response<GetWallet> response) {

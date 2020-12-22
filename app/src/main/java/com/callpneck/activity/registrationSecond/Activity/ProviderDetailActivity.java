@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ObjectAnimator;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -18,8 +17,8 @@ import com.callpneck.R;
 import com.callpneck.activity.registrationSecond.Adapter.AdapterReview;
 import com.callpneck.activity.registrationSecond.Model.ModelReview;
 import com.callpneck.activity.registrationSecond.Model.VenderDetailModel.VendorDetail;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 
 import java.util.ArrayList;
 
@@ -121,8 +120,8 @@ public class ProviderDetailActivity extends AppCompatActivity {
     }
 
     private void getVendorDetails(String shopId) {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<VendorDetail> call = apiInterface.vendorDetail(shopId);
+
+        Call<VendorDetail> call = APIClient.getInstance().vendorDetail(shopId);
         call.enqueue(new Callback<VendorDetail>() {
             @Override
             public void onResponse(Call<VendorDetail> call, Response<VendorDetail> response) {

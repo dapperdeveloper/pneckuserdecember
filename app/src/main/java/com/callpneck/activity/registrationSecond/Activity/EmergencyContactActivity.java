@@ -14,19 +14,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.callpneck.Language.LanguageSettingActivity;
 import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.registrationSecond.Adapter.MyEmergencyContactAdapter;
-import com.callpneck.activity.registrationSecond.MainScreenActivity;
-import com.callpneck.activity.registrationSecond.Model.EmergencyContact;
 import com.callpneck.activity.registrationSecond.Model.addContact.AddEmegencyContact;
 import com.callpneck.activity.registrationSecond.Model.addContact.DeleteContact;
 import com.callpneck.activity.registrationSecond.Model.showContact.ShowContactList;
 import com.callpneck.activity.registrationSecond.Model.showContact.ShowEmegencyContact;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,8 +89,7 @@ public class EmergencyContactActivity extends AppCompatActivity {
     private void getProductDelete(int id) {
         dialog.setMessage("Deleting...");
         dialog.show();
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<DeleteContact> call = apiInterface.deleteContact(id+"");
+        Call<DeleteContact> call = APIClient.getInstance().deleteContact(id+"");
         call.enqueue(new Callback<DeleteContact>() {
             @Override
             public void onResponse(Call<DeleteContact> call, Response<DeleteContact> response) {
@@ -129,8 +125,7 @@ public class EmergencyContactActivity extends AppCompatActivity {
 
     private void getContactList() {
         dialog.show();
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ShowEmegencyContact> call = apiInterface.showEmergencyNumber(user_id);
+        Call<ShowEmegencyContact> call = APIClient.getInstance().showEmergencyNumber(user_id);
         call.enqueue(new Callback<ShowEmegencyContact>() {
             @Override
             public void onResponse(Call<ShowEmegencyContact> call, Response<ShowEmegencyContact> response) {
@@ -207,8 +202,7 @@ public class EmergencyContactActivity extends AppCompatActivity {
 
     private void submitEmergencyContact(String phoneNumber, String name) {
         dialog.setMessage("Contact is adding.....");
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<AddEmegencyContact> call = apiInterface.addEmergencyNumber(user_id,name, phoneNumber);
+        Call<AddEmegencyContact> call = APIClient.getInstance().addEmergencyNumber(user_id,name, phoneNumber);
         call.enqueue(new Callback<AddEmegencyContact>() {
             @Override
             public void onResponse(Call<AddEmegencyContact> call, Response<AddEmegencyContact> response) {

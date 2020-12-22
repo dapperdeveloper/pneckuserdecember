@@ -516,7 +516,7 @@ public class HomeFragment extends Fragment {
         });
 
 
-        //  Call<DashBoard> dashBoardCall = ApiClient.getInstance()
+        //  Call<DashBoard> dashBoardCall = APIClient.getInstance()
         //      .getApi()
         //     .dashboard(email,pass);
     }

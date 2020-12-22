@@ -26,18 +26,14 @@ import com.callpneck.Requests.CustomRequest;
 import com.callpneck.Requests.JsonUTF8Request;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
-import com.callpneck.activity.SideMenuScreens.MyUserOrderList;
 import com.callpneck.activity.TrackOrder.TrackOrderActivity;
-import com.callpneck.activity.registrationSecond.Activity.TransferMoneyActivity;
 import com.callpneck.activity.registrationSecond.Adapter.OrderUserAdapter;
-import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ShopDataList;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUser;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUserList;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.adapter.UserOrderAdapters;
 import com.callpneck.model.UserOrderModel;
-import com.callpneck.utils.InternetConnection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -124,8 +120,7 @@ public class BookingFragment extends Fragment {
 
     private void getUserOrderList() {
         orderUserList = new ArrayList<>();
-        ApiInterface apiInterface = ApiClient.getInstance(getContext()).getApi();
-        Call<OrderUser> call = apiInterface.getUserOrderList(user_id);
+        Call<OrderUser> call = APIClient.getInstance().getUserOrderList(user_id);
         call.enqueue(new Callback<OrderUser>() {
             @Override
             public void onResponse(Call<OrderUser> call, retrofit2.Response<OrderUser> response) {

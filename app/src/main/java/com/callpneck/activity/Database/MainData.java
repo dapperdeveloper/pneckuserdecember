@@ -2,10 +2,10 @@ package com.callpneck.activity.Database;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-
 @Entity(tableName = "table_name")
 public class MainData implements Serializable {
 

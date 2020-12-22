@@ -44,8 +44,8 @@ import com.callpneck.activity.registrationSecond.Activity.NotificationsActivity;
 import com.callpneck.activity.registrationSecond.Activity.TransferMoneyActivity;
 import com.callpneck.activity.registrationSecond.Activity.WorkMapActivity;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 
 import org.json.JSONObject;
 
@@ -113,8 +113,7 @@ public class ProfileFragment extends Fragment {
 
 
     private void getWalletBalance() {
-        ApiInterface apiInterface = ApiClient.getInstance(getContext()).getApi();
-        Call<GetWallet> call = apiInterface.getWallet(sessionManager.getUserid());
+        Call<GetWallet> call = APIClient.getInstance().getWallet(sessionManager.getUserid());
         call.enqueue(new Callback<GetWallet>() {
             @Override
             public void onResponse(Call<GetWallet> call, retrofit2.Response<GetWallet> response) {

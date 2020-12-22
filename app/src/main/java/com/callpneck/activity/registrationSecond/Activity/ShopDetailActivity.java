@@ -23,8 +23,8 @@ import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Adapter.MyRestaurantMenuAdapter;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ProductList;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.productListResponse.ShopDataList;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.nex3z.notificationbadge.NotificationBadge;
@@ -191,8 +191,7 @@ public class ShopDetailActivity extends AppCompatActivity {
     }
 
     private void getProductList() {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ShopDataList> call = apiInterface.getProductList(res_id);
+        Call<ShopDataList> call = APIClient.getInstance().getProductList(res_id);
         call.enqueue(new Callback<ShopDataList>() {
             @Override
             public void onResponse(Call<ShopDataList> call, Response<ShopDataList> response) {

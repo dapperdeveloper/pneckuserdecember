@@ -31,8 +31,8 @@ import com.callpneck.activity.registrationSecond.Model.foodDashboard.Cuisines;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductFood;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductResponse;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ResponseFoodHome;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.utils.Constants;
 import com.google.android.material.snackbar.Snackbar;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -264,9 +264,8 @@ public class ShopHomeActivity extends AppCompatActivity {
 
     private void getProductDetail(String name) {
 
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
         RequestBody requestResId  = RequestBody.create(MediaType.parse("multipart/form-data"), name);
-        Call<ProductResponse> call = apiInterface.restaurantSearchByName(requestResId);
+        Call<ProductResponse> call = APIClient.getInstance().restaurantSearchByName(requestResId);
 
         call.enqueue(new Callback<ProductResponse>() {
             @Override
@@ -317,8 +316,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
 
     private void loadShopByRelevance() {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ProductResponse> call = apiInterface.getOpenProductsByRelevance(latitude, longitude);
+        Call<ProductResponse> call = APIClient.getInstance().getOpenProductsByRelevance(latitude, longitude);
         call.enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
@@ -360,8 +358,7 @@ public class ShopHomeActivity extends AppCompatActivity {
     }
 
     private void loadShopByRatings() {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ProductResponse> call = apiInterface.getOpenProductsByrRating(latitude, longitude);
+        Call<ProductResponse> call = APIClient.getInstance().getOpenProductsByrRating(latitude, longitude);
         call.enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
@@ -403,9 +400,7 @@ public class ShopHomeActivity extends AppCompatActivity {
     }
 
     private void loadShopByDeliveryTime() {
-
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ProductResponse> call = apiInterface.getOpenProductsByDeliveryTime(latitude, longitude);
+        Call<ProductResponse> call = APIClient.getInstance().getOpenProductsByDeliveryTime(latitude, longitude);
         call.enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
@@ -447,8 +442,7 @@ public class ShopHomeActivity extends AppCompatActivity {
     }
 
     private void loadShopLowToHighData() {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ProductResponse> call = apiInterface.getOpenProductsByCostLowToHigh(latitude, longitude);
+        Call<ProductResponse> call = APIClient.getInstance().getOpenProductsByCostLowToHigh(latitude, longitude);
         call.enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
@@ -492,8 +486,7 @@ public class ShopHomeActivity extends AppCompatActivity {
     }
 
     private void loadShopOfferData() {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ProductResponse> call = apiInterface.getOpenProductsByOffer(latitude, longitude);
+        Call<ProductResponse> call = APIClient.getInstance().getOpenProductsByOffer(latitude, longitude);
         call.enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
@@ -536,8 +529,7 @@ public class ShopHomeActivity extends AppCompatActivity {
     }
 
     private void loadShopHighToLowData() {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ProductResponse> call = apiInterface.getOpenProductsByCostHighToLow(latitude,longitude);
+        Call<ProductResponse> call = APIClient.getInstance().getOpenProductsByCostHighToLow(latitude,longitude);
         call.enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
@@ -581,8 +573,7 @@ public class ShopHomeActivity extends AppCompatActivity {
     }
 
     private void loadShopData() {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ProductResponse> call = apiInterface.getProductData(latitude, longitude);
+        Call<ProductResponse> call = APIClient.getInstance().getProductData(latitude, longitude);
         call.enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
@@ -646,8 +637,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
     private void loadCategoryData() {
         progressDialog.setVisibility(View.VISIBLE);
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ResponseFoodHome> call = apiInterface.getCategoryData();
+        Call<ResponseFoodHome> call = APIClient.getInstance().getCategoryData();
         call.enqueue(new Callback<ResponseFoodHome>() {
             @Override
             public void onResponse(Call<ResponseFoodHome> call, Response<ResponseFoodHome> response) {
@@ -678,8 +668,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
     private void getRestaurantByCategory(String id) {
 
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ProductResponse> call = apiInterface.getOpenProductsByCategory(id);
+        Call<ProductResponse> call = APIClient.getInstance().getOpenProductsByCategory(id);
 
         call.enqueue(new Callback<ProductResponse>() {
             @Override

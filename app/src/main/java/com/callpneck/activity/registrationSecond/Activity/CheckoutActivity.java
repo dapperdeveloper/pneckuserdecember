@@ -36,8 +36,8 @@ import com.callpneck.activity.registrationSecond.Model.RawData;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ResponseOrderSubmit.ResponseOrderSubmit;
 import com.callpneck.activity.registrationSecond.Model.getAddress.ResponseAddress;
 import com.callpneck.activity.registrationSecond.Model.walletOrder.WalletOrder;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.activity.registrationSecond.helper.Constant;
 import com.callpneck.utils.ApiConfig;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -88,7 +88,6 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     private double latitude, longitude;
     FusedLocationProviderClient fusedLocationProviderClient;
 
-    ApiInterface apiInterface;
     double total, subtotal;
     double taxAmt = 0.0;
 
@@ -130,7 +129,6 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
 
         gson = new Gson();
         activity = this;
-        apiInterface = ApiClient.getInstance(this).getApi();
         sessionManager = new SessionManager(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Please wait....");
@@ -209,7 +207,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     private void OrderByWallet() {
         progressDialog.setMessage("Ordering....");
         progressDialog.show();
-        Call<WalletOrder> call = apiInterface.orderSubmitWallet(res_id, user_id, lati, longi, item_count, total_amount,
+        Call<WalletOrder> call = APIClient.getInstance().orderSubmitWallet(res_id, user_id, lati, longi, item_count, total_amount,
                 json, userName, userMobile, usr_address, userMail, usedBalance+"");
 
         call.enqueue(new Callback<WalletOrder>() {
@@ -284,8 +282,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         SetDataTotal();
     }
     private void getWalletBalance() {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<GetWallet> call = apiInterface.getWallet(user_id);
+        Call<GetWallet> call = APIClient.getInstance().getWallet(user_id);
         call.enqueue(new Callback<GetWallet>() {
             @Override
             public void onResponse(Call<GetWallet> call, Response<GetWallet> response) {
@@ -426,7 +423,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
 
     private void getWorkAddress(String user_id) {
         progressDialog.show();
-        Call<ResponseAddress> call = apiInterface.getWorkAddress(user_id);
+        Call<ResponseAddress> call = APIClient.getInstance().getWorkAddress(user_id);
         call.enqueue(new Callback<ResponseAddress>() {
             @Override
             public void onResponse(Call<ResponseAddress> call, Response<ResponseAddress> response) {
@@ -453,7 +450,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
 
     private void getHomeAddress(String user_id) {
         progressDialog.show();
-        Call<ResponseAddress> call = apiInterface.getHomeAddress(user_id);
+        Call<ResponseAddress> call = APIClient.getInstance().getHomeAddress(user_id);
         call.enqueue(new Callback<ResponseAddress>() {
             @Override
             public void onResponse(Call<ResponseAddress> call, Response<ResponseAddress> response) {
@@ -536,7 +533,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     }
 
     private void PlaceOrder(String res_id, String user_id, String lati, String longi, String item_count, String total_amount, String json, String userName, String userMobile, String usr_address, String userMail, String paymentMethod, String razorPayId, String success) {
-        Call<ResponseOrderSubmit> call = apiInterface.orderSubmit(res_id, user_id, lati, longi, item_count, total_amount,
+        Call<ResponseOrderSubmit> call = APIClient.getInstance().orderSubmit(res_id, user_id, lati, longi, item_count, total_amount,
                 json, userName, userMobile, usr_address, userMail, paymentMethod, razorPayId, success);
 
         call.enqueue(new Callback<ResponseOrderSubmit>() {
@@ -584,7 +581,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     private void PlaceOrderProcess() {
         progressDialog.setMessage("Ordering....");
         progressDialog.show();
-        Call<ResponseOrderSubmit> call = apiInterface.orderSubmitCod(res_id, user_id, lati, longi, item_count, total_amount,
+        Call<ResponseOrderSubmit> call = APIClient.getInstance().orderSubmitCod(res_id, user_id, lati, longi, item_count, total_amount,
                 json, userName, userMobile, usr_address, userMail);
 
         call.enqueue(new Callback<ResponseOrderSubmit>() {

@@ -26,8 +26,8 @@ import com.callpneck.activity.registrationSecond.Model.responseAddMoney.SendMone
 import com.callpneck.activity.registrationSecond.Model.sendMoneyResponse.CheckUserForMoney;
 import com.callpneck.activity.registrationSecond.Model.userList.PneckList;
 import com.callpneck.activity.registrationSecond.Model.userList.PneckUserList;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -111,8 +111,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
     }
 
     private void getPneckUserList() {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<PneckUserList> call = apiInterface.getPneckUserList();
+        Call<PneckUserList> call = APIClient.getInstance().getPneckUserList();
         call.enqueue(new Callback<PneckUserList>() {
             @Override
             public void onResponse(Call<PneckUserList> call, Response<PneckUserList> response) {
@@ -182,8 +181,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
 
     private void sendMoney(String user_id,String money, String receiverId) {
         progressDialog.show();
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<SendMoneyResponse> call = apiInterface.sendMoneyToUser(user_id, user_id, receiverId, money);
+        Call<SendMoneyResponse> call = APIClient.getInstance().sendMoneyToUser(user_id, user_id, receiverId, money);
         call.enqueue(new Callback<SendMoneyResponse>() {
             @Override
             public void onResponse(Call<SendMoneyResponse> call, Response<SendMoneyResponse> response) {
@@ -217,8 +215,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
     }
 
     private void getResult(String input) {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<CheckUserForMoney> call = apiInterface.checkUserForMoney(input);
+        Call<CheckUserForMoney> call = APIClient.getInstance().checkUserForMoney(input);
         call.enqueue(new Callback<CheckUserForMoney>() {
             @Override
             public void onResponse(Call<CheckUserForMoney> call, Response<CheckUserForMoney> response) {

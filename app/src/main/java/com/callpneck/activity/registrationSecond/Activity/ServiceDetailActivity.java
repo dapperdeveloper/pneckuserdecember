@@ -37,8 +37,8 @@ import com.callpneck.activity.registrationSecond.Model.ModelReview;
 import com.callpneck.activity.registrationSecond.Model.ModelServices;
 import com.callpneck.activity.registrationSecond.Model.Product;
 import com.callpneck.activity.registrationSecond.Model.ProductModel;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -217,8 +217,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
     private void getProduct() {
         progressDialog.setMessage("adding");
         progressDialog.show();
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ProductModel> call = apiInterface.getProduct(shopId);
+        Call<ProductModel> call = APIClient.getInstance().getProduct(shopId);
         call.enqueue(new Callback<ProductModel>() {
             @Override
             public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
@@ -243,8 +242,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
 
     private void getGalleryImage() {
         galleryList = new ArrayList<>();
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<ServiceGalleyResponse> call = apiInterface.getGallery(shopId);
+        Call<ServiceGalleyResponse> call = APIClient.getInstance().getGallery(shopId);
         call.enqueue(new Callback<ServiceGalleyResponse>() {
             @Override
             public void onResponse(Call<ServiceGalleyResponse> call, Response<ServiceGalleyResponse> response) {

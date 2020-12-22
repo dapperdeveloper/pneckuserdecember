@@ -13,8 +13,8 @@ import com.bumptech.glide.Glide;
 import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.activity.registrationSecond.Model.VenderDetailModel.VendorDetail;
-import com.callpneck.activity.registrationSecond.api.ApiClient;
-import com.callpneck.activity.registrationSecond.api.ApiInterface;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.api.APIRequests;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -71,8 +71,7 @@ public class ServiceDetailDescriptionActivity extends AppCompatActivity {
     }
 
     private void getVendorList(String shopId) {
-        ApiInterface apiInterface = ApiClient.getInstance(this).getApi();
-        Call<VendorDetail> call = apiInterface.vendorDetail(shopId);
+        Call<VendorDetail> call = APIClient.getInstance().vendorDetail(shopId);
         call.enqueue(new Callback<VendorDetail>() {
             @Override
             public void onResponse(Call<VendorDetail> call, Response<VendorDetail> response) {
