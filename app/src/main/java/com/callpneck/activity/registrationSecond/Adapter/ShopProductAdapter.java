@@ -21,6 +21,7 @@ import com.callpneck.activity.Database.MainData;
 import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Activity.ServiceDetailActivity;
 import com.callpneck.activity.registrationSecond.Model.Product;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 
 import java.util.ArrayList;
@@ -85,13 +86,11 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
 
     private void showQuantityDialog(Product item) {
 
-//        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-//
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+
        View view = LayoutInflater.from(context).inflate(R.layout.dialog_shop_item,null);
-//        bottomSheetDialog.setContentView(view);
-        final AlertDialog deleteDialog = new AlertDialog.Builder(context).create();
-        deleteDialog.setView(view);
-        deleteDialog.setCanceledOnTouchOutside(false);
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.setCanceledOnTouchOutside(false);
         ImageView productIv;
         final TextView titleTv, pCategoryTv, descriptionTv, closeTv, originalPriceTv, finalPriceTv
                 ,quantityTv;
@@ -138,7 +137,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
         catch (Exception e){
             image = "https://pneck.in/front_theme/images/logo-white.png";
         }
-        deleteDialog.show();
+        bottomSheetDialog.show();
 
         incrementBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,14 +169,14 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
                 String totalPrice = finalPriceTv.getText().toString().trim().replace("Rs.","");
                 String quantity = quantityTv.getText().toString().trim();
                 addToCart(title,priceEach, finalImage,totalPrice,quantity);
-                deleteDialog.dismiss();
+                bottomSheetDialog.dismiss();
 
             }
         });
         closeTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteDialog.dismiss();
+                bottomSheetDialog.dismiss();
             }
         });
 

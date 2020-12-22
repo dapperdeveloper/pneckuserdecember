@@ -23,6 +23,7 @@
         android:layout_below="@+id/productIv"
         android:layout_marginTop="5dp"
         android:singleLine="true"
+        android:textSize="18dp"
         android:text="Product Title"
         android:textColor="@color/colorWhite"/>
     <TextView
@@ -31,8 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/titleTv"
+        android:singleLine="true"
         android:text="Category"
-        android:textSize="10sp"
+        android:textSize="14sp"
         android:textColor="@color/colorWhite"/>
     <TextView
         android:id="@+id/descriptionTv"
@@ -42,7 +44,8 @@
         android:layout_below="@+id/pCategoryTv"
         android:text="Product description"
         android:maxLines="3"
-        android:layout_marginTop="5dp"
+        android:textSize="16sp"
+        android:layout_marginTop="2dp"
         android:textColor="@color/colorWhite"/>
     <TextView
         android:id="@+id/closeTv"
@@ -68,6 +71,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="Rs.50"
+            android:textSize="16sp"
             android:textAlignment="textStart"
             android:textColor="@color/colorBlack"/>
 
@@ -77,6 +81,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="Final Price"
+            android:textSize="16sp"
             android:layout_alignParentEnd="true"
             android:textAlignment="textStart"
             android:textColor="@color/colorBlack"/>
@@ -95,25 +100,30 @@
 
         <ImageButton
             android:id="@+id/decrementBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_vertical"
             android:background="@null"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_remove_circle_black"/>
         <TextView
             android:id="@+id/quantityTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_gravity="center_vertical"
             android:textColor="@color/colorBlack"
-            android:textSize="18sp"
+            android:textSize="22sp"
             />
         <ImageButton
             android:id="@+id/incrementBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_vertical"
             android:background="@null"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_add_circle_black"/>
     </LinearLayout>
     <Button

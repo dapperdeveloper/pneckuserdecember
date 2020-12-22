@@ -52,6 +52,7 @@
             app:cardCornerRadius="8dp">
 
             <ImageView
+                android:id="@+id/shopAvatarIv"
                 android:layout_width="95dp"
                 android:layout_height="95dp"
                 android:src="@drawable/abcdp"

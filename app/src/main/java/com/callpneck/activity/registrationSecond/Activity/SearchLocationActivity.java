@@ -28,6 +28,8 @@ import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.registrationSecond.Adapter.PlaceAutoCompleteSearchActivityAdapter;
+import com.callpneck.activity.registrationSecond.Model.getAddress.ResponseAddress;
+import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -44,6 +46,10 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SearchLocationActivity extends AppCompatActivity {
     EditText etDestination;
@@ -65,6 +71,8 @@ public class SearchLocationActivity extends AppCompatActivity {
     private PlaceAutoCompleteSearchActivityAdapter mAutoCompleteAdapter;
     private PlacesClient placesClient;
 
+    String user_id;
+    private TextView homeAddBtn, workAddBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +87,8 @@ public class SearchLocationActivity extends AppCompatActivity {
         token = AutocompleteSessionToken.newInstance();
         searchBtn = findViewById(R.id.search);
         locationsRv=findViewById(R.id.address_recycler);
-
+        workAddBtn = findViewById(R.id.workAddBtn);
+        homeAddBtn = findViewById(R.id.homeAddBtn);
         bounds = RectangularBounds.newInstance(BOUNDS_INDIA);
 
         etDestination=findViewById(R.id.destination);
@@ -92,7 +101,7 @@ public class SearchLocationActivity extends AppCompatActivity {
         clickListeners();
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLocationPermission();
-
+        user_id = sessionManager.getUserid();
         findViewById(R.id.Goback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,7 +110,125 @@ public class SearchLocationActivity extends AppCompatActivity {
         });
 
 
+        homeAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getHomeAddress();
+            }
+        });
+        workAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getWorkAddress();
+            }
+        });
 
+        getHomeAddressBtnVisibility();
+        getWorkAddressBtnVisibility();
+
+    }
+
+    private void getWorkAddressBtnVisibility() {
+        Call<ResponseAddress> call = APIClient.getInstance().getWorkAddress(user_id);
+        call.enqueue(new Callback<ResponseAddress>() {
+            @Override
+            public void onResponse(Call<ResponseAddress> call, Response<ResponseAddress> response) {
+                try {
+                    ResponseAddress model = response.body();
+                    if (model != null && model.getStatus()){
+                        workAddBtn.setVisibility(View.VISIBLE);
+                    }
+                }catch (Exception e){
+                    workAddBtn.setVisibility(View.GONE);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAddress> call, Throwable t) {
+                workAddBtn.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void getHomeAddressBtnVisibility() {
+        Call<ResponseAddress> call = APIClient.getInstance().getHomeAddress(user_id);
+        call.enqueue(new Callback<ResponseAddress>() {
+            @Override
+            public void onResponse(Call<ResponseAddress> call, Response<ResponseAddress> response) {
+                try {
+                    ResponseAddress model = response.body();
+                    if (model != null && model.getStatus()){
+                        homeAddBtn.setVisibility(View.VISIBLE);
+                    }
+                }catch (Exception e){
+                    homeAddBtn.setVisibility(View.GONE);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAddress> call, Throwable t) {
+                homeAddBtn.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void getHomeAddress() {
+        Call<ResponseAddress> call = APIClient.getInstance().getHomeAddress(user_id);
+        call.enqueue(new Callback<ResponseAddress>() {
+            @Override
+            public void onResponse(Call<ResponseAddress> call, Response<ResponseAddress> response) {
+                try {
+                    ResponseAddress model = response.body();
+                    if (model != null && model.getStatus()){
+                        homeAddBtn.setVisibility(View.VISIBLE);
+                        destination_latti = model.getData().getLati();
+                        destination_longi = model.getData().getLongi();
+                        destination_address = model.getData().getAddress();
+                        sessionManager.setUserLocation(destination_latti, destination_longi);
+                        SaveUserAddress(destination_latti, destination_longi, destination_address);
+                    }
+                }catch (Exception e){
+                    homeAddBtn.setVisibility(View.GONE);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAddress> call, Throwable t) {
+                homeAddBtn.setVisibility(View.GONE);
+                Toast.makeText(SearchLocationActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void getWorkAddress() {
+        Call<ResponseAddress> call = APIClient.getInstance().getWorkAddress(user_id);
+        call.enqueue(new Callback<ResponseAddress>() {
+            @Override
+            public void onResponse(Call<ResponseAddress> call, Response<ResponseAddress> response) {
+                try {
+                    ResponseAddress model = response.body();
+                    if (model != null && model.getStatus()){
+                        homeAddBtn.setVisibility(View.VISIBLE);
+                        destination_latti = model.getData().getLati();
+                        destination_longi = model.getData().getLongi();
+                        destination_address = model.getData().getAddress();
+                        sessionManager.setUserLocation(destination_latti, destination_longi);
+                        SaveUserAddress(destination_latti, destination_longi, destination_address);
+                    }
+                }catch (Exception e){
+                    homeAddBtn.setVisibility(View.GONE);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAddress> call, Throwable t) {
+                homeAddBtn.setVisibility(View.GONE);
+                Toast.makeText(SearchLocationActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     String address;
 

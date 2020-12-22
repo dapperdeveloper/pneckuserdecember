@@ -283,6 +283,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
                                 intent.putExtra("shopName",item.getName());
+                                intent.putExtra("shopAvatar",item.getImage()+"");
                                 intent.putExtra("shopAddress",item.getAddress());
                                 intent.putExtra("ratings", item.getRating());
                                 intent.putExtra("res_id", item.getId()+"");
@@ -332,6 +333,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
                                 intent.putExtra("shopName",item.getName());
+                                intent.putExtra("shopAvatar",item.getImage()+"");
                                 intent.putExtra("shopAddress",item.getAddress());
                                 intent.putExtra("res_id", item.getId()+"");
                                 intent.putExtra("ratings", item.getRating());
@@ -374,6 +376,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
                                 intent.putExtra("shopName",item.getName());
+                                intent.putExtra("shopAvatar",item.getImage()+"");
                                 intent.putExtra("shopAddress",item.getAddress());
                                 intent.putExtra("res_id", item.getId()+"");
                                 intent.putExtra("ratings", item.getRating());
@@ -416,6 +419,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
                                 intent.putExtra("shopName",item.getName());
+                                intent.putExtra("shopAvatar",item.getImage()+"");
                                 intent.putExtra("shopAddress",item.getAddress());
                                 intent.putExtra("ratings", item.getRating());
                                 intent.putExtra("res_id", item.getId()+"");
@@ -458,6 +462,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
                                 intent.putExtra("shopName",item.getName());
+                                intent.putExtra("shopAvatar",item.getImage()+"");
                                 intent.putExtra("ratings", item.getRating());
                                 intent.putExtra("shopAddress",item.getAddress());
                                 intent.putExtra("res_id", item.getId()+"");
@@ -501,6 +506,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
                                 intent.putExtra("shopName",item.getName());
+                                intent.putExtra("shopAvatar",item.getImage()+"");
                                 intent.putExtra("ratings", item.getRating());
                                 intent.putExtra("shopAddress",item.getAddress());
                                 intent.putExtra("res_id", item.getId()+"");
@@ -544,6 +550,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
                                 intent.putExtra("shopName",item.getName());
+                                intent.putExtra("shopAvatar",item.getImage()+"");
                                 intent.putExtra("shopAddress",item.getAddress());
                                 intent.putExtra("ratings", item.getRating());
                                 intent.putExtra("res_id", item.getId()+"");
@@ -588,6 +595,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
                                 intent.putExtra("shopName",item.getName());
+                                intent.putExtra("shopAvatar",item.getImage()+"");
                                 intent.putExtra("shopAddress",item.getAddress());
                                 intent.putExtra("ratings", item.getRating());
                                 intent.putExtra("res_id", item.getId()+"");
@@ -684,6 +692,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
                             intent.putExtra("shopName",item.getName());
+                            intent.putExtra("shopAvatar",item.getImage()+"");
                             intent.putExtra("shopAddress",item.getAddress());
                             intent.putExtra("ratings", item.getRating());
                             intent.putExtra("res_id", item.getId()+"");

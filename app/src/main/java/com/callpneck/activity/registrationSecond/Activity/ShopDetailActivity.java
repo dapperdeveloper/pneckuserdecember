@@ -40,7 +40,7 @@ public class ShopDetailActivity extends AppCompatActivity {
 
 
     TextView shopNameTv, ratingsTv, dTimeTv, offerLabelTv;
-    String shopName, shopAddress,  rating, dTime, discount, discountMin;
+    String shopName, shopAddress, shopAvatar,  rating, dTime, discount, discountMin;
     ImageButton cartBtn;
     //for test only
     NotificationBadge notification_badge;
@@ -93,6 +93,7 @@ public class ShopDetailActivity extends AppCompatActivity {
 
         if (getIntent() != null){
             shopName = getIntent().getStringExtra("shopName");
+            shopAvatar = getIntent().getStringExtra("shopAvatar");
             shopAddress = getIntent().getStringExtra("shopAddress");
             rating = getIntent().getStringExtra("ratings");
             dTime = getIntent().getStringExtra("dTime");
@@ -185,6 +186,7 @@ public class ShopDetailActivity extends AppCompatActivity {
         intent.putExtra("res_id",res_id);
         intent.putExtra("shopName",shopName);
         intent.putExtra("shopAddress", shopAddress);
+        intent.putExtra("shopAvatar", shopAvatar);
         startActivity(intent);
         overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 

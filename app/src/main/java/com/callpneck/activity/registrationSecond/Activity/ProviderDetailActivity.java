@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,13 +18,17 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
+import com.callpneck.activity.AppController;
 import com.callpneck.activity.registrationSecond.Adapter.AdapterReview;
+import com.callpneck.activity.registrationSecond.Adapter.ImageAdapter;
+import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.ModelReview;
 import com.callpneck.activity.registrationSecond.Model.VenderDetailModel.VendorDetail;
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -31,7 +39,7 @@ public class ProviderDetailActivity extends AppCompatActivity {
 
     TextView tabServiceTv, tabGalleryTv, tabReviewsTv;
     RelativeLayout serviceRl, galleryRl, reviewRl;
-    RecyclerView  galleryRv, reviewRv;
+    RecyclerView   reviewRv;
 
     ArrayList<ModelReview> reviewList;
     AdapterReview adapterReview;
@@ -46,7 +54,6 @@ public class ProviderDetailActivity extends AppCompatActivity {
         serviceRl = findViewById(R.id.serviceRl);
         galleryRl = findViewById(R.id.galleryRl);
         reviewRl = findViewById(R.id.reviewRl);
-        galleryRv = findViewById(R.id.galleryRv);
         reviewRv = findViewById(R.id.reviewRv);
         shopAvatarIv = findViewById(R.id.shopAvatarIv);
 
@@ -58,6 +65,8 @@ public class ProviderDetailActivity extends AppCompatActivity {
         closingTimeTv = findViewById(R.id.closingTimeTv);
         websiteTv = findViewById(R.id.websiteTv);
         shopNameTv = findViewById(R.id.shopNameTv);
+
+        grid_view = findViewById(R.id.grid_view);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +112,8 @@ public class ProviderDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 showGalleryUI();
+                if (AppController.isConnected(ProviderDetailActivity.this))
+                    getGalleryImage();
             }
         });
         tabReviewsTv.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +128,47 @@ public class ProviderDetailActivity extends AppCompatActivity {
         loadReviews();
 
 
+    }
+    List<String> galleryList;
+    ImageAdapter imageAdapter;
+    GridView grid_view;
+    private void getGalleryImage() {
+        galleryList = new ArrayList<>();
+        Call<ServiceGalleyResponse> call = APIClient.getInstance().getGallery(shopId);
+        call.enqueue(new Callback<ServiceGalleyResponse>() {
+            @Override
+            public void onResponse(Call<ServiceGalleyResponse> call, Response<ServiceGalleyResponse> response) {
+
+                try {
+                    ServiceGalleyResponse model = response.body();
+                    if (model != null && model.getResponse().getSuccess()){
+                        galleryList.clear();
+                        galleryList = model.getResponse().getData().getImage();
+                        imageAdapter = new ImageAdapter(ProviderDetailActivity.this,galleryList);
+                        grid_view.setAdapter(imageAdapter);
+                        grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view,
+                                                    int position, long id) {
+
+                                Intent fullScreenIntent = new Intent(ProviderDetailActivity.this, FullScreenImageActivity.class);
+                                fullScreenIntent.setData(Uri.parse(galleryList.get(position)));
+                                startActivity(fullScreenIntent);
+                            }
+                        });
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ServiceGalleyResponse> call, Throwable t) {
+                Toast.makeText(ProviderDetailActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getVendorDetails(String shopId) {

@@ -82,6 +82,7 @@
     </RelativeLayout>
 
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -89,6 +90,34 @@
         android:layout_below="@+id/toolbarRl"
         android:background="#F6F3F3"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/homeAddBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Home Address"
+            android:padding="8dp"
+            android:visibility="gone"
+            android:drawableTint="@color/black"
+            android:drawableEnd="@drawable/ic_current_location"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:visibility="gone"
+            android:background="@color/colorGrey1"/>
+        <TextView
+            android:id="@+id/workAddBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Work Address"
+            android:padding="8dp"
+            android:visibility="gone"
+            android:drawableTint="@color/black"
+            android:drawableEnd="@drawable/ic_current_location"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/address_recycler"

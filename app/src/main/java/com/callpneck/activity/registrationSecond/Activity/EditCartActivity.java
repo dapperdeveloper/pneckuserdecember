@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
@@ -34,7 +36,8 @@ public class EditCartActivity extends AppCompatActivity {
 
     public double allTotalPrice =0.00;
     String res_id = "";
-    String shopName, shopAddress;
+    String shopName, shopAddress, shopAvatar;
+    ImageView shopAvatarIv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +49,15 @@ public class EditCartActivity extends AppCompatActivity {
         checkoutBtn = findViewById(R.id.checkoutBtn);
         shopNameTv = findViewById(R.id.shopNameTv);
         shopAddressTv = findViewById(R.id.shopAddressTv);
+        shopAvatarIv = findViewById(R.id.shopAvatarIv);
         sessionManager = new SessionManager(this);
 
         if (getIntent() != null){
             res_id = getIntent().getStringExtra("res_id");
             shopName = getIntent().getStringExtra("shopName");
             shopAddress = getIntent().getStringExtra("shopAddress");
+            shopAvatar = getIntent().getStringExtra("shopAvatar");
+            Glide.with(this).load(shopAvatar).placeholder(R.drawable.ic_user_replace).into(shopAvatarIv);
             shopNameTv.setText(shopName);
             shopAddressTv.setText(shopAddress);
         }

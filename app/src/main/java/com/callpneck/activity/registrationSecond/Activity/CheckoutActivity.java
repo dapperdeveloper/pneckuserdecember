@@ -121,6 +121,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         if (getIntent() != null){
             res_id = getIntent().getStringExtra("res_id");
             total_amount = getIntent().getStringExtra("total_amount");
+
         }
         //Initialize database
         database = RoomDB.getInstance(this);
