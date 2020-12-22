@@ -129,7 +129,7 @@ public class BookingFragment extends Fragment {
                     if (orderUser != null && orderUser.getData().size()>0 && orderUser.getErrorCode()==0){
                         orderUserList.clear();
                         orderUserList = orderUser.getData();
-                        orderRv.setAdapter(new OrderUserAdapter(getContext(), orderUserList, new OrderUserAdapter.OnItemClickListener() {
+                        orderRv.setAdapter(new OrderUserAdapter(getActivity(), orderUserList, new OrderUserAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(OrderUserList item) {
 

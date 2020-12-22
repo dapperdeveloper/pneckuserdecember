@@ -1,6 +1,8 @@
 package com.callpneck.activity.registrationSecond.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.callpneck.R;
+import com.callpneck.activity.TrackOrder.TrackOrderActivity;
+import com.callpneck.activity.registrationSecond.Activity.ReceiptOrderActivity;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUserList;
 
 import java.util.List;
@@ -23,11 +27,11 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
     public interface OnItemClickListener {
         void onItemClick(OrderUserList item);
     }
-    Context context;
+    Activity context;
     List<OrderUserList> itemList;
     private final OnItemClickListener listener;
 
-    public OrderUserAdapter(Context context, List<OrderUserList> itemList, OnItemClickListener listener) {
+    public OrderUserAdapter(Activity context, List<OrderUserList> itemList, OnItemClickListener listener) {
         this.context = context;
         this.itemList = itemList;
         this.listener = listener;
@@ -43,7 +47,18 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(itemList.get(position), listener);
+        holder.viewDetailsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openReceiptActivity();
+            }
+        });
+    }
 
+    private void openReceiptActivity() {
+        Intent intent = new Intent(context, ReceiptOrderActivity.class);
+        context.startActivity(intent);
+        context.overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     @Override
@@ -107,6 +122,8 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
                     listener.onItemClick(item);
                 }
             });
+
+
         }
     }
 }
