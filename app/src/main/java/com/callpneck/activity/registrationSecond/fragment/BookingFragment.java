@@ -134,6 +134,7 @@ public class BookingFragment extends Fragment {
                             public void onItemClick(OrderUserList item) {
 
                                 Intent intent = new Intent(getActivity(), TrackOrderActivity.class);
+                                intent.putExtra("status",item.getStatus()+"");
                                 startActivity(intent);
                                 getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                             }

@@ -13,6 +13,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.callpneck.R;
@@ -42,6 +45,9 @@ public class TrackOrderActivity extends AppCompatActivity implements OnMapReadyC
     Location mLastLocation;
     Marker mCurrLocationMarker;
 
+    String status;
+    ProgressBar receiveid_progress, acceptByDeliveryBoyProgress, picked_up_byDBProgress, delivered_progress;
+    TextView oneTv, twoTv, threeTv, fourTv, fiveTv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +58,63 @@ public class TrackOrderActivity extends AppCompatActivity implements OnMapReadyC
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+        oneTv = findViewById(R.id.oneTv);
+        twoTv = findViewById(R.id.twoTv);
+        threeTv = findViewById(R.id.threeTv);
+        fourTv = findViewById(R.id.fourTv);
+        fiveTv = findViewById(R.id.fiveTv);
+
+        receiveid_progress = findViewById(R.id.receiveid_progress);
+        acceptByDeliveryBoyProgress = findViewById(R.id.acceptByDeliveryBoyProgress);
+        picked_up_byDBProgress = findViewById(R.id.picked_up_byDBProgress);
+        delivered_progress = findViewById(R.id.delivered_progress);
+
+        status = getIntent().getStringExtra("status");
+
 
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
+
+        if (status.equalsIgnoreCase("Processing")){
+            receiveid_progress.setProgress(50);
+            oneTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+        else if (status.equalsIgnoreCase("Received")){
+            receiveid_progress.setProgress(100);
+            oneTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            twoTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+        else if (status.equalsIgnoreCase("Preparing")){
+            receiveid_progress.setProgress(100);
+            acceptByDeliveryBoyProgress.setProgress(100);
+            oneTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            twoTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            threeTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+        else if (status.equalsIgnoreCase("On The Way")){
+            receiveid_progress.setProgress(100);
+            acceptByDeliveryBoyProgress.setProgress(100);
+            picked_up_byDBProgress.setProgress(100);
+            oneTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            twoTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            threeTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            fourTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+             }
+        else {
+            receiveid_progress.setProgress(100);
+            acceptByDeliveryBoyProgress.setProgress(100);
+            picked_up_byDBProgress.setProgress(100);
+            delivered_progress.setProgress(100);
+            oneTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            twoTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            threeTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            fourTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            fiveTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+        }
+
+
+
     }
     @Override
     public boolean onSupportNavigateUp() {
