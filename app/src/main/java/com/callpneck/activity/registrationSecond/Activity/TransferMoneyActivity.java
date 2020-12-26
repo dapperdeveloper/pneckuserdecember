@@ -113,14 +113,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
 
         getContactList();
 
-        adapter = new PneckUserListAdapter(getApplicationContext(), pneckLists, new PneckUserListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(PneckList item) {
-                String mobile = item.getMobile();
-                mailEt.setText(mobile);
-            }
-        });
-        pneckUserRv.setAdapter(adapter);
+
     }
 
     private void getPneckUserList() {
@@ -133,6 +126,14 @@ public class TransferMoneyActivity extends AppCompatActivity {
                     if(model != null && model.getStatus()){
                         pneckLists.clear();
                         pneckLists = model.getPneckList();
+                        adapter = new PneckUserListAdapter(getApplicationContext(), pneckLists, new PneckUserListAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(PneckList item) {
+                                String mobile = item.getMobile();
+                                mailEt.setText(mobile);
+                            }
+                        });
+                        pneckUserRv.setAdapter(adapter);
                     }
                     else if (model != null && !model.getStatus()){
                         showSnackBar(TransferMoneyActivity.this,model.getMessage());
@@ -312,7 +313,6 @@ public class TransferMoneyActivity extends AppCompatActivity {
                         Log.i("TAG", "Name: " + name);
                         Log.i("TAG", "Phone Number: " + phoneNo);
 
-                        pneckLists.add(new PneckList(name,phoneNo));
 
 
                     }
