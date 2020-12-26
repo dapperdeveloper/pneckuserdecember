@@ -60,7 +60,7 @@ public class ProfileFragment extends Fragment {
     ImageButton editProfileBtn;
 
     RelativeLayout logoutLayout, myBookingRBtn, notificationsBtn,  inviteRBtn, emergencyContactBtn,  changeCurrencyBtn
-            ,changeLanguageBtn, paymentMethodBtn, myWalletBtn, addMoneyBtn, sendMoneyBtn,
+            ,changeLanguageBtn,  myWalletBtn, addMoneyBtn, sendMoneyBtn,
             addHomeBtn, addWorkBtn, personalDetailBtn,
             aboutUsBtn, privacyPolicyBtn, termNConditionBtn, feedbackBtn, contactUsBtn;
     LinearLayout inviteAndEarnBtn, topUpBtn, walletBtn, bookingBtn;
@@ -470,7 +470,6 @@ public class ProfileFragment extends Fragment {
         changeCurrencyBtn = view.findViewById(R.id.changeCurrencyBtn);
         changeLanguageBtn = view.findViewById(R.id.changeLanguageBtn);
         //
-        paymentMethodBtn = view.findViewById(R.id.paymentMethodBtn);
         //
         myWalletBtn = view.findViewById(R.id.myWalletBtn);
         addMoneyBtn = view.findViewById(R.id.addMoneyBtn);

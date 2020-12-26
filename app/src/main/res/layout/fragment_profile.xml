@@ -467,7 +467,8 @@
                             android:layout_marginLeft="10dp"
                             android:layout_toRightOf="@+id/a"
                             android:text="@string/personal_details"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black"
+                            android:layout_centerVertical="true" />
 
                         <ImageView
                             android:layout_width="24dp"
@@ -507,6 +508,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_toRightOf="@+id/c"
+                            android:layout_centerVertical="true"
                             android:text="@string/change_currency"
                             android:textColor="@color/black" />
 
@@ -578,46 +580,6 @@
                     android:orientation="vertical"
                     android:background="@color/white">
 
-                    <RelativeLayout
-                        android:id="@+id/paymentMethodBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/f"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="2dp"
-                            android:layout_marginBottom="2dp"
-                            android:padding="6dp"
-                            android:background="@drawable/shape_circle01"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/ic_payment_mthod"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/payment_method"
-                            android:textColor="@color/black"
-                            android:layout_toRightOf="@+id/f"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="10dp"
-                            />
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/forward_arrow"/>
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="?android:attr/listDivider" />
 
                     <RelativeLayout
                         android:id="@+id/myWalletBtn"
@@ -642,6 +604,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_toRightOf="@+id/g"
                             android:text="@string/my_wallet"
+                            android:layout_centerVertical="true"
                             android:textColor="@color/black" />
 
                         <ImageView
@@ -682,6 +645,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_toRightOf="@+id/rr"
                             android:text="@string/add_money_"
+                            android:layout_centerVertical="true"
                             android:textColor="@color/black" />
 
                         <ImageView
@@ -722,6 +686,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_toRightOf="@+id/ww"
                             android:text="@string/send_money"
+                            android:layout_centerVertical="true"
                             android:textColor="@color/black" />
 
                         <ImageView
@@ -772,6 +737,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_toRightOf="@+id/dd"
                             android:text="@string/add_home"
+                            android:layout_centerVertical="true"
                             android:textColor="@color/black" />
 
                         <ImageView

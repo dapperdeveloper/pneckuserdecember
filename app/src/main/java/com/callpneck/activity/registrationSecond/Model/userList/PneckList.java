@@ -11,13 +11,18 @@ public class PneckList {
     private Integer id;
     @SerializedName("name")
     @Expose
-    private Object name;
+    private String name;
     @SerializedName("mobile")
     @Expose
     private String mobile;
     @SerializedName("email")
     @Expose
     private Object email;
+
+    public PneckList(String name, String mobile) {
+        this.name = name;
+        this.mobile = mobile;
+    }
 
     public Integer getId() {
         return id;
@@ -31,7 +36,7 @@ public class PneckList {
         return name;
     }
 
-    public void setName(Object name) {
+    public void setName(String name) {
         this.name = name;
     }
 

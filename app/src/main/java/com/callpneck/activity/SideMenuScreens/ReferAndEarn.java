@@ -23,6 +23,7 @@ public class ReferAndEarn extends AppCompatActivity {
                 shareApp();
             }
         });
+
     }
     private void shareApp() {
         String applink;

@@ -14,6 +14,7 @@ import com.callpneck.R;
 import com.callpneck.activity.Database.MainData;
 import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Activity.EditCartActivity;
+import com.callpneck.activity.registrationSecond.Activity.EditShopCartActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -65,9 +66,11 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,dataList.size());
                 if (dataList.size() == 0){
-                    ((EditCartActivity)context).checkoutBtn.setVisibility(View.GONE);
+                    ((EditCartActivity)context).totalRL.setVisibility(View.GONE);
+                    ((EditCartActivity)context).lytempty.setVisibility(View.VISIBLE);
                 }else {
-                    ((EditCartActivity)context).checkoutBtn.setVisibility(View.VISIBLE);
+                    ((EditCartActivity)context).totalRL.setVisibility(View.VISIBLE);
+                    ((EditCartActivity)context).lytempty.setVisibility(View.GONE);
                 }
                 //adjust the subtotal after product remove
                 double subTotalWithoutDiscount = ((EditCartActivity)context).allTotalPrice;

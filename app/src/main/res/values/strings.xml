@@ -502,5 +502,8 @@
     <string name="total_amt">Subtotal</string>
     <string name="free">Free</string>
     <string name="remaining_wallet_balance">Remaining Wallet Balance:&#160;</string>
+
+    <string name="noitem_incart">Your cart is empty</string>
+    <string name="noitem_incart_msg">You have no items in your shopping cart.\nLets\'s go buy something!</string>
     <string name="products">Products</string>
 </resources>

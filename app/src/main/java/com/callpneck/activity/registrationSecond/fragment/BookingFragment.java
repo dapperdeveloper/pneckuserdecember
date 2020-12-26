@@ -34,6 +34,7 @@ import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.adapter.UserOrderAdapters;
 import com.callpneck.model.UserOrderModel;
+import com.callpneck.utils.CustPrograssbar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -47,23 +48,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class BookingFragment extends Fragment {
-
-
-
-
     TextView tabBookingTv, tabOrdersTv;
     private RecyclerView  orderRv;
     private List<OrderUserList> orderUserList;
     private RelativeLayout bookingRl, orderRl;
-
-    private ProgressBar progressBar;
-
     private SessionManager sessionManager;
     private RecyclerView bookingRv;
     private ArrayList<UserOrderModel> orderList =new ArrayList<>();
     private ArrayList<String> addedOrderList=new ArrayList<>();
     private UserOrderAdapters userOrderAdapters;
     private TextView emptyView, noOrderTv;
+    CustPrograssbar custPrograssbar;
     String user_id;
     public BookingFragment() {
         // Required empty public constructor
@@ -79,7 +74,7 @@ public class BookingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_booking, container, false);
-
+        custPrograssbar = new CustPrograssbar();
         init(view);
 
         sessionManager=new SessionManager(getActivity());
@@ -119,37 +114,49 @@ public class BookingFragment extends Fragment {
     }
 
     private void getUserOrderList() {
+        custPrograssbar.PrograssCreate(getContext());
         orderUserList = new ArrayList<>();
         Call<OrderUser> call = APIClient.getInstance().getUserOrderList(user_id);
         call.enqueue(new Callback<OrderUser>() {
             @Override
             public void onResponse(Call<OrderUser> call, retrofit2.Response<OrderUser> response) {
-                try {
-                    OrderUser orderUser = response.body();
-                    if (orderUser != null && orderUser.getData().size()>0 && orderUser.getErrorCode()==0){
-                        orderUserList.clear();
-                        orderUserList = orderUser.getData();
-                        orderRv.setAdapter(new OrderUserAdapter(getActivity(), orderUserList, new OrderUserAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(OrderUserList item) {
-
-                                Intent intent = new Intent(getActivity(), TrackOrderActivity.class);
-                                intent.putExtra("status",item.getStatus()+"");
-                                startActivity(intent);
-                                getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                if(response.isSuccessful()){
+                    custPrograssbar.ClosePrograssBar();
+                    try {
+                        OrderUser orderUser = response.body();
+                        if (orderUser != null && orderUser.getErrorCode()==0){
+                            if (orderUser.getData().size()==0){
+                                noOrderTv.setVisibility(View.VISIBLE);
                             }
-                        }));
+                            else {
+                                orderUserList.clear();
+                                orderUserList = orderUser.getData();
+                                orderRv.setAdapter(new OrderUserAdapter(getActivity(), orderUserList, new OrderUserAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(OrderUserList item) {
+                                        Intent intent = new Intent(getActivity(), TrackOrderActivity.class);
+                                        intent.putExtra("status",item.getStatus()+"");
+                                        startActivity(intent);
+                                        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                    }
+                                }));
+                                noOrderTv.setVisibility(View.GONE);
+                            }
+
+                        }
+                    }
+                    catch (Exception e){
+                        e.toString();
+                        custPrograssbar.ClosePrograssBar();
                     }
                 }
-                catch (Exception e){
-                    noOrderTv.setVisibility(View.VISIBLE);
-                }
+
 
             }
 
             @Override
             public void onFailure(Call<OrderUser> call, Throwable t) {
-                noOrderTv.setVisibility(View.VISIBLE);
+                custPrograssbar.ClosePrograssBar();
             }
         });
 
@@ -157,7 +164,7 @@ public class BookingFragment extends Fragment {
 
 
     private void checkINDatabase() {
-        progressBar.setVisibility(View.VISIBLE);
+        custPrograssbar.PrograssCreate(getContext());
         String ServerURL = getResources().getString(R.string.pneck_app_url) + "/userMyOrders";
         HashMap<String, String> dataParams = new HashMap<String, String>();
 
@@ -196,7 +203,7 @@ public class BookingFragment extends Fragment {
 
                         if (msg.trim().equalsIgnoreCase("Info-No data!")){
                             emptyView.setVisibility(View.GONE);
-                            progressBar.setVisibility(View.GONE);
+                            custPrograssbar.ClosePrograssBar();
                         }else {
                             JSONObject data=innerResponse.getJSONObject("data");
 
@@ -224,7 +231,7 @@ public class BookingFragment extends Fragment {
                     }else {
                         emptyView.setVisibility(View.GONE);
                     }
-                    progressBar.setVisibility(View.GONE);
+                    custPrograssbar.ClosePrograssBar();
 
                 } catch (Exception e) {
                     Log.v("user_order_list", "inside catch block  " + e.getMessage());
@@ -259,8 +266,8 @@ public class BookingFragment extends Fragment {
         orderRl = view.findViewById(R.id.orderRl);
         orderRv = view.findViewById(R.id.orderRv);
         bookingRv = view.findViewById(R.id.bookingRv);
-        progressBar=view.findViewById(R.id.progress_bar);
         emptyView=view.findViewById(R.id.noBookingTv);
+        noOrderTv = view.findViewById(R.id.noOrderTv);
 
     }
 

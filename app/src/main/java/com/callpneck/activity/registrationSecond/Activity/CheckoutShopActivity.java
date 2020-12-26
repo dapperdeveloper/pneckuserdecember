@@ -204,7 +204,7 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
         progressDialog.setMessage("Ordering....");
         progressDialog.show();
         Call<WalletOrder> call = APIClient.getInstance().orderShopSubmitWallet(res_id, user_id, lati, longi, item_count, total_amount,
-                json, userName, userMobile, usr_address, userMail, usedBalance+"");
+                json, userName, userMobile, usr_address, userMail, Constant.WALLET_BALANCE+"");
 
         call.enqueue(new Callback<WalletOrder>() {
             @Override
@@ -239,6 +239,8 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
                 progressDialog.dismiss();
             }
         });
+
+
     }
 
     private void getUserDetails() {

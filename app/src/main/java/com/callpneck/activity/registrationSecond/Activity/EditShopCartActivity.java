@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.callpneck.Language.ThemeUtils;
@@ -23,7 +24,7 @@ import java.util.List;
 public class EditShopCartActivity extends AppCompatActivity {
 
     RecyclerView recycler_cart;
-    public TextView txt_total_price, shopNameTv, shopAddressTv;
+    public TextView txt_total_price;
     private SessionManager sessionManager;
     public Button checkoutBtn;
 
@@ -36,6 +37,8 @@ public class EditShopCartActivity extends AppCompatActivity {
     public double allTotalPrice =0.00;
     String shop_id = "";
     String shopName, shopAddress;
+    public LinearLayout lytempty, totalRL;
+    Button btnShowNow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +48,15 @@ public class EditShopCartActivity extends AppCompatActivity {
         recycler_cart = findViewById(R.id.cartRv);
         txt_total_price =findViewById(R.id.txt_total_price);
         checkoutBtn = findViewById(R.id.checkoutBtn);
-        shopNameTv = findViewById(R.id.shopNameTv);
-        shopAddressTv = findViewById(R.id.shopAddressTv);
+        lytempty = findViewById(R.id.lytempty);
+        totalRL = findViewById(R.id.totalRL);
+        btnShowNow = findViewById(R.id.btnShowNow);
         sessionManager = new SessionManager(this);
 
         if (getIntent() != null){
             shop_id = getIntent().getStringExtra("res_id");
             shopName = getIntent().getStringExtra("shopName");
             shopAddress = getIntent().getStringExtra("shopAddress");
-            shopNameTv.setText(shopName);
-            shopAddressTv.setText(shopAddress);
         }
         findViewById(R.id.Goback).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,9 +74,12 @@ public class EditShopCartActivity extends AppCompatActivity {
         dataList = database.mainDao().getAll();
 
         if (dataList.size() == 0){
-            checkoutBtn.setVisibility(View.GONE);
+            totalRL.setVisibility(View.GONE);
+            lytempty.setVisibility(View.VISIBLE);
+
         }else {
-            checkoutBtn.setVisibility(View.VISIBLE);
+            totalRL.setVisibility(View.VISIBLE);
+            lytempty.setVisibility(View.GONE);
         }
 
         for(int i =0;i<dataList.size();i++){
@@ -95,6 +100,12 @@ public class EditShopCartActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 openCheckoutActivity();
+            }
+        });
+        btnShowNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
 

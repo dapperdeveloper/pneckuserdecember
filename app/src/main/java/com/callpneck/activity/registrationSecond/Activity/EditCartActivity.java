@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +25,7 @@ import java.util.List;
 public class EditCartActivity extends AppCompatActivity {
 
     RecyclerView recycler_cart;
-    public TextView txt_total_price, shopNameTv, shopAddressTv;
+    public TextView txt_total_price;
     private SessionManager sessionManager;
     public Button checkoutBtn;
 
@@ -37,8 +38,8 @@ public class EditCartActivity extends AppCompatActivity {
     public double allTotalPrice =0.00;
     String res_id = "";
     String shopName, shopAddress, shopAvatar;
-    ImageView shopAvatarIv;
-
+    public LinearLayout lytempty, totalRL;
+    Button btnShowNow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +48,9 @@ public class EditCartActivity extends AppCompatActivity {
         recycler_cart = findViewById(R.id.cartRv);
         txt_total_price =findViewById(R.id.txt_total_price);
         checkoutBtn = findViewById(R.id.checkoutBtn);
-        shopNameTv = findViewById(R.id.shopNameTv);
-        shopAddressTv = findViewById(R.id.shopAddressTv);
-        shopAvatarIv = findViewById(R.id.shopAvatarIv);
+        lytempty = findViewById(R.id.lytempty);
+        totalRL = findViewById(R.id.totalRL);
+        btnShowNow = findViewById(R.id.btnShowNow);
         sessionManager = new SessionManager(this);
 
         if (getIntent() != null){
@@ -57,10 +58,7 @@ public class EditCartActivity extends AppCompatActivity {
             shopName = getIntent().getStringExtra("shopName");
             shopAddress = getIntent().getStringExtra("shopAddress");
             shopAvatar = getIntent().getStringExtra("shopAvatar");
-            Glide.with(this).load(shopAvatar).placeholder(R.drawable.ic_user_replace).into(shopAvatarIv);
-            shopNameTv.setText(shopName);
-            shopAddressTv.setText(shopAddress);
-        }
+             }
         findViewById(R.id.Goback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,11 +75,13 @@ public class EditCartActivity extends AppCompatActivity {
         dataList = database.mainDao().getAll();
 
         if (dataList.size() == 0){
-            checkoutBtn.setVisibility(View.GONE);
-        }else {
-            checkoutBtn.setVisibility(View.VISIBLE);
-        }
+            totalRL.setVisibility(View.GONE);
+            lytempty.setVisibility(View.VISIBLE);
 
+        }else {
+            totalRL.setVisibility(View.VISIBLE);
+            lytempty.setVisibility(View.GONE);
+        }
         for(int i =0;i<dataList.size();i++){
             String cost = dataList.get(i).getCost();
             allTotalPrice = allTotalPrice + Double.parseDouble(cost);
@@ -100,6 +100,12 @@ public class EditCartActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 openCheckoutActivity();
+            }
+        });
+        btnShowNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
 

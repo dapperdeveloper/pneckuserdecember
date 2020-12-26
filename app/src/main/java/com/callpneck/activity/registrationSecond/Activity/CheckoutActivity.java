@@ -209,7 +209,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         progressDialog.setMessage("Ordering....");
         progressDialog.show();
         Call<WalletOrder> call = APIClient.getInstance().orderSubmitWallet(res_id, user_id, lati, longi, item_count, total_amount,
-                json, userName, userMobile, usr_address, userMail, usedBalance+"");
+                json, userName, userMobile, usr_address, userMail, Constant.WALLET_BALANCE+"");
 
         call.enqueue(new Callback<WalletOrder>() {
             @Override

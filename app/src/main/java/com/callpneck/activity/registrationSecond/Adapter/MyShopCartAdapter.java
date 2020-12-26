@@ -65,9 +65,11 @@ public class MyShopCartAdapter extends RecyclerView.Adapter<MyShopCartAdapter.My
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,dataList.size());
                 if (dataList.size() == 0){
-                    ((EditShopCartActivity)context).checkoutBtn.setVisibility(View.GONE);
+                    ((EditShopCartActivity)context).totalRL.setVisibility(View.GONE);
+                    ((EditShopCartActivity)context).lytempty.setVisibility(View.VISIBLE);
                 }else {
-                    ((EditShopCartActivity)context).checkoutBtn.setVisibility(View.VISIBLE);
+                    ((EditShopCartActivity)context).totalRL.setVisibility(View.VISIBLE);
+                    ((EditShopCartActivity)context).lytempty.setVisibility(View.GONE);
                 }
                 //adjust the subtotal after product remove
                 double subTotalWithoutDiscount = ((EditShopCartActivity)context).allTotalPrice;

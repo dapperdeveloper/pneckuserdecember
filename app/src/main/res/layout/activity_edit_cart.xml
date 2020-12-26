@@ -36,65 +36,13 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/shopDetailLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbarRl"
-        android:layout_marginTop="16dp">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/vh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp">
-
-            <ImageView
-                android:id="@+id/shopAvatarIv"
-                android:layout_width="95dp"
-                android:layout_height="95dp"
-                android:src="@drawable/abcdp"
-                />
-        </androidx.cardview.widget.CardView>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="95dp"
-            android:layout_toRightOf="@+id/vh"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/shopNameTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Shop name"
-                android:textColor="@color/black"
-                android:layout_marginLeft="8dp"
-                android:layout_gravity="center"/>
-            <TextView
-                android:id="@+id/shopAddressTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Shop address"
-                android:layout_marginLeft="8dp"
-                android:layout_gravity="center"/>
-
-        </LinearLayout>
-
-
-
-    </RelativeLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartRv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/shopDetailLayout"
+        android:layout_below="@+id/toolbarRl"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/layout_cart_item"
         android:layout_above="@+id/totalRL"
@@ -151,7 +99,7 @@
         <Button
             android:id="@+id/checkoutBtn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:text="@string/checkout"
             android:enabled="true"
             android:textSize="18sp"
@@ -159,6 +107,48 @@
             android:textColor="@color/white"
             />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lytempty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_below="@+id/toolbarRl"
+        android:orientation="vertical"
+        android:visibility="visible">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/emptycart" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/noitem_incart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/noitem_incart_msg" />
+
+        <Button
+            android:id="@+id/btnShowNow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:clickable="false"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="@string/shop_now"
+            android:textColor="@color/white" />
+    </LinearLayout>
 
 </RelativeLayout>
