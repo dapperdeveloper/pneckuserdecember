@@ -209,27 +209,26 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
         call.enqueue(new Callback<WalletOrder>() {
             @Override
             public void onResponse(Call<WalletOrder> call, Response<WalletOrder> response) {
+                if (response.isSuccessful()){
+                    try {
+                        WalletOrder orderSubmit  = response.body();
+                        if (orderSubmit != null && orderSubmit.getSuccess()){
+                            startActivity(new Intent(CheckoutShopActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                            finish();
+                            progressDialog.dismiss();
+                        }
+                        else if(orderSubmit != null && !orderSubmit.getSuccess()) {
+                            progressDialog.dismiss();
+                            Toast.makeText(CheckoutShopActivity.this, orderSubmit.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
 
-                try {
-                    WalletOrder orderSubmit  = response.body();
-                    if (orderSubmit != null && orderSubmit.getSuccess()){
-                        startActivity(new Intent(CheckoutShopActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                        finish();
+
+                    }catch (Exception e){
+                       e.toString();
                         progressDialog.dismiss();
                     }
-                    else if(orderSubmit != null && !orderSubmit.getSuccess()) {
-                        progressDialog.dismiss();
-                        Toast.makeText(CheckoutShopActivity.this, orderSubmit.getMessage(), Toast.LENGTH_SHORT).show();
-                    }else {
-                        progressDialog.dismiss();
-                        Toast.makeText(CheckoutShopActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                    progressDialog.dismiss();
                 }
+
 
             }
 

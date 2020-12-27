@@ -13,6 +13,13 @@ public class ReceiptOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receipt_order);
 
+        if (getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("RECEIPT");
+            getSupportActionBar().setElevation(0f);
+        }
+
+
 
     }
 }

@@ -6,9 +6,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class WalletOrder {
 
-    @SerializedName("item")
-    @Expose
-    private Item item;
     @SerializedName("message")
     @Expose
     private String message;
@@ -16,13 +13,6 @@ public class WalletOrder {
     @Expose
     private Boolean success;
 
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
 
     public String getMessage() {
         return message;
