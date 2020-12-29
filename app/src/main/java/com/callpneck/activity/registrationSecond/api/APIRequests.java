@@ -1,6 +1,7 @@
 package com.callpneck.activity.registrationSecond.api;
 
 
+import com.callpneck.activity.TrackOrder.Model.TrackOrderModel;
 import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.Model.ProductModel;
@@ -277,6 +278,18 @@ public interface APIRequests {
     @FormUrlEncoded
     @POST("VendorDetail")
     Call<VendorDetail> vendorDetail(@Field("vendor_id") String vendor_id);
+
+    @FormUrlEncoded
+    @POST("UserOrderListDetails")
+    Call<TrackOrderModel> UserOrderListDetails(@Field("order_id") String vendor_id);
+
+
+    @FormUrlEncoded
+    @POST("CancelOrder")
+    Call<DeleteContact> CancelOrder(@Field("order_id") String order_id,
+                                    @Field("user_id") String user_id,
+                                    @Field("res_id") String res_id,
+                                    @Field("message") String message);
 
 
 }

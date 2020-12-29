@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.registrationSecond.Activity.CancelOrderScreenActivity">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/radio_group"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        >
+
+        <RadioButton
+            android:id="@+id/oneRb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Order Created by Mistake"
+
+            />
+        <RadioButton
+            android:id="@+id/twoRb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Item(s) Would Not Arrive on Time"
+            />
+        <RadioButton
+            android:id="@+id/threeRb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Shipping Cost Too High"
+            />
+        <RadioButton
+            android:id="@+id/fourRb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Item Price Too High"
+            />
+        <RadioButton
+            android:id="@+id/fiveRb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Found Cheaper Somewhere Else"
+            />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnCnl"
+        android:layout_below="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/CANCEL_ORDER"
+        android:textColor="@color/white"
+        android:layout_margin="16dp"
+        android:background="@drawable/button_corner_background"
+        />
+</RelativeLayout>

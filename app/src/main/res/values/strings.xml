@@ -18,6 +18,7 @@
     <string name="facebook_app_id">2691819664391880</string>
     <string name="fb_login_protocol_scheme">fb2691819664391880</string>
 
+
     <string name="refere">Refer &amp; Earn</string>
     <string name="your_refer_code">Your Referral Code</string>
     <string name="tap_copy">Tap To Copy</string>
@@ -506,4 +507,27 @@
     <string name="noitem_incart">Your cart is empty</string>
     <string name="noitem_incart_msg">You have no items in your shopping cart.\nLets\'s go buy something!</string>
     <string name="products">Products</string>
+
+    <string name="ordered_id">Ordered Id:&#160;</string>
+    <string name="order_date">Order Date:&#160;</string>
+    <string name="price_details">Price Detail</string>
+    <string name="items">Items Amount :</string>
+    <string name="delivery_charge1">Delivery Charge :</string>
+    <string name="promo_applied">PromoCode Discount :</string>
+    <string name="wallet_balance1">Wallet Balance :</string>
+    <string name="final_total">Final Total : </string>
+    <string name="other_details">Other Details</string>
+    <string name="order_placed">Order Placed</string>
+    <string name="processed">Order Processed</string>
+    <string name="shipped">Order Shipped</string>
+    <string name="delivered">Order Delivered</string>
+    <string name="returned">Returned</string>
+    <string name="order_status">Order Status</string>
+    <string name="cancel_order_detail">Cancel Order ?</string>
+    <string name="name_1">Name :&#160;</string>
+    <string name="mobile_no_1">\nMobile No :&#160;</string>
+    <string name="address_1">\nAddress :&#160;</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="cancel_msg">Are you sure, you want to cancel this item ?</string>
+
 </resources>

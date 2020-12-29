@@ -24,8 +24,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.registrationSecond.Activity.ReceiptOrderActivity"
-            android:theme="@style/AppTheme1"></activity>
+        <activity android:name=".activity.registrationSecond.Activity.CancelOrderScreenActivity"></activity>
+        <activity
+            android:name=".activity.registrationSecond.Activity.ReceiptOrderActivity"
+            android:theme="@style/AppTheme1" />
         <activity
             android:name=".activity.TrackOrder.TrackOrderActivity"
             android:theme="@style/DarkActionBar" />

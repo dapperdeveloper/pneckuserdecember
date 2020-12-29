@@ -26,6 +26,7 @@
             android:id="@+id/cancel_reason_radio">
 
             <RadioButton
+                android:id="@+id/oneRb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -34,6 +35,7 @@
                 android:text="Late response"/>
 
             <RadioButton
+                android:id="@+id/twoRb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -42,6 +44,7 @@
                 android:text="I have other option"/>
 
             <RadioButton
+                android:id="@+id/threeRb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -50,19 +53,30 @@
                 android:text="No service required"/>
 
             <RadioButton
+                android:id="@+id/fourRb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:paddingLeft="8dp"
-                android:text="Booked by mistake"/>
+                android:text="Order by mistake"/>
             <RadioButton
+                android:id="@+id/fiveRb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:paddingLeft="8dp"
                 android:text="Late delivery time"/>
+
+            <RadioButton
+                android:id="@+id/otherRb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:paddingLeft="8dp"
+                android:text="Other"/>
 
         </RadioGroup>
 

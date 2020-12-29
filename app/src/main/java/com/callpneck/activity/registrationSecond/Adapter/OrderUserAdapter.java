@@ -47,12 +47,6 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(itemList.get(position), listener);
-        holder.viewDetailsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openReceiptActivity();
-            }
-        });
     }
 
     private void openReceiptActivity() {
@@ -73,7 +67,7 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
         TextView shopNameTv, orderStatusTv, orderType, orderIdTv,
                 totalAmountTv, addressTv,  dateOfOrderTv;
         CircleImageView productIv;
-        Button trackOrderBtn, viewDetailsBtn;
+        Button trackOrderBtn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -86,7 +80,6 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
             totalAmountTv = itemView.findViewById(R.id.textView8);
             addressTv = itemView.findViewById(R.id.addressTv);
             dateOfOrderTv = itemView.findViewById(R.id.textView9);
-            viewDetailsBtn = itemView.findViewById(R.id.viewDetails);
         }
 
         public void bind(final OrderUserList item, OnItemClickListener listener){
@@ -98,18 +91,12 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
             if (status.equalsIgnoreCase("Cancelled")){
                 orderStatusTv.setTextColor(context.getResources().getColor(R.color.white));
                 orderStatusTv.setBackgroundColor(context.getResources().getColor(R.color.red));
-                viewDetailsBtn.setVisibility(View.VISIBLE);
-                trackOrderBtn.setVisibility(View.GONE);
             }
             else if (status.equalsIgnoreCase("Delivered")){
                 orderStatusTv.setTextColor(context.getResources().getColor(R.color.white));
                 orderStatusTv.setBackgroundColor(context.getResources().getColor(R.color.blue1));
-                viewDetailsBtn.setVisibility(View.VISIBLE);
-                trackOrderBtn.setVisibility(View.GONE);
             }
             else {
-                viewDetailsBtn.setVisibility(View.GONE);
-                trackOrderBtn.setVisibility(View.VISIBLE);
                 orderStatusTv.setTextColor(context.getResources().getColor(R.color.white));
                 orderStatusTv.setBackgroundColor(context.getResources().getColor(R.color.light_green));
             }

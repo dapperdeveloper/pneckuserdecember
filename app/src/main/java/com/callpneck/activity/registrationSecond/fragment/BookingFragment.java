@@ -27,6 +27,7 @@ import com.callpneck.Requests.JsonUTF8Request;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
 import com.callpneck.activity.TrackOrder.TrackOrderActivity;
+import com.callpneck.activity.registrationSecond.Activity.ReceiptOrderActivity;
 import com.callpneck.activity.registrationSecond.Adapter.OrderUserAdapter;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUser;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUserList;
@@ -134,8 +135,8 @@ public class BookingFragment extends Fragment {
                                 orderRv.setAdapter(new OrderUserAdapter(getActivity(), orderUserList, new OrderUserAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(OrderUserList item) {
-                                        Intent intent = new Intent(getActivity(), TrackOrderActivity.class);
-                                        intent.putExtra("status",item.getStatus()+"");
+                                        Intent intent = new Intent(getActivity(), ReceiptOrderActivity.class);
+                                        intent.putExtra("status",item.getId()+"");
                                         startActivity(intent);
                                         getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                                     }
