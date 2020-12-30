@@ -34,7 +34,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:textColor="@color/primary_600"
+                android:textColor="@color/black"
                 android:id="@+id/order_status"
                 android:text=""
                 android:layout_centerHorizontal="true"/>

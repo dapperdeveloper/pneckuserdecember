@@ -41,6 +41,7 @@ import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
 import com.callpneck.activity.deliveryboy.DeliveryMainActivity;
+import com.callpneck.activity.registrationSecond.Activity.MyWalletActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderDetailActivity;
 import com.callpneck.activity.registrationSecond.Activity.SearchActivity;
@@ -565,6 +566,11 @@ public class HomeFragment extends Fragment {
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                     }
+                }
+                else if(item.getCate_type().equalsIgnoreCase("wallet")){
+                    Intent intent = new Intent(getContext(), MyWalletActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                 }
                 else {
                     Toast.makeText(getContext(), "Location not set", Toast.LENGTH_SHORT).show();

@@ -135,8 +135,8 @@ public class BookingFragment extends Fragment {
                                 orderRv.setAdapter(new OrderUserAdapter(getActivity(), orderUserList, new OrderUserAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(OrderUserList item) {
-                                        Intent intent = new Intent(getActivity(), ReceiptOrderActivity.class);
-                                        intent.putExtra("status",item.getId()+"");
+                                        Intent intent = new Intent(getActivity(), TrackOrderActivity.class);
+                                        intent.putExtra("status",item.getStatus()+"");
                                         startActivity(intent);
                                         getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                                     }

@@ -136,7 +136,6 @@ tools:context=".activity.registrationSecond.fragment.HomeFragment">
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    app:tabBackground="@drawable/tab_selector"
                     app:tabIndicatorGravity="center" />
             </RelativeLayout>
             <androidx.recyclerview.widget.RecyclerView
