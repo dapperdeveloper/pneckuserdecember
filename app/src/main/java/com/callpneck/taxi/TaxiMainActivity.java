@@ -1,5 +1,6 @@
 package com.callpneck.taxi;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -8,8 +9,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -27,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
@@ -95,6 +99,7 @@ import com.callpneck.taxi.Adapter.ServiceAdapter;
 import com.callpneck.taxi.activity.DestinationPickerActivity;
 import com.callpneck.taxi.activity.DriverListActivity;
 import com.callpneck.taxi.activity.RealTimeActivity;
+import com.callpneck.taxi.map.WebSocketListener;
 import com.callpneck.taxi.model.AgreeDriverData;
 import com.callpneck.taxi.model.CarType;
 import com.callpneck.taxi.model.driver.Datum;
@@ -111,6 +116,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -118,6 +124,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
@@ -127,13 +135,18 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -154,13 +167,13 @@ import static com.callpneck.PublicMethods.hideKeyboard;
 import static com.callpneck.taxi.activity.RealTimeActivity.createCustomMarker;
 
 
-public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCallback, WebSocketListener {
 
     private static final String TAG ="Seraj" ;
     LinearLayout mainLayout,cashOfferLinearLayout;
     TextView whereto;
     TextView cashTv;
-    EditText cashOffered,etDestination;
+    EditText cashOffered,etDestination,discription;
     ImageButton searchBtn;
     GoogleMap mMap;
     Map<String, MapPointerModel> allMarkersMap = new HashMap<>();
@@ -169,13 +182,9 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
     Button demoBtn,getRideBtn;
     String bookingId;
     RecyclerView locationsRv;
-
-
-
     private String city = "";
     private String state = "";
     SlidingUpPanelLayout slidingUpPanelLayout;
-
     private EditText CompleteAddress;
     private ImageButton mCurrentLocationBtn;
     private String country = "";
@@ -189,13 +198,6 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
     private LinearLayout TryAgainView;
     private TextView TryAgainBtn;
     private RectangularBounds bounds;
-
-
-
-
-
-
-
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2002;
     private boolean mLocationPermissionGranted = true;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -232,6 +234,14 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
     private PlaceAutoCompleteAdapter mAutoCompleteAdapter;
     RecyclerView serviceRv;
 
+    //mk
+    List<LatLng> nearbyCabLocations = new ArrayList<>();
+    List<LatLng> pickupPath = new ArrayList<>();
+    List<LatLng> shownearbyCabLocations = new ArrayList<>();
+    Polyline greyPolyLine;
+    Polyline blackPolyline;
+    Marker originMarker;
+    Marker destinationMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,12 +250,8 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
         Places.initialize(getApplicationContext(), "AIzaSyBTbcRRCLbhqeMVVGD5fnUevHfxj2MdgdI");
         placesClient = Places.createClient(this);
         serviceRv=findViewById(R.id.service_rv);
-
         getCarType("11");
-
         token = AutocompleteSessionToken.newInstance();
-
-
         cashOfferLinearLayout = findViewById(R.id.cash_linear_layout);
         mainLayout = findViewById(R.id.dragView);
         searchBtn = findViewById(R.id.search);
@@ -254,6 +260,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
 
         getRideBtn = findViewById(R.id.ride_now);
         cashOffered=findViewById(R.id.cash_offer);
+        discription=findViewById(R.id.discription);
         slidingUpPanelLayout=findViewById(R.id.sliding_layout);
 
         TryAgainView=findViewById(R.id.try_again_view);
@@ -274,37 +281,21 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
         pb=new ProgressBar(this);
         etDestination=findViewById(R.id.destination);
         currentAddress=findViewById(R.id.source);
-
         //map initialized
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
         mAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this);
-
         locationsRv.setLayoutManager(new LinearLayoutManager(this));
         locationsRv.setAdapter(mAutoCompleteAdapter);
-
-
-
-
-
         clickListeners();
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
         getLocationPermission();
 
 
 
 
-
-
     }
-
-
-
-
 
     public void onItemClickAddressRecycler(int position){
         if (mAutoCompleteAdapter.getItemCount() == 0) return;
@@ -321,12 +312,10 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
             desinationAddress = address;
             destination_latti=""+addresses.get(0).getLatitude();
             destination_longi=""+addresses.get(0).getLongitude();
-
-
             // hideKeyboard(TaxiMainActivity.this);
             cashLayout(addresses.get(0).getLatitude(),addresses.get(0).getLongitude());
         } catch (IOException e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
             Log.println(Log.ERROR, "Tag", e.toString());
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -355,7 +344,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
 
                     }
                 } catch (IOException e) {
-                 //   e.printStackTrace();
+                    //   e.printStackTrace();
                     Log.d("Seraj","error while fetching address");
                 }
             }
@@ -428,38 +417,21 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
 
-
-
-
-
-
-
-
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
-
         mMap.setMyLocationEnabled(true);
-
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.pneck_retro_style));
+        //ts   mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.pneck_retro_style));
         getDeviceLocation();
-        try {
+      /*TS  try {
             boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.uber_maps_style));
             if (!success)
                 Log.e("DAPPER_ERROR","Style parsing error");
-
         }catch (Resources.NotFoundException e){
             Log.e("DAPPER_ERROR", e.getMessage());
-        }
-
-
-
-
-
-
+        }*/
 
     }
 
@@ -551,7 +523,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
 
                 } catch (Exception e) {
                     Log.v("emoloyee_list", "inside catch block  " + e.getMessage());
-                   // e.printStackTrace();
+                    // e.printStackTrace();
                 }
             }
         };
@@ -561,7 +533,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-               // error.printStackTrace();
+                // error.printStackTrace();
                 Log.v("emoloyee_list", "inside error block  " + error.getMessage());
             }
         };
@@ -582,34 +554,32 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
             if (addresses.size() > 0) {
                 Log.d("Seraj","Address found");
 
-              /***  String address = addresses.get(0).getAddressLine(0);
-                city = addresses.get(0).getLocality();
-                state = addresses.get(0).getAdminArea();
-                country = addresses.get(0).getCountryName();
-                postalCode = addresses.get(0).getPostalCode();
-                knownName = addresses.get(0).getFeatureName();
-                locality = addresses.get(0).getSubLocality();**/
+                /***  String address = addresses.get(0).getAddressLine(0);
+                 city = addresses.get(0).getLocality();
+                 state = addresses.get(0).getAdminArea();
+                 country = addresses.get(0).getCountryName();
+                 postalCode = addresses.get(0).getPostalCode();
+                 knownName = addresses.get(0).getFeatureName();
+                 locality = addresses.get(0).getSubLocality();**/
 
-              String address=addresses.get(0).getAddressLine(0);
+                String address=addresses.get(0).getAddressLine(0);
 
                 UserLatitude = "" + latitude;
                 UserLongitude = "" + longitude;
 
 
-               currentFullAddress=address;
-               // CompleteAddress.setText(address);
-               Log.d("Seraj","setting :"+address);
+                currentFullAddress=address;
+                // CompleteAddress.setText(address);
+                Log.d("Seraj","setting :"+address);
 
 
-               currentAddress.setText(address);
+                currentAddress.setText(address);
 
 
                 Log.d("Seraj","Latitude AAAAAA is called...."+UserLatitude.toString());
                 Log.d("Seraj","Longitude AAAAAA  is called...."+UserLongitude.toString());
-              //  Log.d("Seraj","address AAAAAA is called...."+address.toString());
-                //CompleteAddress.setSelection(CompleteAddress.getText().length());
+                //  Log.d("Seraj","address AAAAAA is called...."+address.toString());
 
-                getEmployeeList();
 
 
             }
@@ -628,15 +598,17 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                     @Override
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(TaxiMainActivity.this, "Getting Current Location...", Toast.LENGTH_SHORT).show();
-                            // Set the map's camera position to the current location of the device.
+                            //ts   Toast.makeText(TaxiMainActivity.this, "Getting Current Location...", Toast.LENGTH_SHORT).show();
                             mLastKnownLocation = (Location) task.getResult();
                             if (mLastKnownLocation!=null){
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mLastKnownLocation.getLatitude(),
                                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
 
+
+
                                 Log.d("Seraj","getting location...");
+                                getNearByDriverList();
                                 getCompleteAddressString(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
 
                                 LatLng mypos=new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
@@ -645,8 +617,8 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                                 mMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude())).
                                         icon(BitmapDescriptorFactory.fromBitmap(
                                                 CustomMarker(TaxiMainActivity.this,R.drawable.icon_user,sessionManager.getUserName())))).setTitle(sessionManager.getUserAddress());
-                            }
 
+                            }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
@@ -688,22 +660,19 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
             Double longitude=data.getDoubleExtra("longitude",83);
             Double lattitude=data.getDoubleExtra("lattitude",83);
             Log.d("Seraj",lattitude+""+longitude);
-           mMap.addMarker(new MarkerOptions().position(new LatLng(lattitude,longitude)));
+            mMap.addMarker(new MarkerOptions().position(new LatLng(lattitude,longitude)));
 
 
-           cashLayout(longitude,lattitude);
+            cashLayout(longitude,lattitude);
         }
     }
 
-    private void cashLayout(Double longitude, Double lattitude) {
+    private void cashLayout(Double lattitude, Double longitude) {
         Log.d("Seraj","Setting Layouts");
 
 
-
-
         //mainLayout.setVisibility(View.GONE);
-
-
+        showpathapi(lattitude,longitude);
         cashOfferLinearLayout.setVisibility(View.VISIBLE);
 
 
@@ -716,49 +685,46 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View view) {
 
                 String cash=cashOffered.getText().toString();
-                if (!TextUtils.isEmpty(cash)){
-                    String c=cashOffered.getText().toString();
-                    if (sessionManager.getSesBookingId()==null){
-                        getDriversList(longitude,lattitude,c);
-                    }else{
-                        Toast.makeText(TaxiMainActivity.this, "You have aleady a running order...", Toast.LENGTH_SHORT).show();
-                        Intent intent=new Intent(TaxiMainActivity.this, RealTimeActivity.class);
-                        startActivity(intent);
+                String discriptiontxt=discription.getText().toString();
+                int id = 0;
+                adapter.getCarTypeList();
+
+                for(int i=0; i<adapter.getCarTypeList().size();i++)
+                {
+                    if(adapter.getCarTypeList().get(i).getSelected()==1)
+                    {
+                        id = adapter.getCarTypeList().get(i).getId();
                     }
+                }
+                if(id==0)
+                {
+                    Toast.makeText(TaxiMainActivity.this,"Please Select Vehicle type",Toast.LENGTH_SHORT).show();
+                }
+                else if (!TextUtils.isEmpty(cash)){
+
+
+                    getDriverList(cash.toString(),id+"",discriptiontxt.toString(),UserLatitude,UserLongitude,destination_latti,destination_longi);
+
                 }else{
                     cashOffered.setError("Please offer your fare...");
                 }
 
-
-             /**   if (sessionManager.getSesBookingId()==null||sessionManager.getSesBookingId().length()<=0){
-
-                }else {
-                    Toast.makeText(TaxiMainActivity.this,getString(R.string.TRACK_RUNNING_ORDER),Toast.LENGTH_SHORT).show();
-                    Bundle bundle=new Bundle();
-                    bundle.putString("order_ses_id",p_ses_bk_id);
-                    LaunchActivityClass.LaunchBookingCompleted(TaxiMainActivity.this,bundle);
-                }**/
             }
         });
 
 
-      //  PublicMethods.hideKeyboard(this);
+
 
 
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 
     }
 
-    private void getDriversList(Double longitude, Double lattitude, String c) {
-        userId = sessionManager.getUserid();
-        epToken = sessionManager.getUserToken();
-        sendLocation(userId, UserLatitude, UserLongitude, epToken, desinationAddress,c);
-    }
+
 
 
     public void sendLocation(String userId, String currentLati, String currentLongi,
                              String epToken, String desinationAddress,String c) {
-
         if (sessionManager.setUserLocation(""+currentLati,""+currentLongi)){
             Map<String, String> params = new HashMap<>();
             params.put("user_id", userId);
@@ -766,6 +732,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
             params.put("user_long", currentLongi);
             params.put("ep_token", epToken);
             params.put("user_currentAddress", desinationAddress);
+
             params.put("destination_latti", destination_latti);
             params.put("destination_longi", destination_longi);
             params.put("cash_offered", c);
@@ -793,7 +760,6 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                         Log.d("Seraj","this is success result "+jsonObject1.getBoolean("success"));
                         if (jsonObject1.getBoolean("success")) {
 
-
                             JSONObject jsonObject2 = jsonObject1.getJSONObject("data");
                             String msge = jsonObject2.getString("msg");
                             String ses_booking_id = jsonObject2.getString("ses_booking_id");
@@ -804,9 +770,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                             Log.d("Serajbid",bookingId);
                             Toast.makeText(TaxiMainActivity.this, msg, Toast.LENGTH_LONG).show();
                             cashOfferLinearLayout.setVisibility(View.INVISIBLE);
-
-                             Log.d("Seraj"," calling getAvailableAtOfferDriverList()");
-
+                            Log.d("Seraj"," calling getAvailableAtOfferDriverList()");
                             Intent intent=new Intent(TaxiMainActivity.this, DriverListActivity.class);
                             intent.putExtra("bookin_id",bookingId);
                             intent.putExtra("cash",c);
@@ -818,10 +782,8 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                         }
                     } catch (Exception e) {
                         Log.e("Seraj","this is error  "+e.getMessage());
-                       // e.printStackTrace();
+                        // e.printStackTrace();
                     }
-
-
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -868,12 +830,6 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
 
-
-
-
-
-
-
     private void getCarType(String b_id) {
         Log.d("Serajcpa","api called "+bookingId);
         String ServerURL = getResources().getString(R.string.pneck_app_url) + "/fetchVehicleTyle";
@@ -898,35 +854,30 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                 try {
                     Log.d("Serajcpa","accept responce recieved");
                     Log.d("Serajcpa", "this is complete response " + response);
-                   // JSONObject innerResponse=response.getJSONObject("response");
+                    // JSONObject innerResponse=response.getJSONObject("response");
                     if (response.getBoolean("success")) {
                         Log.d("Serajarray","responce success");
                         JSONArray jsonArray=response.getJSONArray("data");
-
-                        Log.d("serajcararray",jsonArray.toString());
+                        Log.d("serajcararray","vehicletype list is......"+jsonArray.toString());
                         List<CarType> list = new ArrayList<>();
                         list.clear();
 
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject object=jsonArray.getJSONObject(i);
-                            list.add(new CarType(object.getInt("id"),object.getString("vehicle_type"),object.getString("vehicle_image")));
+                            list.add(new CarType(object.getInt("id"),object.getString("vehicle_type"),object.getString("vehicle_image"),0));
                             Log.d("serajcararray",list.get(i).getCarName());
                         }
-
-
                         adapter = new ServiceAdapter(TaxiMainActivity.this,list);
                         serviceRv.setLayoutManager(new LinearLayoutManager(TaxiMainActivity.this, LinearLayoutManager.HORIZONTAL, false));
                         serviceRv.setItemAnimator(new DefaultItemAnimator());
                         serviceRv.setAdapter(adapter);
 
-
                     }else {
                         Log.d("Serajad","accept responce failed");
                     }
-
                 } catch (Exception e) {
                     Log.d("Serajad", "error ad inside catch block  " + e.getMessage());
-                 //   e.printStackTrace();
+                    //   e.printStackTrace();
 
                 }
             }
@@ -939,7 +890,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-              //  error.printStackTrace();
+                //  error.printStackTrace();
                 Log.v("Seraj", "error occured" + error.getMessage());
             }
         };
@@ -986,5 +937,270 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
 
 
 
+    public void showNearByCabs()
+    {
+        shownearbyCabLocations.clear();
+        for (int i=0; i<nearbyCabLocations.size(); i++) {
+            Marker  nearbyCabMarker = addCarMarkerAndGet(nearbyCabLocations.get(i));
+        }
+    }
+
+    private Marker addCarMarkerAndGet( LatLng latLng) {
+        BitmapDescriptor bitmapDescriptor= BitmapDescriptorFactory.fromBitmap(getCarBitmap());
+        return mMap.addMarker(new MarkerOptions().position(latLng).flat(true).icon(bitmapDescriptor));
+    }
+
+    public Bitmap getCarBitmap()
+    {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_car);
+        return Bitmap.createScaledBitmap(bitmap, 50, 100, false);
+
+    }
+
+
+
+
+    public void showPath( List<LatLng> latLngList) {
+        String path = sessionManager.getPath();
+        Gson gson = new Gson();
+        Type type =new  TypeToken<List<LatLng>>() {}.getType();
+        List<LatLng> finallist  =   gson.fromJson(path, type);
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (int i=0;i<latLngList.size();i++) {
+            builder.include(latLngList.get(i));
+        }
+        LatLngBounds bounds = builder.build();
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 2));
+        PolylineOptions polylineOptions = new PolylineOptions();
+        polylineOptions.color(Color.GRAY);
+        polylineOptions.width(5f);
+        polylineOptions.addAll(latLngList);
+        greyPolyLine = mMap.addPolyline(polylineOptions);
+        PolylineOptions blackPolylineOptions = new PolylineOptions();
+        blackPolylineOptions.width(5f);
+        blackPolylineOptions.color(Color.BLACK);
+        blackPolyline = mMap.addPolyline(blackPolylineOptions);
+        originMarker = addOriginDestinationMarkerAndGet( latLngList.get(0));
+        originMarker.setAnchor(0.5f, 0.5f);
+        destinationMarker = addOriginDestinationMarkerAndGet(latLngList.get(latLngList.size()-1));
+        destinationMarker.setAnchor(0.5f, 0.5f);
+        ValueAnimator polylineAnimator = polyLineAnimator();
+        polylineAnimator.addUpdateListener(valueAnimator -> {
+                    int percentValue = (int) valueAnimator.getAnimatedValue();
+                    int index = (int) (greyPolyLine.getPoints().size() * (percentValue / 100.0f));
+                    blackPolyline.setPoints(greyPolyLine.getPoints().subList(0, index));
+                }
+        );
+        polylineAnimator.start();
+    }
+
+
+    private Marker addOriginDestinationMarkerAndGet(LatLng latLng) {
+        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(getDestinationBitmap());
+        return mMap.addMarker(new MarkerOptions().position(latLng).flat(true).icon(bitmapDescriptor));
+    }
+
+    public Bitmap getDestinationBitmap() {
+        int height = 20;
+        int width = 20;
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
+        canvas.drawRect(0F, 0F, width, height, paint);
+        return bitmap;
+    }
+
+    public ValueAnimator polyLineAnimator() {
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 100);
+        valueAnimator.setInterpolator(new LinearInterpolator());
+        valueAnimator.setDuration(2000);
+        return valueAnimator;
+    }
+
+    private void getDriverList(String cash,String id,String description,String UserLatitude,String UserLongitude,String destination_latti,String destination_longi) {
+
+        String userId = sessionManager.getUserid();
+        String epToken = sessionManager.getUserToken();
+        // progressBar.setVisibility(View.VISIBLE);
+        //    String ServerURL = getResources().getString(R.string.pneck_app_url) + "/fetchDriversOnDemand";
+        String ServerURL =  AllUrl.sendLocation;
+        HashMap<String, String> dataParams = new HashMap<String, String>();
+
+        //  dataParams.put("user_lat", "29.5985194");
+
+        dataParams.put("user_id", userId);
+        dataParams.put("ep_token", epToken);
+        dataParams.put("user_lat", UserLatitude);
+        dataParams.put("user_long", UserLongitude);
+        dataParams.put("destination_latti", destination_latti);
+        dataParams.put("destination_longi", destination_longi);
+        dataParams.put("cash_offered", cash);
+        dataParams.put("vehicle_type", id);
+        dataParams.put("description", description);
+
+
+        CustomRequest dataParamsJsonReq = new CustomRequest(JsonUTF8Request.Method.POST,
+                ServerURL,
+                dataParams,
+                DriverListSuccessListeners(),
+                DriverListError());
+        dataParamsJsonReq.setRetryPolicy(new DefaultRetryPolicy(
+                (int) TimeUnit.SECONDS.toMillis(Const.VOLLEY_RETRY_TIMEOUT),
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        Volley.newRequestQueue(TaxiMainActivity.this).add(dataParamsJsonReq);
+    }
+
+    private Response.Listener<JSONObject> DriverListSuccessListeners() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject innerResponse = response.getJSONObject("response");
+                    //Log.d("pass",pass);
+                    String msg = innerResponse.getString("message");
+                    boolean resp_status = true;
+                    if (innerResponse.getBoolean("success")) {
+
+                        JSONObject jsonObject = innerResponse.getJSONObject("data");
+
+                        Intent intent=new Intent(TaxiMainActivity.this, DriverListActivity.class);
+                        String bookingId =jsonObject.getString("ses_booking_id");
+                        intent.putExtra("booking_id",bookingId);
+                        startActivity(intent);
+                    }
+
+                } catch (Exception e) {
+                    Toast.makeText(TaxiMainActivity.this,e.getMessage().toString()+"",Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+    }
+
+    private Response.ErrorListener DriverListError() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // error.printStackTrace();
+            }
+        };
+    }
+
+
+
+
+    private void getNearByDriverList() {
+        // progressBar.setVisibility(View.VISIBLE);
+        String ServerURL = getResources().getString(R.string.pneck_app_url) + "/getNearByDrivers";
+        HashMap<String, String> dataParams = new HashMap<String, String>();
+        dataParams.put("latitude", mLastKnownLocation.getLatitude()+"");
+        dataParams.put("longitude", mLastKnownLocation.getLongitude()+"");
+        CustomRequest dataParamsJsonReq = new CustomRequest(JsonUTF8Request.Method.POST,
+                ServerURL,
+                dataParams,
+                NearBySuccessListeners(),
+                NearByDriverError());
+        dataParamsJsonReq.setRetryPolicy(new DefaultRetryPolicy(
+                (int) TimeUnit.SECONDS.toMillis(Const.VOLLEY_RETRY_TIMEOUT),
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        Volley.newRequestQueue(TaxiMainActivity.this).add(dataParamsJsonReq);
+    }
+
+    private Response.Listener<JSONObject> NearBySuccessListeners() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject innerResponse = response.getJSONObject("response");
+                    //Log.d("pass",pass);
+                    String msg = innerResponse.getString("message");
+                    boolean resp_status = true;
+                    if (innerResponse.getBoolean("success")) {
+                        JSONArray array = innerResponse.getJSONArray("data");
+                        if(array.length()==0)
+                        {
+                            Toast.makeText(TaxiMainActivity.this,"No Driver Found",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject object = array.getJSONObject(i);
+                            double latitude = Double.parseDouble(object.getString("curr_latitude"));
+                            double longitude =   Double.parseDouble(object.getString("curr_longitude"));
+                            LatLng latLng = new LatLng(latitude, longitude);
+                            nearbyCabLocations.add(latLng);
+
+                        }
+                        showNearByCabs();
+                    }
+
+                } catch (Exception e) {
+                }
+            }
+        };
+    }
+
+    private Response.ErrorListener NearByDriverError() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        };
+    }
+
+
+    public void showpathapi(Double destilattitude, Double destlongitude)
+    {
+        com.callpneck.taxi.map.GoogleMap.requestCab(
+                this,mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(),destilattitude,destlongitude
+        );
+
+    }
+
+    @Override
+    public void onConnect() {
+
+    }
+
+    @Override
+    public void onMessage(@NotNull String data) {
+
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            JSONArray jsonArray=jsonObject.getJSONArray("path");
+            if(pickupPath.size()>0)
+            {
+                pickupPath.clear();
+                mMap.clear();
+                getDeviceLocation();
+            }
+
+            for (int i=0;i<jsonArray.length();i++){
+                JSONObject object=jsonArray.getJSONObject(i);
+                LatLng ltlng= new LatLng(object.getDouble("lat"), object.getDouble("lng"));
+                pickupPath.add(ltlng);
+            }
+            Gson gson = new Gson();
+            String list = gson.toJson(pickupPath);
+            sessionManager.setPath(list);
+            showPath(pickupPath);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void onDisconnect() {
+
+    }
+
+    @Override
+    public void onError(@NotNull String error) {
+        Toast.makeText(TaxiMainActivity.this,"No Route Available",Toast.LENGTH_LONG).show();
+    }
 
 }

@@ -68,20 +68,20 @@
         android:background="@color/colorPrimary"
         android:id="@+id/cash_controll_layout"
         android:layout_alignParentBottom="true">
-       <androidx.cardview.widget.CardView
-           android:layout_width="100dp"
-           app:cardElevation="40dp"
-           android:layout_marginLeft="30dp"
-           app:cardCornerRadius="35dp"
-           android:layout_height="match_parent">
-           <TextView
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:gravity="center"
-               android:text="INR 200"
-               android:textAlignment="center"
-               android:id="@+id/tv_cash_offred"/>
-       </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            app:cardElevation="40dp"
+            android:layout_marginLeft="30dp"
+            app:cardCornerRadius="35dp"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="INR 200"
+                android:textAlignment="center"
+                android:id="@+id/tv_cash_offred"/>
+        </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="60dp"
@@ -100,7 +100,6 @@
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#ffffff" />
-
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView

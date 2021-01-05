@@ -8,6 +8,8 @@ import androidx.multidex.MultiDex;
 import android.util.Log;
 
 import com.callpneck.activity.registrationSecond.AppSignatureHelper;
+import com.callpneck.taxi.map.GoogleMap;
+import com.google.maps.GeoApiContext;
 
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
@@ -21,7 +23,7 @@ import java.util.concurrent.ThreadFactory;
 @ReportsCrashes(mailTo = "ankitrajdwivedi@gmail.com", // my email here
 		mode = ReportingInteractionMode.TOAST,
 		resToastText = R.string.crash_toast_text, formKey = "")
-     public class PneckUserApplication extends Application {
+public class PneckUserApplication extends Application {
 	public static final String TAG = Application.class.getName();
 	private static Application _instance;
 	private final Handler _handler;
@@ -47,7 +49,7 @@ import java.util.concurrent.ThreadFactory;
 					}
 				});
 		closed = false;
-	//	uiListeners = new HashMap<Class<? extends BaseUIListener>, Collection<? extends BaseUIListener>>();
+		//	uiListeners = new HashMap<Class<? extends BaseUIListener>, Collection<? extends BaseUIListener>>();
 	}
 
 	public static Application getInstance() {
@@ -112,6 +114,12 @@ import java.util.concurrent.ThreadFactory;
 
 		AppSignatureHelper appSignatureHelper = new AppSignatureHelper(this);
 		appSignatureHelper.getAppSignatures();
+
+
+		GoogleMap.geoApiContext = new GeoApiContext.Builder()
+				.apiKey("AIzaSyBTbcRRCLbhqeMVVGD5fnUevHfxj2MdgdI")
+				.build();
+
 		//logUser();
 	}
 	/*private void logUser() {

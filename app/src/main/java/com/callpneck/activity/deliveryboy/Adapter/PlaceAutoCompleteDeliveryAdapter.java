@@ -50,7 +50,7 @@ public class PlaceAutoCompleteDeliveryAdapter
         placesViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((DeliveryMainActivity)mContext).onItemClickAddressRecycler(i);
+                ((TaxiMainActivity)mContext).onItemClickAddressRecycler(i);
             }
         });
     }

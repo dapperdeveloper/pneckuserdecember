@@ -1,9 +1,32 @@
 package com.callpneck.taxi.model;
 
 public class AgreeDriverData {
-    private String id,bookibgId,employeeId,epToken,employeeLat,employeeLong,employeeName,employeePhone,employeeTimeToReach,description,status,empCashOffered;
+    private String id;
+    private String bookibgId;
+    private String employeeId;
+    private String epToken;
+    private String employeeLat;
+    private String employeeLong;
+    private String employeeName;
+    private String employeePhone;
+    private String employeeTimeToReach;
+    private String description;
+    private String status;
+    private String empCashOffered;
 
-    public AgreeDriverData(String id, String bookibgId, String employeeId, String epToken, String employeeLat, String employeeLong, String employeeName, String employeePhone, String employeeTimeToReach, String description, String status, String empCashOffered) {
+    public String getEmployeeDistanceToReach() {
+        return employeeDistanceToReach;
+    }
+
+    public void setEmployeeDistanceToReach(String employeeDistanceToReach) {
+        this.employeeDistanceToReach = employeeDistanceToReach;
+    }
+
+    private String employeeDistanceToReach;
+
+
+
+    public AgreeDriverData(String id, String bookibgId, String employeeId, String epToken, String employeeLat, String employeeLong, String employeeName, String employeePhone, String employeeTimeToReach, String description, String status, String empCashOffered,String employeeDistanceToReach) {
         this.id = id;
         this.bookibgId = bookibgId;
         this.employeeId = employeeId;
@@ -13,6 +36,7 @@ public class AgreeDriverData {
         this.employeeName = employeeName;
         this.employeePhone = employeePhone;
         this.employeeTimeToReach = employeeTimeToReach;
+        this.employeeDistanceToReach = employeeDistanceToReach;
         this.description = description;
         this.status = status;
         this.empCashOffered = empCashOffered;

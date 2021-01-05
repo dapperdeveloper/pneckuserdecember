@@ -107,9 +107,9 @@ public class GetBookingData{
                                 sessionManager.setOrderStatus("delivered");
                                 Log.d("serajsessiondatasetted","pay");
 
-                              //  Bundle bundle =new Bundle();
-                               // bundle.putString("billing_amount",object.getString("pay_amount"));
-                               // LaunchActivityClass.LaunchPaymentScreen(RealTimeActivity.this,bundle);
+                                //  Bundle bundle =new Bundle();
+                                // bundle.putString("billing_amount",object.getString("pay_amount"));
+                                // LaunchActivityClass.LaunchPaymentScreen(RealTimeActivity.this,bundle);
                             }
                         }
 
@@ -147,7 +147,7 @@ public class GetBookingData{
                     Log.d("seravvolley","parse error");
                 }
                 Log.v("Seraj", "error occured" + error.getMessage());
-              //  bookingDataLoaded=true;
+                //  bookingDataLoaded=true;
             }
         };
     }

@@ -40,22 +40,22 @@
 
     </androidx.cardview.widget.CardView>
 
-  <androidx.cardview.widget.CardView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      app:contentPaddingBottom="20dp"
-      app:cardCornerRadius="16dp"
-      app:cardElevation="8dp"
-      android:layout_marginBottom="-20dp"
-      android:layout_alignParentBottom="true">
-      <LinearLayout
-          android:id="@+id/Address_view"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical">
-          <include layout="@layout/userinfo"/>
-      </LinearLayout>
-  </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:contentPaddingBottom="20dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        android:layout_marginBottom="-20dp"
+        android:layout_alignParentBottom="true">
+        <LinearLayout
+            android:id="@+id/Address_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include layout="@layout/userinfo"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 
 </RelativeLayout>

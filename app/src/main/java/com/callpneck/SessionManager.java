@@ -340,6 +340,14 @@ public class SessionManager {
         return pref.getString("deslongi",null);
     }
 
+    public void setPath(String path) {
+        editor.putString("path", path);
+        editor.commit();
+    }
+
+    public String getPath() {
+        return pref.getString("path",null);
+    }
 
     public void setDestinationAddress(String locality) {
         editor.putString("locality", locality);

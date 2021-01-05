@@ -28,9 +28,12 @@ import com.callpneck.Requests.JsonUTF8Request;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.SessionManager;
 import com.callpneck.taxi.Adapter.DriverAdapter;
+import com.callpneck.taxi.map.WebSocketListener;
 import com.callpneck.taxi.model.AgreeDriverData;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -40,15 +43,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class DriverListActivity extends AppCompatActivity {
+public class DriverListActivity extends AppCompatActivity  implements WebSocketListener {
     String bookingId;
+    List<AgreeDriverData> tempagreeDriverDataList=new ArrayList<>();
     List<AgreeDriverData> agreeDriverDataList=new ArrayList<>();
     ScheduledExecutorService executor;
     Runnable periodicTask;
     DriverAdapter driverAdapter;
     RecyclerView driverRecycler;
     TextView cashTv;
-    private String cash_offered,cash;
+    private String cash_offered;
     private ScheduledExecutorService eFuture;
     TextView cancelBtn;
     int c;
@@ -57,6 +61,7 @@ public class DriverListActivity extends AppCompatActivity {
     Handler mHandler;
     private boolean isAccepted=false;
     ImageView loadingIV;
+    String vechletype,description,userlat,userlong,destlat,destlong;
 
 
     @Override
@@ -66,56 +71,37 @@ public class DriverListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_driver_list);
         sessionManager = new SessionManager(DriverListActivity.this);
         progressBar=findViewById(R.id.pb);
-
         Intent intent=getIntent();
-        bookingId=intent.getStringExtra("bookin_id");
-        cash=intent.getStringExtra("cash");
-
+        bookingId=intent.getStringExtra("booking_id");
 
 
         cashTv=findViewById(R.id.tv_cash_offred);
         Button cashUpBtn=findViewById(R.id.cash_up_btn);
         cancelBtn=findViewById(R.id.cancel_btn);
         loadingIV = findViewById(R.id.loadingIV);
-
         loadingIV.setVisibility(View.VISIBLE);
-
-        cashTv.setText(cash);
-
+        cashTv.setText(cash_offered);
         driverRecycler=findViewById(R.id.driver_rv);
         driverRecycler.setLayoutManager(new LinearLayoutManager(this));
         driverRecycler.setHasFixedSize(true);
-
         //single thread executer
-
-
         eFuture=executor = Executors.newSingleThreadScheduledExecutor();
-
         periodicTask = new Runnable() {
             public void run() {
                 // Invoke method(s) to do the work
-                doPeriodicWork();
-
+                //ts    doPeriodicWork();
             }
         };
-
-
-
-        mHandler = new Handler();
-        c=0;
-        startRepeatingTask();
-
-
-
+        //ts  mHandler = new Handler();
+        //ts   c=0;
+        //ts  startRepeatingTask();
 
         driverAdapter=new DriverAdapter(DriverListActivity.this,agreeDriverDataList);
         driverAdapter.notifyDataSetChanged();
         driverRecycler.setAdapter(driverAdapter);
         executor.scheduleAtFixedRate(periodicTask, 0, 3, TimeUnit.SECONDS);
 
-
         Glide.with(this).load(R.drawable.loading_gif).into(loadingIV);
-
         cashUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,7 +110,6 @@ public class DriverListActivity extends AppCompatActivity {
             }
         });
 
-
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,6 +117,16 @@ public class DriverListActivity extends AppCompatActivity {
                 userCancelBooking(sessionManager.getUserid(),sessionManager.getUserToken(),bookingId,"Cancel by user");
             }
         });
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                callFetchApi(String.valueOf(bookingId));
+            }
+        }, 20000);
+        //mk getDriverList();
+        //callFetchApi(String.valueOf(bookingId));
+
 
     }
 
@@ -144,7 +139,6 @@ public class DriverListActivity extends AppCompatActivity {
         dataParams.put("ses_booking_id",sesBookingId);
         dataParams.put("cancel_reason",cancel_by_user);
 
-        Log.d("Serajcandata","booking id  "+dataParams);
 
         CustomRequest dataParamsJsonReq = new CustomRequest(JsonUTF8Request.Method.POST,
                 ServerURL,
@@ -164,8 +158,6 @@ public class DriverListActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    Log.d("Serajcpa","accept responce recieved");
-                    Log.d("Serajcpa", "this is complete response " + response);
                     JSONObject innerResponse=response.getJSONObject("response");
                     if (innerResponse.getBoolean("success")) {
                         Toast.makeText(DriverListActivity.this, "Booking Cancelled", Toast.LENGTH_SHORT).show();
@@ -191,11 +183,12 @@ public class DriverListActivity extends AppCompatActivity {
     private void doPeriodicWork() {
         callFetchApi(String.valueOf(bookingId));
     }
+
     private void cashUp(RecyclerView driverRecycler, int bookind_id) {
-        String new_cash=String.valueOf(Integer.valueOf(cash)+10);
+        String new_cash=String.valueOf(Integer.valueOf(cash_offered)+10);
         Log.d("Seraj","cash up value "+new_cash);
         cashTv.setText(new_cash);
-        cash=new_cash;
+        cash_offered=new_cash;
         Log.d("Seraj","booking id  "+bookind_id);
 
         String ServerURL = getResources().getString(R.string.pneck_app_url) + "/updateOfferedCash";
@@ -249,6 +242,7 @@ public class DriverListActivity extends AppCompatActivity {
             }
         };
     }
+
     private void callFetchApi(String b_id) {
         Log.d("Serajcpa","api called "+bookingId);
         String ServerURL = getResources().getString(R.string.pneck_app_url) + "/fetchAvailableEmployees";
@@ -265,41 +259,44 @@ public class DriverListActivity extends AppCompatActivity {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Volley.newRequestQueue(DriverListActivity.this).add(dataParamsJsonReq);
     }
+
     private Response.Listener<JSONObject> DriverFetchSuccess() {
         return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    Log.d("Serajcpa","accept responce recieved");
-                    Log.d("Serajcpa", "this is complete response " + response);
                     JSONObject innerResponse=response.getJSONObject("response");
                     if (innerResponse.getBoolean("success")) {
-                        Log.d("Serajad","responce success");
                         JSONArray jsonArray=innerResponse.getJSONArray("data");
 
-                        int size=agreeDriverDataList.size();
-                        agreeDriverDataList.clear();
+                        loadingIV.setVisibility(View.GONE);
 
-
+                        //  agreeDriverDataList.clear();
+                        if(jsonArray.length()==0)
+                        {
+                            Toast.makeText(DriverListActivity.this,"No Driver Found",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject object=jsonArray.getJSONObject(i);
-                            Log.d("Serajemp",object.getString("employee_name"));
-                            agreeDriverDataList.add(new AgreeDriverData(""+object.getInt("id"),""+object.getInt("booking_id"),""+object.getInt("employee_id"),""+object.getString("ep_token"),""+object.getString("employee_lat"),""+object.getString("employee_lng"),""+object.getString("employee_name"),""+object.getString("employee_phone"),""+object.getString("employee_time_to_reach"),""+object.getString("description"),""+object.getString("status"),""+object.getString("employee_cash_offer")));
-                            loadingIV.setVisibility(View.GONE);
+                            //  agreeDriverDataList.add(new AgreeDriverData(""+object.getInt("id"),""+object.getInt("booking_id"),""+object.getInt("employee_id"),""+object.getString("ep_token"),""+object.getString("employee_lat"),""+object.getString("employee_lng"),""+object.getString("employee_name"),""+object.getString("employee_phone"),""+object.getString("employee_time_to_reach"),""+object.getString("description"),""+object.getString("status"),""+object.getString("employee_cash_offer"),""));
+                            tempagreeDriverDataList.add(new AgreeDriverData(""+object.getInt("id"),""+object.getInt("booking_id"),""+object.getInt("employee_id"),""+object.getString("ep_token"),""+object.getString("employee_lat"),""+object.getString("employee_lng"),""+object.getString("employee_name"),""+object.getString("employee_phone"),""+object.getString("employee_time_to_reach"),""+object.getString("description"),""+object.getString("status"),""+object.getString("employee_cash_offer"),""));
+                            // tempagreeDriverDataList.add(new AgreeDriverData(""+object.getInt("id"),"","",""+object.getString("ep_token"),""+object.getString("curr_latitude"),""+object.getString("curr_longitude"),""+object.getString("first_name")+" "+object.getString("last_name"),""+object.getString("mobile"),"","",""+object.getString("status"),"",""));
+                            updatelocation(i);
+
                         }
-                        if (agreeDriverDataList.size()!=size){
+
+                     /*   if (agreeDriverDataList.size()!=size){
                             Log.d("Serajsize","changed");
                             driverAdapter.notifyDataSetChanged();
                             loadingIV.setVisibility(View.GONE);
                         }else{
                             Log.d("Serajsize","same data");
-                        }
+                        }*/
                     }else {
-                        Log.d("Serajad","accept responce failed");
                     }
-
                 } catch (Exception e) {
-                    Log.d("Serajad", "error ad inside catch block  " + e.getMessage());
+                    loadingIV.setVisibility(View.GONE);
                     e.printStackTrace();
 
                 }
@@ -311,10 +308,6 @@ public class DriverListActivity extends AppCompatActivity {
         eFuture.shutdown();
         finish();
     }
-
-
-
-
 
     Runnable mStatusChecker = new Runnable() {
         @Override
@@ -344,4 +337,41 @@ public class DriverListActivity extends AppCompatActivity {
         mHandler.removeCallbacks(mStatusChecker);
     }
 
+
+
+    public void updatelocation(int value)
+    {
+        com.callpneck.taxi.map.GoogleMap.requesttimedistance(
+                DriverListActivity.this,Double.parseDouble(tempagreeDriverDataList.get(value).getEmployeeLat()),Double.parseDouble(tempagreeDriverDataList.get(value).getEmployeeLong()),30.7411,76.7790,value
+        );
+    }
+
+    @Override
+    public void onConnect() {
+
+    }
+
+    @Override
+    public void onMessage(@NotNull String data) {
+
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            jsonObject.getString("time");
+            jsonObject.getInt("value");
+            agreeDriverDataList.add(new AgreeDriverData(tempagreeDriverDataList.get(jsonObject.getInt("value")).getId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getBookibgId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEpToken(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeLat(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeLong(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeName(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeePhone(),jsonObject.getString("time"),tempagreeDriverDataList.get(jsonObject.getInt("value")).getDescription(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getStatus(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmpCashOffered(),jsonObject.getString("distance")));
+            driverAdapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDisconnect() {
+
+    }
+
+    @Override
+    public void onError(@NotNull String error) {
+
+    }
 }

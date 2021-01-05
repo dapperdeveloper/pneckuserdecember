@@ -35,7 +35,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class FetchDriverData {
-
     Context context;
     SessionManager sessionManager;
     boolean isContinue;
@@ -52,12 +51,12 @@ public class FetchDriverData {
 
     public void start(){
 
-                Log.d("serajfetchDriver","running inside cont");
-                if (againDdata){
-                    againDdata=false;
-                    Log.d("serajfetchDriver","running inside called");
-                    getDriverData();
-                }
+        Log.d("serajfetchDriver","running inside cont");
+        if (againDdata){
+            againDdata=false;
+            Log.d("serajfetchDriver","running inside called");
+            getDriverData();
+        }
 
     }
 
@@ -99,7 +98,7 @@ public class FetchDriverData {
 
                         if(loaded){
                             Log.d("serajfetchDriver","running loaded");
-                           String otp=object.getString("otp");
+                            String otp=object.getString("otp");
                             String name=object.getString("first_name") +" "+object.getString("last_name");
                             String mobile=object.getString("mobile");
                             String vehicleNumber=object.getString("vehicle_number");

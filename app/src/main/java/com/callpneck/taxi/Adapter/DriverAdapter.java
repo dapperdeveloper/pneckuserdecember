@@ -58,15 +58,13 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
 
-        final int random = new Random().nextInt(20)+5;
         final int rate = new Random().nextInt(6)+5;
-        final int dis = new Random().nextInt(3)+5;
-       //holder.carType.setText(data.get(position).getBookingId());
+        //holder.carType.setText(data.get(position).getBookingId());
         holder.cashOffer.setText("INR "+data.get(position).getEmpCashOffered());
         holder.driverName.setText(data.get(position).getEmployeeName());
-       holder.arrivalTime.setText(random+" min");
-       holder.ratings.setText("Ratings("+rate+")");
-       holder.distance.setText(dis+" km away");
+        holder.arrivalTime.setText(data.get(position).getEmployeeTimeToReach());
+        holder.ratings.setText("Ratings("+rate+")");
+        holder.distance.setText(data.get(position).getEmployeeDistanceToReach());
         bookingId=data.get(position).getBookibgId();
 
 

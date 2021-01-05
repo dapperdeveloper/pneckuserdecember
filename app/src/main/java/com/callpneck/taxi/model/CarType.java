@@ -5,10 +5,13 @@ public class CarType {
     String carName;
     String imageUrl;
 
-    public CarType(int id, String carName, String imageUrl) {
+    int selected;
+
+    public CarType(int id, String carName, String imageUrl,int selected) {
         this.id = id;
         this.carName = carName;
         this.imageUrl = imageUrl;
+        this.selected = selected;
     }
 
     public int getId() {
@@ -34,4 +37,14 @@ public class CarType {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+
+    public int getSelected() {
+        return selected;
+    }
+
+    public void setSelected(int selected) {
+        this.selected = selected;
+    }
+
 }

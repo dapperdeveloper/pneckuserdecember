@@ -1,10 +1,12 @@
 package com.callpneck.taxi.activity;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -24,6 +27,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -57,6 +61,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -65,7 +70,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.gson.Gson;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
@@ -81,6 +90,7 @@ import com.google.maps.model.EncodedPolyline;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -116,7 +126,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
 
     String userLat;
 
-    private int DEFAULT_ZOOM = 1;
+    private float DEFAULT_ZOOM = 15.0f;
     private ScheduledExecutorService executor,locationExecuter;
     private Runnable periodicTask,updateRunner;
     private boolean loaded=true;
@@ -129,6 +139,21 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
     FetchDriverData fetchDriverData;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private float bearing=0.0f;
+
+
+    //mk
+    private boolean mLocationPermissionGranted = true;
+    private Location mLastKnownLocation = null;
+    private LatLng mDefaultLocation;
+    List<LatLng> nearbyCabLocations = new ArrayList<>();
+    List<LatLng> pickupPath = new ArrayList<>();
+    List<LatLng> shownearbyCabLocations = new ArrayList<>();
+    Polyline greyPolyLine;
+    Polyline blackPolyline;
+    Marker originMarker;
+    Marker destinationMarker;
+    String dname="";
+    String dphoneno="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,46 +168,32 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
         carAvatar=findViewById(R.id.car_image);
         mcarName=findViewById(R.id.car_name);
         callBtn=findViewById(R.id.call_driver_btn);
-
-
-
+        Intent intent=getIntent();
+        dname= intent.getStringExtra("name");
+        dphoneno=intent.getStringExtra("phoneno");
+        mDriverName.setText(dname.toString());
+        callBtn.setText("Call "+dphoneno.toString());
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         sessionManager = new SessionManager(RealTimeActivity.this);
-
         getBookingData= new GetBookingData(this,sessionManager);
-
         fetchDriverData=new FetchDriverData(this,sessionManager);
-
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
         executor =
                 Executors.newSingleThreadScheduledExecutor();
-
         Runnable periodicTask = new Runnable() {
             public void run() {
-                Log.d("serajcallingdriver","calling");
                 // Invoke method(s) to do the work
                 fetchDriverData.start();
             }
         };
-
         executor.scheduleAtFixedRate(periodicTask, 0, 4, TimeUnit.SECONDS);
-
-
-
-
-
-
-
-
-
+        addLocation();
     }
 
     private void checkStatus() {
         if (getBookingData.fetchBooking()){
-            Log.d("serajgetbookingcalled","yes");
         }
         if (!sessionManager.getOtpVerified()){
             setUserOtp();
@@ -233,8 +244,6 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
 
     private void setUserOtp() {
 
-        Log.d("serajsetuser","otp");
-
         userOtp.setText("OTP: "+ sessionManager.getPickUpOtp());
         userOtp.setTextColor(Color.GREEN);
         mDriverName.setText(sessionManager.getDname());
@@ -263,7 +272,11 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap=googleMap;
+        mGoogleMap.setMyLocationEnabled(true);
 
+        mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        //ts   mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.pneck_retro_style));
+        getDeviceLocation();
         mGoogleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
@@ -279,10 +292,10 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
             public void run() {
                 try{
                     //do your code here
-                   if (delivered){
-                       Log.d("serajrunner","running");
-                       checkStatus();
-                   }
+                    if (delivered){
+                        Log.d("serajrunner","running");
+                        checkStatus();
+                    }
                 }
                 catch (Exception e) {
                     // TODO: handle exception
@@ -296,7 +309,6 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
 
 //runnable must be execute once
         handler.post(runnable);
-
     }
 
     private void drawRoutes(LatLng source, LatLng destination) {
@@ -401,9 +413,9 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
                                 createCustomMarker(RealTimeActivity.this,R.drawable.userr,"Seraj")))).setTitle("I am User");
 
                 Log.d("serajrtd","marker driver");
-               // mGoogleMap.addMarker(new MarkerOptions().position(destination).
-                 //       icon(BitmapDescriptorFactory.fromBitmap(
-                   //             createCustomMarker(RealTimeActivity.this,R.drawable.ic_scooter,"driver")))).setTitle("I am Driver");
+                // mGoogleMap.addMarker(new MarkerOptions().position(destination).
+                //       icon(BitmapDescriptorFactory.fromBitmap(
+                //             createCustomMarker(RealTimeActivity.this,R.drawable.ic_scooter,"driver")))).setTitle("I am Driver");
                 mGoogleMap.addMarker(new MarkerOptions().position(destination).icon(PublicMethod.convertToBitmapFromVector(RealTimeActivity.this,
                         R.drawable.ic_scooter)).title("Driver").snippet("curr_loc_address"));
             }
@@ -439,8 +451,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
                 String[] separated = timeReuired.split(" ");
                 String ftime=separated[0];
                 desttime.setText(ftime);
-              String addressesf=sessionManager1.getDestinationLocality();
-                Log.d("serajduration",ftime+addressesf);
+                String addressesf=sessionManager1.getDestinationLocality();
 
                 if (!addressesf.isEmpty()){
                     destname.setText(addressesf);
@@ -468,5 +479,146 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
         return bitmap;
     }
 
+
+    private void getDeviceLocation() {
+        try {
+            if (mLocationPermissionGranted) {
+                Task locationResult = mFusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener(this, new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            //    Toast.makeText(RealTimeActivity.this, "Getting Current Location...", Toast.LENGTH_SHORT).show();
+                            // Set the map's camera position to the current location of the device.
+                            mLastKnownLocation = (Location) task.getResult();
+                            if (mLastKnownLocation!=null){
+                                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(mLastKnownLocation.getLatitude(),
+                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+
+
+
+                                Log.d("Seraj","getting location...");
+
+                                LatLng mypos=new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                                Log.d("serajmk",sessionManager.getUserImage());
+
+                                mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude())).
+                                        icon(BitmapDescriptorFactory.fromBitmap(
+                                                CustomMarker(RealTimeActivity.this,R.drawable.icon_user,sessionManager.getUserName())))).setTitle(sessionManager.getUserAddress());
+
+                                showPath(pickupPath);
+
+                            }
+
+                        } else {
+                            Log.d(TAG, "Current location is null. Using defaults.");
+                            Log.e(TAG, "Exception: %s", task.getException());
+                            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                            mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                        }
+                    }
+                });
+            }
+        } catch(SecurityException e)  {
+            Log.d("Seraj", e.getMessage());
+        }
+    }
+    public void addLocation()
+    {
+        String path = sessionManager.getPath();
+        Gson gson = new Gson();
+        Type type =new  TypeToken<List<LatLng>>() {}.getType();
+        List<LatLng> finallist  =   gson.fromJson(path, type);
+        pickupPath = finallist;
+    }
+
+    private Bitmap CustomMarker(Context context, @DrawableRes int resource, String _name) {
+
+        Log.d("Serajmk","inside custom");
+
+        View marker = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_marker_layout, null);
+
+        ImageView markerImage = marker.findViewById(R.id.user_dp);
+
+        SessionManager sessionManager1 = new SessionManager(context);
+
+        String image_url="https://pneck.in/storage/user_img/5f94dc4223d59compress_img.jpg";
+
+        if (sessionManager1.getUserImage()!=null){
+            Glide.with(context).load(image_url).placeholder(R.drawable.userr).into(markerImage);
+        }else{
+            Glide.with(context).load(R.drawable.userr).into(markerImage);
+        }
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        marker.setLayoutParams(new ViewGroup.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
+        marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        marker.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(marker.getMeasuredWidth(), marker.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        marker.draw(canvas);
+
+        return bitmap;
+    }
+
+
+    public void showPath( List<LatLng> latLngList) {
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (int i=0;i<latLngList.size();i++) {
+            builder.include(latLngList.get(i));
+        }
+        LatLngBounds bounds = builder.build();
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 2));
+        PolylineOptions polylineOptions = new PolylineOptions();
+        polylineOptions.color(Color.GRAY);
+        polylineOptions.width(5f);
+        polylineOptions.addAll(latLngList);
+        greyPolyLine = mGoogleMap.addPolyline(polylineOptions);
+        PolylineOptions blackPolylineOptions = new PolylineOptions();
+        blackPolylineOptions.width(5f);
+        blackPolylineOptions.color(Color.BLACK);
+        blackPolyline = mGoogleMap.addPolyline(blackPolylineOptions);
+        originMarker = addOriginDestinationMarkerAndGet( latLngList.get(0));
+        originMarker.setAnchor(0.5f, 0.5f);
+        destinationMarker = addOriginDestinationMarkerAndGet(latLngList.get(latLngList.size()-1));
+        destinationMarker.setAnchor(0.5f, 0.5f);
+        ValueAnimator polylineAnimator = polyLineAnimator();
+        polylineAnimator.addUpdateListener(valueAnimator -> {
+                    int percentValue = (int) valueAnimator.getAnimatedValue();
+                    int index = (int) (greyPolyLine.getPoints().size() * (percentValue / 100.0f));
+                    blackPolyline.setPoints(greyPolyLine.getPoints().subList(0, index));
+                }
+        );
+        polylineAnimator.start();
+    }
+
+
+    public Bitmap getDestinationBitmap() {
+        int height = 20;
+        int width = 20;
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
+        canvas.drawRect(0F, 0F, width, height, paint);
+        return bitmap;
+    }
+
+    private Marker addOriginDestinationMarkerAndGet(LatLng latLng) {
+        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(getDestinationBitmap());
+        return mGoogleMap.addMarker(new MarkerOptions().position(latLng).flat(true).icon(bitmapDescriptor));
+    }
+    public ValueAnimator polyLineAnimator() {
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 100);
+        valueAnimator.setInterpolator(new LinearInterpolator());
+        valueAnimator.setDuration(2000);
+        return valueAnimator;
+    }
 
 }

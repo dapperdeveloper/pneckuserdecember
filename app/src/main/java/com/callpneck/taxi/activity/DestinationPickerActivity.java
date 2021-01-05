@@ -89,6 +89,7 @@ public class DestinationPickerActivity extends AppCompatActivity implements OnMa
     private String UserLongitude = "";
     TextView currentAddress;
 
+
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2002;
     private boolean mLocationPermissionGranted = true;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -129,7 +130,6 @@ public class DestinationPickerActivity extends AppCompatActivity implements OnMa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -310,17 +310,17 @@ public class DestinationPickerActivity extends AppCompatActivity implements OnMa
             getDeviceLocation();
         } else {
 
-             CameraPosition cameraPosition = mMap.getCameraPosition();
-             mCenterLatLong = cameraPosition.target;
-             getCompleteAddressString(mCenterLatLong.latitude, mCenterLatLong.longitude);
-             Log.d("Seraj", "location req send..");
+            CameraPosition cameraPosition = mMap.getCameraPosition();
+            mCenterLatLong = cameraPosition.target;
+            getCompleteAddressString(mCenterLatLong.latitude, mCenterLatLong.longitude);
+            Log.d("Seraj", "location req send..");
 
-             new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
 
-            }
+                }
             }, 100*2);
         }
     }
