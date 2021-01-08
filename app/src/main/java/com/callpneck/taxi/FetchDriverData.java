@@ -35,6 +35,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class FetchDriverData {
+
     Context context;
     SessionManager sessionManager;
     boolean isContinue;

@@ -69,7 +69,7 @@ dependencies {
     implementation 'com.google.maps.android:android-maps-utils:0.5+'
 
     implementation 'com.google.firebase:firebase-core:17.5.0'
-    implementation 'com.google.firebase:firebase-messaging:20.2.4'
+    implementation 'com.google.firebase:firebase-messaging:20.2.0'
 
     implementation 'com.balysv:material-ripple:1.0.2'
 
@@ -154,12 +154,14 @@ dependencies {
     implementation 'com.karumi:dexter:6.2.1'
 
 
+    implementation 'androidx.biometric:biometric:1.0.0-rc01'
     //foR razorpay
     implementation 'com.razorpay:checkout:1.5.13'
     implementation 'org.jetbrains:annotations-java5:15.0'
     //taxi final
     implementation 'com.google.android.material:material:1.1.0'
-
+    //pageIndicator
+    implementation 'com.romandanylyk:pageindicatorview:1.0.1@aar'
     //slidingup pannel
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
 

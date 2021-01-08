@@ -250,8 +250,9 @@ public interface APIRequests {
                                    @Field("category") String category);
 
 
+    @FormUrlEncoded
     @POST("pneck_user_list")
-    Call<PneckUserList> getPneckUserList();
+    Call<PneckUserList> getPneckUserList(@Field("mobile") String mobile);
 
     @FormUrlEncoded
     @POST("show_services_gallery")

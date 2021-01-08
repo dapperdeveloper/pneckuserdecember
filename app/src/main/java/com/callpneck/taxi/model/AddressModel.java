@@ -2,7 +2,6 @@ package com.callpneck.taxi.model;
 
 public class AddressModel {
 
-
     String Addtrss;
     Double latitude;
     Double longitude;

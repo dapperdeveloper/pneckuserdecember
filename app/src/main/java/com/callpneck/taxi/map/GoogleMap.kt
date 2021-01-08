@@ -40,8 +40,8 @@ object GoogleMap
         directionsApiRequest.destination(dbookedCabCurrentLocations)
         directionsApiRequest.setCallback(object : PendingResult.Callback<DirectionsResult> {
             override fun onResult(result: DirectionsResult) {
-              //  val jsonObjectCabBooked = JSONObject()
-              //  jsonObjectCabBooked.put("type", "cabBooked")
+                //  val jsonObjectCabBooked = JSONObject()
+                //  jsonObjectCabBooked.put("type", "cabBooked")
                 /*mainThread.post {
                     webSocketListener.onMessage(jsonObjectCabBooked.toString())
                 }*/
@@ -120,7 +120,7 @@ object GoogleMap
                     var time =""
                     var distance =""
                     for (route in routeList) {
-                         time = route.legs.get(0).duration.toString()
+                        time = route.legs.get(0).duration.toString()
                         distance = route.legs.get(0).distance.toString()
 
                         val path = route.overviewPolyline.decodePath()

@@ -19,6 +19,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.text.Editable;
@@ -90,6 +91,8 @@ import com.callpneck.SessionManager;
 
 import com.callpneck.activity.MainActivity;
 import com.callpneck.activity.PneckMapLocation;
+import com.callpneck.activity.Registration.LoginActivity;
+import com.callpneck.activity.SplashActivity;
 import com.callpneck.activity.registrationSecond.Adapter.MyShopAdapter;
 import com.callpneck.commonutility.AllUrl;
 import com.callpneck.model.MapPointerModel;
@@ -137,6 +140,9 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.model.TravelMode;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.jetbrains.annotations.NotNull;
@@ -164,7 +170,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static com.callpneck.PublicMethods.hideKeyboard;
-import static com.callpneck.taxi.activity.RealTimeActivity.createCustomMarker;
 
 
 public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCallback, WebSocketListener {
@@ -1041,6 +1046,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
         dataParams.put("cash_offered", cash);
         dataParams.put("vehicle_type", id);
         dataParams.put("description", description);
+        dataParams.put("user_drop_address", desinationAddress);
 
 
         CustomRequest dataParamsJsonReq = new CustomRequest(JsonUTF8Request.Method.POST,
@@ -1067,16 +1073,27 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                     if (innerResponse.getBoolean("success")) {
 
                         JSONObject jsonObject = innerResponse.getJSONObject("data");
-
+                        String msge = jsonObject.getString("msg");
+                        String ses_booking_id = jsonObject.getString("ses_booking_id");
+                        your_booking_number = jsonObject.getString("your_booking_number");
+                        your_booking_status = jsonObject.getString("your_booking_status");
+                        your_booking_status_msg = jsonObject.getString("your_booking_status_msg");
+                        bookingId=ses_booking_id;
+                        Log.d("TahseenKhanBId",bookingId);
+                        Toast.makeText(TaxiMainActivity.this, msg, Toast.LENGTH_LONG).show();
+                        cashOfferLinearLayout.setVisibility(View.INVISIBLE);
+                        Log.d("TahseenKhan"," calling getAvailableAtOfferDriverList()");
                         Intent intent=new Intent(TaxiMainActivity.this, DriverListActivity.class);
-                        String bookingId =jsonObject.getString("ses_booking_id");
-                        intent.putExtra("booking_id",bookingId);
+                        intent.putExtra("bookin_id",bookingId);
                         startActivity(intent);
+                    }else {
+                        Toast.makeText(TaxiMainActivity.this, msg, Toast.LENGTH_LONG).show();
+                        Log.d("TahseenKhan"," error");
                     }
 
                 } catch (Exception e) {
-                    Toast.makeText(TaxiMainActivity.this,e.getMessage().toString()+"",Toast.LENGTH_LONG).show();
-                }
+                    e.toString();
+                    Log.e("TahseenKhan","this is error  "+e.getMessage()); }
             }
         };
     }
@@ -1086,6 +1103,26 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onErrorResponse(VolleyError error) {
                 // error.printStackTrace();
+                Log.d("TahseenKhan", "Error: " + error.getMessage());
+
+                VolleyLog.d("Error", "Error: " + error.getMessage());
+                Toast.makeText(TaxiMainActivity.this,"System error "+error.getMessage(),Toast.LENGTH_LONG).show();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Log.d("TahseenKhan", "TimeoutError");
+
+                } else if (error instanceof AuthFailureError) {
+                    Log.d("TahseenKhan", "AuthFailureError");
+
+                } else if (error instanceof ServerError) {
+                    Log.d("TahseenKhan", "ServerError "+error.getMessage());
+
+                } else if (error instanceof NetworkError) {
+                    Log.d("TahseenKhan", "NetworkError");
+
+                } else if (error instanceof ParseError) {
+                    Log.d("TahseenKhan", "ParseError");
+
+                }
             }
         };
     }

@@ -1,10 +1,10 @@
 
-package com.callpneck.taxi.model.driver;
+package com.callpneck.taxi.model.FetchDriverData;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Datum {
+public class DriverList {
 
     @SerializedName("id")
     @Expose

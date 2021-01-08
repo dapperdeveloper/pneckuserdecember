@@ -171,7 +171,9 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
         Intent intent=getIntent();
         dname= intent.getStringExtra("name");
         dphoneno=intent.getStringExtra("phoneno");
+        if (dname!=null)
         mDriverName.setText(dname.toString());
+        if (dphoneno!=null)
         callBtn.setText("Call "+dphoneno.toString());
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

@@ -3,6 +3,7 @@ package com.callpneck.activity.registrationSecond.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,12 +15,14 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -48,6 +51,7 @@ import com.callpneck.activity.registrationSecond.Activity.SearchActivity;
 import com.callpneck.activity.registrationSecond.Activity.SearchLocationActivity;
 import com.callpneck.activity.registrationSecond.Activity.ShopHomeActivity;
 import com.callpneck.activity.registrationSecond.Adapter.MyCategoryAdapter;
+import com.callpneck.activity.registrationSecond.Adapter.MyCustomPagerAdapter;
 import com.callpneck.activity.registrationSecond.Model.Category;
 import com.callpneck.api.retrofit.RetrofitClient;
 import com.callpneck.model.dashboard.BannerSliderImage;
@@ -213,6 +217,7 @@ public class HomeFragment extends Fragment {
         return view;
 
     }
+
 
     private boolean checkLocationPermission(){
         boolean result = ContextCompat.checkSelfPermission(getActivity(),
@@ -600,50 +605,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public class MyCustomPagerAdapter extends PagerAdapter {
-        Context context;
-        List<BannerSliderImage> bannerDatumList;
-        LayoutInflater layoutInflater;
-
-        public MyCustomPagerAdapter(Context context, List<BannerSliderImage> bannerDatumList) {
-            this.context = context;
-            this.bannerDatumList = bannerDatumList;
-            layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        }
-        @Override
-        public int getCount() {
-            return bannerDatumList.size();
-        }
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view ==  object;
-        }
-        @Override
-        public Object instantiateItem(ViewGroup container, final int position) {
-            View itemView = layoutInflater.inflate(R.layout.layout_banner_look, container, false);
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.image_look_book);
-            try {
-                Glide.with(mContext).load(bannerDatumList.get(position).getImage()).placeholder(R.drawable.pneck_icon).into(imageView);
-            }catch (Exception e){
-
-            }
-
-            container.addView(itemView);
-            if (bannerDatumList.get(position).getImage()!=null)
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, ""+bannerDatumList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
-                }
-            });
-            return itemView;
-        }
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((RelativeLayout) object);
-        }
-    }
 
     //get current user location
 

@@ -38,10 +38,12 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.MyViewHo
         this.context = context;
         this.carTypes = carTypes;
     }
+
     public List<CarType> getCarTypeList()
     {
         return  carTypes;
     }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -56,6 +58,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.MyViewHo
 
 
         holder.serviceName.setText(carTypes.get(position).getCarName());
+
         Glide.with(context).load(carTypes.get(position).getImageUrl()).into(holder.image);
         if(carTypes.get(position).getSelected()==1)
         {
@@ -100,6 +103,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.MyViewHo
                     notifyDataSetChanged();
                 }
             });
+
         }
 
 

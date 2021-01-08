@@ -20,6 +20,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.callpneck.Const;
 import com.callpneck.R;
@@ -42,17 +43,16 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
-public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
+public class FirebaseMessaging extends FirebaseMessagingService {
     private static final String TAG =  "FirebaseMessagingSlfad";
     public static int StrangersChatNOtificationId=242326;
     public static int StrangersChatChatNotificationId=23324632;
     public static String NOTIFICATION_SHARED_PREF_NAME="corporat32$^#3";
     private String MyDefaultClickAction="com.peppty.corporator.corporater_app_MAIN_ACTIVITY_TARGET";
-
+    private static final String ADMIN_CHANNEL_ID = "admin_channel";
 
     @Override
     public void onNewToken(String s) {
-
         super.onNewToken(s);
         UpdateTokenToServer(s);
         Log.e("dsadasdasdasdas",  "device token   "+s);
@@ -156,7 +156,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         /*****************sending message notification ***************/
         Intent resultIntent = new Intent();
 
-        SessionManager sessionManager=new SessionManager(FirebaseMessagingService.this);
+        SessionManager sessionManager=new SessionManager(FirebaseMessaging.this);
         if (!sessionManager.isLoggedIn()){
             return;
         }
@@ -169,7 +169,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         if (remoteMessage.getData().get("notification_type")
                 .equalsIgnoreCase("BookingOrderInfo")){
 
-            resultIntent=new Intent(FirebaseMessagingService.this, JobRealTimeTrackingScreen.class);
+            resultIntent=new Intent(FirebaseMessaging.this, JobRealTimeTrackingScreen.class);
             resultIntent.putExtra("booking_order_number",remoteMessage.getData().get("booking_order_number"));
             resultIntent.putExtra("booking_order_id",remoteMessage.getData().get("ses_booking_id"));
             resultIntent.putExtra("customer_lat",remoteMessage.getData().get("user_lat"));
@@ -178,22 +178,21 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         }else if (remoteMessage.getData().get("notification_type")
                 .equalsIgnoreCase("OrderAccepted")){
 
-            resultIntent=new Intent(FirebaseMessagingService.this, JobRealTimeTrackingScreen.class);
+            resultIntent=new Intent(FirebaseMessaging.this, JobRealTimeTrackingScreen.class);
             resultIntent.putExtra("booking_order_number",remoteMessage.getData().get("booking_order_number"));
             resultIntent.putExtra("booking_order_id",remoteMessage.getData().get("ses_booking_id"));
             resultIntent.putExtra("customer_lat",remoteMessage.getData().get("user_lat"));
             resultIntent.putExtra("customer_long",remoteMessage.getData().get("user_long"));
             notificationContent=remoteMessage.getData().get("message");
         }else if (remoteMessage.getData().get("notification_type").equalsIgnoreCase("PaymentRequest")){
-            resultIntent=new Intent(FirebaseMessagingService.this, DoPaymentScreen.class);
+            resultIntent=new Intent(FirebaseMessaging.this, DoPaymentScreen.class);
             resultIntent.putExtra("billing_amount",remoteMessage.getData().get("billing_amount"));
             notificationContent=remoteMessage.getData().get("message");
         }
         else {
             notificationContent=remoteMessage.getData().get("message");
-            resultIntent=new Intent(FirebaseMessagingService.this, PneckMapLocation.class);
+            resultIntent=new Intent(FirebaseMessaging.this, PneckMapLocation.class);
         }
-
 
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         resultIntent.setAction(Long.toString(System.currentTimeMillis()));
@@ -249,14 +248,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     /*****************sending message notification ***************/
         Intent resultIntent = new Intent();
 
-        SessionManager sessionManager=new SessionManager(FirebaseMessagingService.this);
+        SessionManager sessionManager=new SessionManager(FirebaseMessaging.this);
         if (!sessionManager.isLoggedIn()){
             return;
         }
 
         String notificationGroup="";
 
-        resultIntent=new Intent(FirebaseMessagingService.this, PneckMapLocation.class);
+        resultIntent=new Intent(FirebaseMessaging.this, PneckMapLocation.class);
 
         resultIntent.setAction(Long.toString(System.currentTimeMillis()));
 
@@ -329,7 +328,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
     private void UpdateTokenToServer(String token) {
 
-        SessionManager sessionManager=new SessionManager(FirebaseMessagingService.this);
+        SessionManager sessionManager=new SessionManager(FirebaseMessaging.this);
         String ServerURL = getResources().getString(R.string.pneck_app_url) + "userDevicetoken";
         HashMap<String, String> dataParams = new HashMap<String, String>();
 
@@ -346,7 +345,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 (int) TimeUnit.SECONDS.toMillis(Const.VOLLEY_RETRY_TIMEOUT),
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Volley.newRequestQueue(FirebaseMessagingService.this).add(dataParamsJsonReq);
+        Volley.newRequestQueue(FirebaseMessaging.this).add(dataParamsJsonReq);
 
     }
 
@@ -358,6 +357,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 try {
                     Log.v("klsddsfdsf", "this is complete response " + response);
                     if (response.getBoolean("success")) {
+
                     }
 
                 } catch (Exception e) {

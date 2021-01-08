@@ -2,16 +2,29 @@ package com.callpneck.activity.registrationSecond;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.app.ActivityOptions;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.activity.MainActivity;
@@ -36,13 +49,13 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import butterknife.ButterKnife;
 
 public class MainScreenActivity extends AppCompatActivity {
 
     BottomNavigationView bottom_navigation;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +90,10 @@ public class MainScreenActivity extends AppCompatActivity {
                             return loadFragment(fragment);
                         }
                     });
-                    bottom_navigation.setSelectedItemId(R.id.action_home);
 
+                    showDialog();
+
+                    bottom_navigation.setSelectedItemId(R.id.action_home);
             }
 
             @Override
@@ -99,5 +114,25 @@ public class MainScreenActivity extends AppCompatActivity {
         }
         return false;
     }
+    public void showDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        View view = LayoutInflater.from(this).inflate(R.layout.wear_a_mask,null);
+        dialog.setContentView(view);
 
+        ImageView imageView = view.findViewById(R.id.jj);
+        Glide.with(this).load(R.drawable.maskgif).into(imageView);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+
+            }
+        }, 4000);
+    }
 }

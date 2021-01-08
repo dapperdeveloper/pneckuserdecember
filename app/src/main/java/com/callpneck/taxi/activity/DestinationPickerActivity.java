@@ -52,7 +52,7 @@ import java.util.Map;
 
 
 public class DestinationPickerActivity extends AppCompatActivity implements OnMapReadyCallback ,
- GoogleMap.OnCameraMoveStartedListener,
+        GoogleMap.OnCameraMoveStartedListener,
         GoogleMap.OnCameraMoveListener,
         GoogleMap.OnCameraMoveCanceledListener,
         GoogleMap.OnCameraIdleListener{
@@ -88,7 +88,6 @@ public class DestinationPickerActivity extends AppCompatActivity implements OnMa
     private String UserLatitude = "";
     private String UserLongitude = "";
     TextView currentAddress;
-
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2002;
     private boolean mLocationPermissionGranted = true;
@@ -132,6 +131,7 @@ public class DestinationPickerActivity extends AppCompatActivity implements OnMa
         mapFragment.getMapAsync(this);
 
 
+
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,7 +160,7 @@ public class DestinationPickerActivity extends AppCompatActivity implements OnMa
             }
         });
 
-        
+
     }
 
     private void gotoLocation(double latitude, double longitude) {

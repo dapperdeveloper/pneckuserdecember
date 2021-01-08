@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <application
         android:name=".PneckUserApplication"
@@ -24,7 +25,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.registrationSecond.Activity.CancelOrderScreenActivity"></activity>
+        <activity android:name=".activity.SecurityActivity"></activity>
+        <activity android:name=".activity.registrationSecond.Activity.CancelOrderScreenActivity" />
         <activity
             android:name=".activity.registrationSecond.Activity.ReceiptOrderActivity"
             android:theme="@style/AppTheme1" />
@@ -204,7 +206,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service android:name=".Notification.FirebaseMessagingService">
+        <service android:name="com.callpneck.Notification.FirebaseMessaging">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

@@ -1,5 +1,5 @@
 
-package com.callpneck.taxi.model.driver;
+package com.callpneck.taxi.model.FetchDriverData;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
@@ -15,7 +15,7 @@ public class Response {
     private String message;
     @SerializedName("data")
     @Expose
-    private List<Datum> data = null;
+    private List<DriverList> data = null;
 
     public Boolean getSuccess() {
         return success;
@@ -33,11 +33,11 @@ public class Response {
         this.message = message;
     }
 
-    public List<Datum> getData() {
+    public List<DriverList> getData() {
         return data;
     }
 
-    public void setData(List<Datum> data) {
+    public void setData(List<DriverList> data) {
         this.data = data;
     }
 
