@@ -88,6 +88,8 @@ public class JobRealTimeTrackingScreen extends AppCompatActivity {
         }else {
             bookingId=sessionManager.getSesBookingId();
         }
+
+
         
     }
     private void LoadMapFragment(){
@@ -139,7 +141,7 @@ public class JobRealTimeTrackingScreen extends AppCompatActivity {
                         JSONObject data=innerResponse.getJSONObject("data");
                          if (data.getString("curr_booking_status").equalsIgnoreCase("order_request_payment")){
                             //launch payment request screen
-                             String bookingCharge=data.getString("booking_charge");
+                             String bookingCharge= String.valueOf(data.getInt("booking_charge"));
                              Bundle bundle = new Bundle();
                              bundle.putString("billing_amount",bookingCharge);
                             LaunchActivityClass.LaunchPaymentScreen(JobRealTimeTrackingScreen.this,bundle);

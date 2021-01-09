@@ -180,6 +180,15 @@ public class HomeFragment extends Fragment {
         if (AppController.isConnected(getActivity()))
         getData();
 
+
+        sessionManager.setSesBookingId(null);
+        sessionManager.setOtpVerified(false);
+        sessionManager.setOrderStatus(null);
+        sessionManager.setDestination(null,null);
+        sessionManager.setDeliveryOtp(null);
+        sessionManager.setUserValues("...","...","...","...","Generating");
+        sessionManager.clearOrderSession();
+
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -46,6 +46,7 @@ import java.util.concurrent.TimeUnit;
 public class DriverListActivity extends AppCompatActivity implements WebSocketListener {
     String bookingId;
     List<AgreeDriverData> agreeDriverDataList=new ArrayList<>();
+    List<AgreeDriverData> tempagreeDriverDataList=new ArrayList<>();
     ScheduledExecutorService executor;
     Runnable periodicTask;
     DriverAdapter driverAdapter;
@@ -97,7 +98,7 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
         periodicTask = new Runnable() {
             public void run() {
                 // Invoke method(s) to do the work
-                doPeriodicWork();
+               // doPeriodicWork();
 
             }
         };
@@ -136,6 +137,12 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
             }
         });
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                callFetchApi(String.valueOf(bookingId));
+            }
+        }, 20000);
     }
 
     private void userCancelBooking(String userid, String userToken, String sesBookingId, String cancel_by_user) {
@@ -280,29 +287,30 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
                         Log.d("Serajad","responce success");
                         JSONArray jsonArray=innerResponse.getJSONArray("data");
 
-                        int size=agreeDriverDataList.size();
-                        agreeDriverDataList.clear();
-
+//                        int size=agreeDriverDataList.size();
+//                        agreeDriverDataList.clear();
+                        loadingIV.setVisibility(View.GONE);
 
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject object=jsonArray.getJSONObject(i);
                             Log.d("Serajemp",object.getString("employee_name"));
-                            agreeDriverDataList.add(new AgreeDriverData(""+object.getInt("id"),""+object.getInt("booking_id"),""+object.getInt("employee_id"),""+object.getString("ep_token"),""+object.getString("employee_lat"),""+object.getString("employee_lng"),""+object.getString("employee_name"),""+object.getString("employee_phone"),""+object.getString("employee_time_to_reach"),""+object.getString("description"),""+object.getString("status"),""+object.getString("employee_cash_offer"),""));
+                            //agreeDriverDataList.add(new AgreeDriverData(""+object.getInt("id"),""+object.getInt("booking_id"),""+object.getInt("employee_id"),""+object.getString("ep_token"),""+object.getString("employee_lat"),""+object.getString("employee_lng"),""+object.getString("employee_name"),""+object.getString("employee_phone"),""+object.getString("employee_time_to_reach"),""+object.getString("description"),""+object.getString("status"),""+object.getString("employee_cash_offer"),""));
+                            tempagreeDriverDataList.add(new AgreeDriverData(""+object.getInt("id"),""+object.getInt("booking_id"),""+object.getInt("employee_id"),""+object.getString("ep_token"),""+object.getString("employee_lat"),""+object.getString("employee_lng"),""+object.getString("employee_name"),""+object.getString("employee_phone"),""+object.getString("employee_time_to_reach"),""+object.getString("description"),""+object.getString("status"),""+object.getString("employee_cash_offer"),""));
                             updatelocation(i);
-                            loadingIV.setVisibility(View.GONE);
                         }
-                        if (agreeDriverDataList.size()!=size){
-                            Log.d("Serajsize","changed");
-                            driverAdapter.notifyDataSetChanged();
-                            loadingIV.setVisibility(View.GONE);
-                        }else{
-                            Log.d("Serajsize","same data");
-                        }
+//                        if (agreeDriverDataList.size()!=size){
+//                            Log.d("Serajsize","changed");
+//                            driverAdapter.notifyDataSetChanged();
+//                            loadingIV.setVisibility(View.GONE);
+//                        }else{
+//                            Log.d("Serajsize","same data");
+//                        }
                     }else {
                         Log.d("Serajad","accept responce failed");
                     }
 
                 } catch (Exception e) {
+                    loadingIV.setVisibility(View.GONE);
                     Log.d("Serajad", "error ad inside catch block  " + e.getMessage());
                     e.printStackTrace();
 
@@ -315,6 +323,10 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
         eFuture.shutdown();
         finish();
     }
+
+
+
+
 
     Runnable mStatusChecker = new Runnable() {
         @Override
@@ -345,10 +357,11 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
     }
 
 
+
     public void updatelocation(int value)
     {
         com.callpneck.taxi.map.GoogleMap.requesttimedistance(
-                DriverListActivity.this,Double.parseDouble(agreeDriverDataList.get(value).getEmployeeLat()),Double.parseDouble(agreeDriverDataList.get(value).getEmployeeLong()),30.7411,76.7790,value
+                DriverListActivity.this,Double.parseDouble(tempagreeDriverDataList.get(value).getEmployeeLat()),Double.parseDouble(tempagreeDriverDataList.get(value).getEmployeeLong()),30.7411,76.7790,value
         );
     }
 
@@ -364,7 +377,7 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
             JSONObject jsonObject = new JSONObject(data);
             jsonObject.getString("time");
             jsonObject.getInt("value");
-            agreeDriverDataList.add(new AgreeDriverData(agreeDriverDataList.get(jsonObject.getInt("value")).getId(),agreeDriverDataList.get(jsonObject.getInt("value")).getBookibgId(),agreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeId(),agreeDriverDataList.get(jsonObject.getInt("value")).getEpToken(),agreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeLat(),agreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeLong(),agreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeName(),agreeDriverDataList.get(jsonObject.getInt("value")).getEmployeePhone(),jsonObject.getString("time"),agreeDriverDataList.get(jsonObject.getInt("value")).getDescription(),agreeDriverDataList.get(jsonObject.getInt("value")).getStatus(),agreeDriverDataList.get(jsonObject.getInt("value")).getEmpCashOffered(),jsonObject.getString("distance")));
+            agreeDriverDataList.add(new AgreeDriverData(tempagreeDriverDataList.get(jsonObject.getInt("value")).getId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getBookibgId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEpToken(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeLat(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeLong(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeName(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeePhone(),jsonObject.getString("time"),tempagreeDriverDataList.get(jsonObject.getInt("value")).getDescription(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getStatus(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmpCashOffered(),jsonObject.getString("distance")));
             driverAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -380,6 +393,4 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
     public void onError(@NotNull String error) {
 
     }
-
-
 }

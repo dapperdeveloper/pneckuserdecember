@@ -2,6 +2,7 @@ package com.callpneck.taxi.activity;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,13 +31,26 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.callpneck.Const;
@@ -46,6 +60,8 @@ import com.callpneck.Requests.CustomRequest;
 import com.callpneck.Requests.JsonUTF8Request;
 import com.callpneck.SessionManager;
 import com.callpneck.Language.ThemeUtils;
+import com.callpneck.activity.MainActivity;
+import com.callpneck.commonutility.AllUrl;
 import com.callpneck.model.ClusterMarker;
 import com.callpneck.model.PolylineData;
 import com.callpneck.model.User;
@@ -88,6 +104,7 @@ import com.google.maps.model.DirectionsStep;
 import com.google.maps.model.Duration;
 import com.google.maps.model.EncodedPolyline;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -95,6 +112,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -155,6 +173,13 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
     String dname="";
     String dphoneno="";
 
+    private LinearLayout cancelOrder;
+
+
+    private Handler mHandler = new Handler();
+    private Runnable mRunnable;
+    private static final int LOCATION_UPDATE_INTERVAL = 3000;
+    String currentBookingStatus;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +193,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
         carAvatar=findViewById(R.id.car_image);
         mcarName=findViewById(R.id.car_name);
         callBtn=findViewById(R.id.call_driver_btn);
+        cancelOrder = (LinearLayout)findViewById( R.id.cancel_order );
         Intent intent=getIntent();
         dname= intent.getStringExtra("name");
         dphoneno=intent.getStringExtra("phoneno");
@@ -181,6 +207,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
         sessionManager = new SessionManager(RealTimeActivity.this);
         getBookingData= new GetBookingData(this,sessionManager);
         fetchDriverData=new FetchDriverData(this,sessionManager);
+        currentBookingStatus = sessionManager.getOrderStatus();
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         executor =
                 Executors.newSingleThreadScheduledExecutor();
@@ -188,11 +215,316 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
             public void run() {
                 // Invoke method(s) to do the work
                 fetchDriverData.start();
+                currentTrackingBooking();
             }
         };
         executor.scheduleAtFixedRate(periodicTask, 0, 4, TimeUnit.SECONDS);
         addLocation();
+
+
+        cancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelOrderReasonDialog(RealTimeActivity.this);
+            }
+        });
+
+
     }
+
+    private void startUserLocationsRunnable(){
+        Log.d(TAG, "startUserLocationsRunnable: starting runnable for retrieving updated locations.");
+        mHandler.postDelayed(mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                currentTrackingBooking();
+                //retrieveUserLocations();
+                mHandler.postDelayed(mRunnable, LOCATION_UPDATE_INTERVAL);
+            }
+        }, LOCATION_UPDATE_INTERVAL);
+    }
+
+    private void currentTrackingBooking() {
+
+        String ServerURL = getResources().getString(R.string.pneck_app_url) + "/userCurrBookingTracking";
+        HashMap<String, String> dataParams = new HashMap<String, String>();
+
+        dataParams.put("user_id",sessionManager.getUserid());
+        dataParams.put("ep_token",sessionManager.getUserToken());
+        dataParams.put("ses_booking_id",sessionManager.getSesBookingId());
+        dataParams.put("curr_lat",sessionManager.getUserLatitude());
+        dataParams.put("curr_long",sessionManager.getUserLongitude());
+        dataParams.put("curr_address","Empty");
+
+
+        Log.e("user_employee_loc", "this is url " +ServerURL);
+
+        Log.e("user_employee_loc", "this is we sending " + dataParams.toString());
+
+        CustomRequest dataParamsJsonReq = new CustomRequest(JsonUTF8Request.Method.POST,
+                ServerURL,
+                dataParams,
+                getLocationUpdate(),
+                ErrorListeners());
+        dataParamsJsonReq.setRetryPolicy(new DefaultRetryPolicy(
+                (int) TimeUnit.SECONDS.toMillis(Const.VOLLEY_RETRY_TIMEOUT),
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        Volley.newRequestQueue(this).add(dataParamsJsonReq);
+    }
+
+    private boolean isImageSet=false;
+    private Response.Listener<JSONObject> getLocationUpdate() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.v("user_employee_loc", "this is complete response " + response);
+                    JSONObject innerResponse=response.getJSONObject("response");
+                    if (innerResponse.getBoolean("success")) {
+
+                        JSONObject object=innerResponse.getJSONObject("data");
+
+                        String userImage=object.getString("employee_image");
+
+
+                        if (userImage!=null&&userImage.length()>3&&!isImageSet){
+                            Log.e("kjhsdfkdsf","setting image this is employee image "+userImage);
+                            isImageSet=true;
+                            Glide.with(RealTimeActivity.this)
+                                    .load(userImage)
+                                    .into(driverAvatar);
+                        }else {
+                            Log.e("kjhsdfkdsf","setting not is employee image "+userImage);
+                        }
+
+                        String jobDetail=object.getString("job_detail");
+
+                        if (jobDetail.length()<=0||jobDetail.equals("null")){
+//                            orderInfoLayout.setVisibility(View.GONE);
+                        }else {
+//                            orderInfoLayout.setVisibility(View.VISIBLE);
+//                            orderInfo.setText(jobDetail);
+                        }
+
+                        JSONObject empObj=object.getJSONObject("employee_loc");
+                        if (object.getString("curr_booking_status").
+                                equalsIgnoreCase("order_request_payment")){
+                            //launch payment request screen
+                            String bookingCharge=object.getString("payable_amount");
+                            /* "booking_charge": "50",
+                            "order_subtotal": "445.00",
+                                    "payable_amount": "495.00",*/
+                            Bundle bundle =new Bundle();
+                            bundle.putString("billing_amount",bookingCharge);
+                            LaunchActivityClass.LaunchPaymentScreen(RealTimeActivity.this,bundle);
+                            finish();
+                        }
+                        //employeeRating.setText(empObj.getString("emp_rating"));
+
+                        if (!empObj.getString("delivery_otp").equals("null")&&empObj.getString("delivery_otp").length()>0){
+                            userOtp.setText("OTP : "+empObj.getString("delivery_otp"));
+                        }else {
+                            if (!empObj.getString("accept_otp").equals("null")&&empObj.getString("accept_otp").length()>0){
+                                userOtp.setText("OTP : "+empObj.getString("accept_otp"));
+                            }else {
+                                userOtp.setText("OTP");
+                            }
+                        }
+
+
+                        //bookingCharge=object.getString("booking_charge");
+//                        if (bookingCharge==null||bookingCharge.length()<=1){
+//                            bookingCharges.setVisibility(View.GONE);
+//                        }else {
+//                            bookingCharges.setText("Charges : "+bookingCharge);
+//                        }
+
+                        //userPhoneNo.setText(employeePhoneNum);
+                        currentBookingStatus=object.getString("curr_booking_status");
+
+                        if (currentBookingStatus.equals("accepted")){
+                            currentBookingStatus="Order Accepted";
+                        }else if (currentBookingStatus.equals("accepted_otp_confirmed")){
+                            currentBookingStatus="OTP Confirmed";
+                        }else if (currentBookingStatus.equals("order_info_provided")){
+                            currentBookingStatus="Order Information Added";
+                        }else if (currentBookingStatus.equals("delivery_otp_confirmed")){
+                            currentBookingStatus="Delivery OTP Confirmed";
+                        }else if (currentBookingStatus.equals("order_request_payment")){
+                            currentBookingStatus="Order Payment Request";
+                        }
+                        //bookingStatus.setText(currentBookingStatus);
+
+
+                       // VehicleNo.setText("VEHICLE NO. : "+empObj.getString("vehicle_number"));
+                        for (int i = 0; i < mClusterMarkers.size(); i++) {
+                            try {
+                                if (!mClusterMarkers.get(i).getUser().getUser_id().equals(sessionManager.getUserid())) {
+
+                                    LatLng updatedLatLng = new LatLng(Double.parseDouble(empObj.getString("curr_lat")),
+                                            Double.parseDouble(empObj.getString("curr_long")));
+
+                                    mClusterMarkers.get(i).setPosition(updatedLatLng);
+                                    mClusterManagerRenderer.setUpdateMarker(mClusterMarkers.get(i));
+                                }
+                            } catch (NullPointerException e) {
+                                Log.e(TAG, "retrieveUserLocations: NullPointerException: " + e.getMessage());
+                            }
+                        }
+                    }
+
+                } catch (Exception e) {
+                    Log.v("user_employee_loc", "inside catch block  " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    private Response.ErrorListener ErrorListeners() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.v("user_employee_loc", "inside error block  " + error.getMessage());
+            }
+        };
+    }
+
+    public  void cancelOrderReasonDialog(final Activity activity){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        View mView = activity.getLayoutInflater().inflate(R.layout.cancel_order_dialog, null);
+        //TextInputEditText cancelReason;
+        TextView stayOnOrder;
+        TextView cancelOrder;
+
+        RadioGroup radioGroup=mView.findViewById(R.id.cancel_reason_radio);
+        //cancelReason = (TextInputEditText)mView.findViewById( R.id.cancel_reason );
+        stayOnOrder = (TextView)mView.findViewById( R.id.stay_on_order );
+        cancelOrder = (TextView)mView.findViewById( R.id.cancel_order );
+
+        builder.setView(mView);
+        final AlertDialog NewCategory_dialog = builder.create();
+
+
+
+        stayOnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                NewCategory_dialog.dismiss();
+            }
+        });
+        final String[] selected = {""};
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int selectedId = radioGroup.getCheckedRadioButtonId();
+                RadioButton radioButton = (RadioButton) mView.findViewById(selectedId);
+                selected[0] =radioButton.getText().toString();
+            }
+        });
+        cancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selected[0].length()>0){
+                    cancelCurrentOrder(selected[0].toString());
+                    NewCategory_dialog.dismiss();
+                }else {
+                    Toast.makeText(RealTimeActivity.this,getString(R.string.PLEASE_ENTER_CANCEL_RESON),Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        });
+
+
+        NewCategory_dialog.show();
+    }
+    private void cancelCurrentOrder(String cancelReason) {
+        userBookingCancel(sessionManager.getUserid(), sessionManager.getUserToken(),
+                sessionManager.getSesBookingId(),cancelReason);
+    }
+    private void userBookingCancel(String userId, String epToken, String ses_booking, String cancelReason) {
+        Map<String, String> params = new HashMap<>();
+        ses_booking = sessionManager.getSesBookingId();
+        params.put("user_id", userId);
+        params.put("ep_token", epToken);
+        params.put("ses_booking_id", ses_booking);
+        params.put("cancel_reason",cancelReason);
+        Log.e("dhfsdfsdfsf","this is data sending "+params);
+
+//        progressDialog = new SpotsDialog(PneckMapLocation.this, R.style.Custom);
+        //  progressDialog.show();
+        //Utility.showProgressDialog(this);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, AllUrl.userBookingCancel, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                Log.d("booking_cancle_2", jsonObject.toString());
+                // Utility.dismissProgressDialog();
+                //     progressDialog.dismiss();
+                try {
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                    Log.d("booking_cancle_2", jsonObject1.toString());
+
+                    //Log.d("pass",pass);
+                    String msg = jsonObject1.getString("message");
+                    if (jsonObject1.getBoolean("success")) {
+                        Log.e("booking_cancle_2","inside if success ");
+                        sessionManager.clearOrderSession();
+                        JSONObject jsonObject2 = jsonObject1.getJSONObject("data");
+                        String booking_status_msg = jsonObject2.getString("your_booking_status_msg");
+                        String your_booking_status = jsonObject2.getString("your_booking_status");
+
+                        //statusMsg.setText(booking_status_msg);
+                        Log.e("booking_cancle_2","before tost inside if success ");
+                        Toast.makeText(RealTimeActivity.this,booking_status_msg,Toast.LENGTH_SHORT).show();
+                        Log.e("booking_cancle_2","calling main if success ");
+                        LaunchActivityClass.LaunchMainActivity(RealTimeActivity.this);
+                    } else {
+                        Log.e("booking_cancle_2","inside else success ");
+                        Toast.makeText(RealTimeActivity.this, msg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    Log.e("booking_cancle_2","this is error "+e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("booking_cancle_2", "Error: " + error.getMessage());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Log.d("error ocurred", "TimeoutError");
+
+                } else if (error instanceof AuthFailureError) {
+                    Log.d("error ocurred", "AuthFailureError");
+
+                } else if (error instanceof ServerError) {
+                    Log.d("error ocurred", "ServerError");
+
+                } else if (error instanceof NetworkError) {
+                    Log.d("error ocurred", "NetworkError");
+
+                } else if (error instanceof ParseError) {
+                    Log.d("error ocurred", "ParseError");
+
+                }
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
 
     private void checkStatus() {
         if (getBookingData.fetchBooking()){

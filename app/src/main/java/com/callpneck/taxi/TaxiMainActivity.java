@@ -89,6 +89,7 @@ import com.callpneck.Requests.CustomRequest;
 import com.callpneck.Requests.JsonUTF8Request;
 import com.callpneck.SessionManager;
 
+import com.callpneck.activity.JobRealTimeTrackingScreen;
 import com.callpneck.activity.MainActivity;
 import com.callpneck.activity.PneckMapLocation;
 import com.callpneck.activity.Registration.LoginActivity;
@@ -277,7 +278,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
 
 
         if (sessionManager.getSesBookingId()!=null){
-            startActivity(new Intent(TaxiMainActivity.this,RealTimeActivity.class));
+            startActivity(new Intent(TaxiMainActivity.this, JobRealTimeTrackingScreen.class));
         }
 
 
@@ -778,7 +779,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                             Log.d("Seraj"," calling getAvailableAtOfferDriverList()");
                             Intent intent=new Intent(TaxiMainActivity.this, DriverListActivity.class);
                             intent.putExtra("bookin_id",bookingId);
-                            intent.putExtra("cash",c);
+                            intent.putExtra("cash",c+"");
                             startActivity(intent);
 
                         } else {
