@@ -7,6 +7,7 @@
     android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:gravity="bottom"
     sothree:umanoPanelHeight="68dp"
     sothree:umanoShadowHeight="4dp"
@@ -18,7 +19,7 @@
     <!-- MAIN CONTENT -->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,6 +29,7 @@
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_above="@+id/cash_linear_layout"
                 android:gravity="center"
                 />
             <LinearLayout
@@ -58,28 +60,55 @@
                             android:orientation="horizontal" />
 
 
-
-                        <EditText
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Cash offer"
-                            android:drawableLeft="@drawable/ic_indian_money"
-                            android:inputType="number"
-                            android:drawablePadding="10dp"
-                            android:padding="10dp"
-                            android:keyboardNavigationCluster="false"
-                            android:textSize="14sp"
-                            android:id="@+id/cash_offer"/>
+                            android:layout_height="wrap_content">
 
-                        <EditText
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_payment"
+                                android:layout_marginLeft="16dp"
+                                android:layout_gravity="center_vertical"
+                                />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Cash offer"
+                                android:inputType="number"
+                                android:drawablePadding="10dp"
+                                android:padding="10dp"
+                                android:keyboardNavigationCluster="false"
+                                android:textSize="14sp"
+                                android:id="@+id/cash_offer"/>
+                        </LinearLayout>
+
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Enter comments"
-                            android:textSize="14sp"
-                            android:paddingLeft="5dp"
-                            android:keyboardNavigationCluster="false"
-                            android:padding="10dp"
-                            android:id="@+id/discription"/>
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_chat"
+                                android:layout_marginLeft="16dp"
+                                android:layout_gravity="center_vertical"
+                                />
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Enter comments"
+                                android:textSize="14sp"
+                                android:paddingLeft="5dp"
+                                android:keyboardNavigationCluster="false"
+                                android:padding="10dp"
+                                android:id="@+id/discription"/>
+                        </LinearLayout>
+
+
 
                         <Button
                             android:id="@+id/ride_now"
@@ -88,7 +117,7 @@
                             android:layout_height="50dp"
                             android:text="@string/offer_now"
                             android:textColor="#FFFFFF"
-                            android:background="@color/colorAccent"
+                            android:background="@color/colorPrimary"
                             android:textStyle="bold"
                             android:textSize="16sp"/>
                     </LinearLayout>

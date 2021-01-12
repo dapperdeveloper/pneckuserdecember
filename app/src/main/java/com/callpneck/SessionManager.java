@@ -37,6 +37,7 @@ public class SessionManager {
     public static final String USER_LATITUDE="user_latitude";
     public static final String USER_SCREEN_ADDRESS = "user_screen_address";
     public static final String USER_LONGITUDE="user_longitude";
+    public static  final  String DEVICE_TOKEN ="device_token";
 
 
     public static final String CURRENT_ORDER_RESPONSE="current_order_response";
@@ -277,6 +278,14 @@ public class SessionManager {
         editor.commit();
     }
 
+    public void setDeviceToken(String deviceToken) {
+        editor.putString(DEVICE_TOKEN, deviceToken);
+        editor.commit();
+    }
+
+    public String getDeviceToken() {
+        return pref.getString(DEVICE_TOKEN, null);
+    }
     public String getUserid() {
         return pref.getString(USERID, null);
     }

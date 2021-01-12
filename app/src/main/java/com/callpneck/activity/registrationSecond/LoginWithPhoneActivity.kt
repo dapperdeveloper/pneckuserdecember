@@ -17,10 +17,14 @@ import com.callpneck.R
 import com.callpneck.SessionManager
 import com.callpneck.Language.ThemeUtils
 import com.callpneck.commonutility.AllUrl
+import com.callpneck.utils.Variables
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.iid.InstanceIdResult
 import dmax.dialog.SpotsDialog
 import org.json.JSONObject
 import java.util.*
@@ -53,6 +57,7 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
 
     private var receivedOtp: String? = null
 
+    private var deviceToken: String? = null
 
     private val countDownTimer =
             SimpleCountDownTimerKotlin(
@@ -234,113 +239,121 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
     }
 
     fun verifyotpApi(mobileno: String, otp: String) {
-        val params: MutableMap<String?, String?> = HashMap()
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this@LoginWithPhoneActivity,
+                OnSuccessListener<InstanceIdResult> { instanceIdResult ->
+                    val newToken = instanceIdResult.token
+                    deviceToken = newToken
+                    Log.e("newToken", deviceToken)
+                    val params: MutableMap<String?, String?> = HashMap()
 
-        if (sessionManager!!.loginType.toString() == "1")
-        {
-            params["mobile"] = mobileno
-            params["otp"] = otp
-            params["device_token"] = "ddddddfdfftetetdgfghhrtrt"
-        }
-        else
-        {
-            params["mobile"] = mobileno
-            params["otp"] = otp
-            params["user_id"] = sessionManager!!.userid
-            params["device_token"] = "ddddddfdfftetetdgfghhrtrt"
-        }
-
-        //        progressDialog = new SpotsDialog(PneckMapLocation.this, R.style.Custom);
-
-        progressDialog!!.show()
-        //Utility.showProgressDialog(this);
-        val requestQueue = Volley.newRequestQueue(this@LoginWithPhoneActivity)
-        val stringRequest: JsonObjectRequest = object : JsonObjectRequest(Method.POST, AllUrl.userMobileVerifyOtpSend, JSONObject(params), com.android.volley.Response.Listener { jsonObject ->
-            //    Log.d("booking_pending_status", jsonObject.toString())
-
-            // Utility.dismissProgressDialog();
-            progressDialog!!.dismiss()
-            try {
-                val jsonObject1 = jsonObject.getJSONObject("response")
-                val pass = jsonObject1.getBoolean("success")
-                //Log.d("pass",pass);
-                val msg = jsonObject1.getString("message")
-                val resp_status = true
-                if (pass == resp_status) {
-                    val jsonObject2 = jsonObject1.getJSONObject("data")
-                    val token = jsonObject2.getString("ep_token")
-                    val isactive = jsonObject2.getInt("is_active")
-                    if (sessionManager!!.loginType.toString() == "1") {
-                        if (isactive.toString() == "1") {
-                            val userFirstName = jsonObject2.getString("first_name")
-                            val userId = jsonObject2.getString("user_id")
-                            val userTokenNo = jsonObject2.getString("ep_token")
-                            val userLastName = jsonObject2.getString("last_name")
-                            val userEmail = jsonObject2.getString("email")
-                            val userMobile = jsonObject2.getString("mobile")
-                            sessionManager!!.createSession(userFirstName, userMobile, userId,
-                                    userLastName, userTokenNo, userEmail, jsonObject2.getString("image"))
-                            // intent.putExtra("mobile",mobile);
-                            /* Intent intent = new Intent(LoginWithPhoneActivity.this, SplashActivity.class);
-                            startActivity(intent);
-                            finish();*/
-                            sessionManager!!.setSuccess(true);
-                            val intent = Intent(this@LoginWithPhoneActivity, MainScreenActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            val userid = jsonObject2.getInt("user_id")
-                            usertoken = jsonObject2.getString("ep_token")
-                            login_with_phoneLayout!!.visibility = View.GONE
-                            verify_otp_layout!!.visibility = View.GONE
-                            register_layout_user_detail!!.visibility = View.VISIBLE
-                            sessionManager!!.userid = userid.toString()
-                        }
-                    } else {
-                        val userFirstName = jsonObject2.getString("first_name")
-                        val userId = jsonObject2.getString("user_id")
-                        val userTokenNo = jsonObject2.getString("ep_token")
-                        val userLastName = jsonObject2.getString("last_name")
-                        val userEmail = jsonObject2.getString("email")
-                        val userMobile = jsonObject2.getString("mobile")
-                        sessionManager!!.setSuccess(true);
-
-                        sessionManager!!.createSession(userFirstName, userMobile, userId,
-                                userLastName, userTokenNo, userEmail, jsonObject2.getString("image"))
-                        // intent.putExtra("mobile",mobile);
-                        /* Intent intent = new Intent(LoginWithPhoneActivity.this, SplashActivity.class);
-                            startActivity(intent);
-                            finish();*/
-                        val intent = Intent(this@LoginWithPhoneActivity, MainScreenActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(intent)
-                        finish()
+                    if (sessionManager!!.loginType.toString() == "1")
+                    {
+                        params["mobile"] = mobileno
+                        params["otp"] = otp
+                        params["device_token"] = deviceToken
                     }
-                } else {
-                    Toast.makeText(this@LoginWithPhoneActivity, msg, Toast.LENGTH_LONG).show()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }, com.android.volley.Response.ErrorListener { error ->
-            progressDialog!!.dismiss()
-            VolleyLog.d("Error", "Error: " + error.message)
-            if (error is TimeoutError || error is NoConnectionError) {
-            } else if (error is AuthFailureError) {
-            } else if (error is ServerError) {
-            } else if (error is NetworkError) {
-            } else if (error is ParseError) {
-            }
-        }) {
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                val headers: MutableMap<String, String> = HashMap()
-                headers["Content-Type"] = "application/json"
-                return headers
-            }
-        }
-        requestQueue.add(stringRequest)
+                    else
+                    {
+                        params["mobile"] = mobileno
+                        params["otp"] = otp
+                        params["user_id"] = sessionManager!!.userid
+                        params["device_token"] = deviceToken
+                    }
+
+                    //        progressDialog = new SpotsDialog(PneckMapLocation.this, R.style.Custom);
+
+                    progressDialog!!.show()
+                    //Utility.showProgressDialog(this);
+                    val requestQueue = Volley.newRequestQueue(this@LoginWithPhoneActivity)
+                    val stringRequest: JsonObjectRequest = object : JsonObjectRequest(Method.POST, AllUrl.userMobileVerifyOtpSend, JSONObject(params), com.android.volley.Response.Listener { jsonObject ->
+                        //    Log.d("booking_pending_status", jsonObject.toString())
+
+                        // Utility.dismissProgressDialog();
+                        progressDialog!!.dismiss()
+                        try {
+                            val jsonObject1 = jsonObject.getJSONObject("response")
+                            val pass = jsonObject1.getBoolean("success")
+                            //Log.d("pass",pass);
+                            val msg = jsonObject1.getString("message")
+                            val resp_status = true
+                            if (pass == resp_status) {
+                                val jsonObject2 = jsonObject1.getJSONObject("data")
+                                val token = jsonObject2.getString("ep_token")
+                                val isactive = jsonObject2.getInt("is_active")
+                                if (sessionManager!!.loginType.toString() == "1") {
+                                    if (isactive.toString() == "1") {
+                                        val userFirstName = jsonObject2.getString("first_name")
+                                        val userId = jsonObject2.getString("user_id")
+                                        val userTokenNo = jsonObject2.getString("ep_token")
+                                        val userLastName = jsonObject2.getString("last_name")
+                                        val userEmail = jsonObject2.getString("email")
+                                        val userMobile = jsonObject2.getString("mobile")
+                                        sessionManager!!.createSession(userFirstName, userMobile, userId,
+                                                userLastName, userTokenNo, userEmail, jsonObject2.getString("image"))
+                                        // intent.putExtra("mobile",mobile);
+                                        /* Intent intent = new Intent(LoginWithPhoneActivity.this, SplashActivity.class);
+                                        startActivity(intent);
+                                        finish();*/
+                                        sessionManager!!.setSuccess(true);
+                                        val intent = Intent(this@LoginWithPhoneActivity, MainScreenActivity::class.java)
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        startActivity(intent)
+                                        finish()
+                                    } else {
+                                        val userid = jsonObject2.getInt("user_id")
+                                        usertoken = jsonObject2.getString("ep_token")
+                                        login_with_phoneLayout!!.visibility = View.GONE
+                                        verify_otp_layout!!.visibility = View.GONE
+                                        register_layout_user_detail!!.visibility = View.VISIBLE
+                                        sessionManager!!.userid = userid.toString()
+                                    }
+                                } else {
+                                    val userFirstName = jsonObject2.getString("first_name")
+                                    val userId = jsonObject2.getString("user_id")
+                                    val userTokenNo = jsonObject2.getString("ep_token")
+                                    val userLastName = jsonObject2.getString("last_name")
+                                    val userEmail = jsonObject2.getString("email")
+                                    val userMobile = jsonObject2.getString("mobile")
+                                    sessionManager!!.setSuccess(true);
+
+                                    sessionManager!!.createSession(userFirstName, userMobile, userId,
+                                            userLastName, userTokenNo, userEmail, jsonObject2.getString("image"))
+                                    // intent.putExtra("mobile",mobile);
+                                    /* Intent intent = new Intent(LoginWithPhoneActivity.this, SplashActivity.class);
+                                        startActivity(intent);
+                                        finish();*/
+                                    val intent = Intent(this@LoginWithPhoneActivity, MainScreenActivity::class.java)
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    startActivity(intent)
+                                    finish()
+                                }
+                            } else {
+                                Toast.makeText(this@LoginWithPhoneActivity, msg, Toast.LENGTH_LONG).show()
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }, com.android.volley.Response.ErrorListener { error ->
+                        progressDialog!!.dismiss()
+                        VolleyLog.d("Error", "Error: " + error.message)
+                        if (error is TimeoutError || error is NoConnectionError) {
+                        } else if (error is AuthFailureError) {
+                        } else if (error is ServerError) {
+                        } else if (error is NetworkError) {
+                        } else if (error is ParseError) {
+                        }
+                    }) {
+                        @Throws(AuthFailureError::class)
+                        override fun getHeaders(): Map<String, String> {
+                            val headers: MutableMap<String, String> = HashMap()
+                            headers["Content-Type"] = "application/json"
+                            return headers
+                        }
+                    }
+                    requestQueue.add(stringRequest)
+                })
+
+
     }
 
 

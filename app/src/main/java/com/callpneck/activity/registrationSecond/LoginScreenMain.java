@@ -415,7 +415,7 @@ public class LoginScreenMain extends AppCompatActivity {
                             sessionManager.setSuccess(true);
                            sessionManager.createSession(name.toString(),mobile.toString(),userid.toString(),
                                     "",token.toString(),email,"");
-                            Intent intent=new Intent(LoginScreenMain.this, SplashActivity.class);
+                            Intent intent=new Intent(LoginScreenMain.this, MainSplashScreen.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             finish();

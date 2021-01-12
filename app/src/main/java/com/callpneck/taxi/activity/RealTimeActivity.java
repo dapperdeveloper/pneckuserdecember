@@ -315,6 +315,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
                             /* "booking_charge": "50",
                             "order_subtotal": "445.00",
                                     "payable_amount": "495.00",*/
+                            executor.shutdown();
                             Bundle bundle =new Bundle();
                             bundle.putString("billing_amount",bookingCharge);
                             LaunchActivityClass.LaunchPaymentScreen(RealTimeActivity.this,bundle);

@@ -2,6 +2,7 @@ package com.callpneck.activity.registrationSecond.api;
 
 
 import com.callpneck.activity.TrackOrder.Model.TrackOrderModel;
+import com.callpneck.activity.registrationSecond.Model.BookingResponse.BookingResponse;
 import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.Model.ProductModel;
@@ -291,6 +292,14 @@ public interface APIRequests {
                                     @Field("user_id") String user_id,
                                     @Field("res_id") String res_id,
                                     @Field("message") String message);
+
+
+    @FormUrlEncoded
+    @POST("userMyOrders")
+    Call<BookingResponse> getBookingList(@Field("user_id") String vendor_id,
+                                         @Field("ep_token") String ep_token);
+
+
 
 
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -18,10 +19,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.callpneck.Language.ThemeUtils;
+import com.callpneck.utils.Variables;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
+
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -87,11 +91,17 @@ public class SplashActivity extends BaseActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         (this).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         width = displayMetrics.widthPixels;
+        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
         getCurrentVersion();
       //mk  doAuth();
 
 
      //mk   initGoogleAPIClientLocation();
+
+        sessionManager.setDeviceToken(android_id);
+        Log.e("DEVICE_TOKEN", android_id);
+        Toast.makeText(this, ""+android_id, Toast.LENGTH_SHORT).show();
     }
 
     public void getCurrentVersion() {
@@ -233,6 +243,8 @@ public class SplashActivity extends BaseActivity {
         } else {
             getDeviceLocation();
         }
+
+
     }
 
 

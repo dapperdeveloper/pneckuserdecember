@@ -210,7 +210,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
     private Location mLastKnownLocation = null;
     //not initilized till now
     private LatLng mDefaultLocation;
-    private float DEFAULT_ZOOM = 15.0f;
+    private float DEFAULT_ZOOM = 1.0f;
     private String userId,epToken;
     private String your_booking_number, your_booking_status, your_booking_status_msg;
     Dialog bookingDialog;

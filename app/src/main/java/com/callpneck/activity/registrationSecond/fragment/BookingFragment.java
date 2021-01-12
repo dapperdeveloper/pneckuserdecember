@@ -28,7 +28,10 @@ import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
 import com.callpneck.activity.TrackOrder.TrackOrderActivity;
 import com.callpneck.activity.registrationSecond.Activity.ReceiptOrderActivity;
+import com.callpneck.activity.registrationSecond.Adapter.BookingAdapter;
 import com.callpneck.activity.registrationSecond.Adapter.OrderUserAdapter;
+import com.callpneck.activity.registrationSecond.Model.BookingResponse.BookingResponse;
+import com.callpneck.activity.registrationSecond.Model.BookingResponse.MyOrder;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUser;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUserList;
 import com.callpneck.activity.registrationSecond.api.APIClient;
@@ -52,13 +55,14 @@ public class BookingFragment extends Fragment {
     TextView tabBookingTv, tabOrdersTv;
     private RecyclerView  orderRv;
     private List<OrderUserList> orderUserList;
+    private List<MyOrder> bookingResponseList;
     private RelativeLayout bookingRl, orderRl;
     private SessionManager sessionManager;
     private RecyclerView bookingRv;
     private ArrayList<UserOrderModel> orderList =new ArrayList<>();
     private ArrayList<String> addedOrderList=new ArrayList<>();
     private UserOrderAdapters userOrderAdapters;
-    private TextView emptyView, noOrderTv;
+    private TextView emptyView, noOrderTv, noBookingTv;
     CustPrograssbar custPrograssbar;
     String user_id;
     public BookingFragment() {
@@ -87,7 +91,7 @@ public class BookingFragment extends Fragment {
         bookingRv.setItemViewCacheSize(20);
         userOrderAdapters = new UserOrderAdapters(getActivity(), orderList);
         bookingRv.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        bookingRv.setAdapter(userOrderAdapters);
+
 
 
         tabBookingTv.setOnClickListener(new View.OnClickListener() {
@@ -109,9 +113,44 @@ public class BookingFragment extends Fragment {
         });
 
         if (AppController.isConnected(getActivity()))
-        checkINDatabase();
+            getBookingList();
 
         return view;
+    }
+
+    private void getBookingList() {
+        custPrograssbar.PrograssCreate(getContext());
+        bookingResponseList = new ArrayList<>();
+        Call<BookingResponse> call = APIClient.getInstance().getBookingList(sessionManager.getUserid(),sessionManager.getUserToken());
+        call.enqueue(new Callback<BookingResponse>() {
+            @Override
+            public void onResponse(Call<BookingResponse> call, retrofit2.Response<BookingResponse> response) {
+                if(response.isSuccessful()){
+                    custPrograssbar.ClosePrograssBar();
+                    try {
+                        BookingResponse model = response.body();
+                        if (model.getResponse()!= null && model.getResponse().getSuccess()){
+
+                            if (model.getResponse().getData().getMyOrders().size()>0){
+                                emptyView.setVisibility(View.GONE);
+                                bookingResponseList.clear();
+                                bookingResponseList = model.getResponse().getData().getMyOrders();
+                                bookingRv.setAdapter(new BookingAdapter(getContext(), bookingResponseList));
+                            }
+                        }
+
+                    }catch (Exception e){
+                        e.toString();
+                        custPrograssbar.ClosePrograssBar();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BookingResponse> call, Throwable t) {
+                custPrograssbar.ClosePrograssBar();
+            }
+        });
     }
 
     private void getUserOrderList() {
@@ -164,101 +203,6 @@ public class BookingFragment extends Fragment {
     }
 
 
-    private void checkINDatabase() {
-        custPrograssbar.PrograssCreate(getContext());
-        String ServerURL = getResources().getString(R.string.pneck_app_url) + "/userMyOrders";
-        HashMap<String, String> dataParams = new HashMap<String, String>();
-
-        dataParams.put("user_id",sessionManager.getUserid());
-        dataParams.put("ep_token",sessionManager.getUserToken());
-
-        Log.e("user_order_list", "this is url " +ServerURL);
-
-        Log.e("user_order_list", "this is we sending " + dataParams.toString());
-
-        CustomRequest dataParamsJsonReq = new CustomRequest(JsonUTF8Request.Method.POST,
-                ServerURL,
-                dataParams,
-                RegistrationSuccess(),
-                RegistrationError());
-        dataParamsJsonReq.setRetryPolicy(new DefaultRetryPolicy(
-                (int) TimeUnit.SECONDS.toMillis(Const.VOLLEY_RETRY_TIMEOUT),
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Volley.newRequestQueue(getContext()).add(dataParamsJsonReq);
-    }
-
-
-    private Response.Listener<JSONObject> RegistrationSuccess() {
-        return new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-
-                    Log.v("user_order_list", "this is complete response " + response);
-                    JSONObject innerResponse=response.getJSONObject("response");
-
-                    if (innerResponse.getBoolean("success")) {
-
-                        String msg=innerResponse.getString("message");
-
-                        if (msg.trim().equalsIgnoreCase("Info-No data!")){
-                            emptyView.setVisibility(View.GONE);
-                            custPrograssbar.ClosePrograssBar();
-                        }else {
-                            JSONObject data=innerResponse.getJSONObject("data");
-
-                            JSONArray orders=data.getJSONArray("my_orders");
-
-                            for (int i=0;i<orders.length();i++){
-                                JSONObject object=orders.getJSONObject(i);
-                                if (!addedOrderList.contains(object.getString("order_number"))){
-                                    orderList.add(new UserOrderModel(object.getString("id"),
-                                            object.getString("order_number"),object.getString("order_status"),
-                                            object.getString("accept_otp_confirm_at"),object.getString("delivery_confirm_at"),
-                                            object.getString("order_subtotal"),object.getString("booking_charge"),
-                                            object.getString("grand_total"),object.getString("booking_complete_at")));
-                                }
-
-                            }
-
-                            userOrderAdapters.notifyDataSetChanged();
-//                            progressBar.setVisibility(View.GONE);
-
-                        }
-                    }
-                    if (orderList.size()==0){
-                        emptyView.setVisibility(View.VISIBLE);
-                    }else {
-                        emptyView.setVisibility(View.GONE);
-                    }
-                    custPrograssbar.ClosePrograssBar();
-
-                } catch (Exception e) {
-                    Log.v("user_order_list", "inside catch block  " + e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        };
-    }
-
-    private Response.ErrorListener RegistrationError() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    error.printStackTrace();
-//                progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), R.string.SOMETHING_WENT_WRONG, Toast.LENGTH_LONG).show();
-                    Log.v("user_order_list", "inside error block  " + error.getMessage());
-                }catch (Exception e){
-
-                }
-
-            }
-        };
-    }
-
     private void init(View view) {
 
         tabOrdersTv = view.findViewById(R.id.tabOrdersTv);
@@ -269,6 +213,7 @@ public class BookingFragment extends Fragment {
         bookingRv = view.findViewById(R.id.bookingRv);
         emptyView=view.findViewById(R.id.noBookingTv);
         noOrderTv = view.findViewById(R.id.noOrderTv);
+
 
     }
 

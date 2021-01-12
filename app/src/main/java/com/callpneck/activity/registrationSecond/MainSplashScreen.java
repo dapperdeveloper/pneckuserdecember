@@ -3,6 +3,8 @@ package com.callpneck.activity.registrationSecond;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -27,6 +29,10 @@ public class MainSplashScreen extends AppCompatActivity {
         sessionManager = new SessionManager(MainSplashScreen.this);
         success = sessionManager.getSuccess();
 
+        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        sessionManager.setDeviceToken(android_id);
+        Log.e("DEVICE_TOKEN", android_id);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -43,6 +49,8 @@ public class MainSplashScreen extends AppCompatActivity {
                 }
             }
         }, 3000);
+
+
     }
 
 
