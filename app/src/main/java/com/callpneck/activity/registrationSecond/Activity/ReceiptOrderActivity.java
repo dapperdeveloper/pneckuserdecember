@@ -12,10 +12,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ import com.callpneck.Language.LanguageSettingActivity;
 import com.callpneck.LaunchActivityClass;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
+import com.callpneck.activity.OrderCompleteHappyScreen;
 import com.callpneck.activity.PneckMapLocation;
 import com.callpneck.activity.TrackOrder.Model.Item;
 import com.callpneck.activity.TrackOrder.Model.TrackOrder;
@@ -35,6 +39,7 @@ import com.callpneck.activity.registrationSecond.Model.response.responseOrder.Or
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.utils.CustPrograssbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,24 +72,16 @@ public class ReceiptOrderActivity extends AppCompatActivity {
     String order_id, res_id;
     Activity activity=this;
     SessionManager sessionManager;
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return super.onSupportNavigateUp();
-    }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_receipt_order);
-        ButterKnife.bind(this);
-        if (getSupportActionBar() != null)
-        {
-            getSupportActionBar().setTitle("Receipt");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+
+    LinearLayout commentLayout;
+    RatingBar ratingBar;
+    EditText userFeedBack;
+    TextView CancelDialog;
+    TextView SubmitRating;
+    RelativeLayout ratingLayout;
+
+    private void init() {
         lvlItems = findViewById(R.id.lvl_items);
-        oid = getIntent().getStringExtra("status");
         pBar = findViewById(R.id.pBar);
         lytPriceDetail = findViewById(R.id.lytPriceDetail);
         lytPromo = findViewById(R.id.lytPromo);
@@ -103,21 +100,100 @@ public class ReceiptOrderActivity extends AppCompatActivity {
         txtorderid = findViewById(R.id.txtorderid);
         txtorderdate = findViewById(R.id.txtorderdate);
 
-
         txtotherdetails = findViewById(R.id.txtotherdetails);
         txtcanceldetail = findViewById(R.id.txtcanceldetail);
         lyttracker = findViewById(R.id.lyttracker);
         btnCancel = findViewById(R.id.btncancel);
         l4 = findViewById(R.id.l4);
-        returnLyt = findViewById(R.id.returnLyt);
 
+        returnLyt = findViewById(R.id.returnLyt);
+        commentLayout = findViewById(R.id.comment_layout);
+        ratingBar = findViewById(R.id.user_rating);
+        userFeedBack = findViewById(R.id.user_feed_back_comment);
+
+        CancelDialog = (TextView) findViewById(R.id.Cancel_dialog);
+        SubmitRating = (TextView) findViewById(R.id.submit_rating);
+        ratingLayout = findViewById(R.id.hj);
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_receipt_order);
+        ButterKnife.bind(this);
+        if (getSupportActionBar() != null)
+        {
+            getSupportActionBar().setTitle("Receipt");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        init();
+
+        oid = getIntent().getStringExtra("status");
         sessionManager = new SessionManager(this);
         custPrograssbar = new CustPrograssbar();
         productinfoArrayList = new ArrayList<>();
         if (oid!=null)
         getOrderDetails(oid);
 
+        clickListener();
+
     }
+
+    private void clickListener() {
+        SubmitRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ratingBar.getRating() > 0) {
+
+                    if (userFeedBack.getText().toString().length()<10){
+                        Toast.makeText(activity,"Feedback should be larger the 10 words",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    submitRatingToServer(ratingBar.getRating(), userFeedBack.getText().toString());
+
+                } else {
+                    Toast.makeText(ReceiptOrderActivity.this, "Please provide your feedback", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+    private void submitRatingToServer(float rating, String feedback) {
+
+        custPrograssbar.PrograssCreate(this);
+        Call<DeleteContact>  call = APIClient.getInstance().ratingToVendor(sessionManager.getUserid(), oid, res_id, feedback, rating+"");
+
+        call.enqueue(new Callback<DeleteContact>() {
+            @Override
+            public void onResponse(Call<DeleteContact> call, Response<DeleteContact> response) {
+                if (response.isSuccessful()){
+                    custPrograssbar.ClosePrograssBar();
+                    try {
+                        DeleteContact deleteContact = response.body();
+                        if (deleteContact.getSuccess()){
+                            StyleableToast.makeText(ReceiptOrderActivity.this, deleteContact.getMessage(), Toast.LENGTH_LONG, R.style.mytoast).show();
+                            onBackPressed();
+                        }
+                    }catch (Exception e){
+                        e.toString();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DeleteContact> call, Throwable t) {
+                custPrograssbar.ClosePrograssBar();
+            }
+        });
+    }
+
 
     private void getOrderDetails(String oid) {
 
@@ -135,6 +211,12 @@ public class ReceiptOrderActivity extends AppCompatActivity {
                         setJoinPlayrList(lvlItems, productinfoArrayList);
                         TrackOrder trackOrder = model.getData();
                         setDataToUI(trackOrder);
+
+                        if (trackOrder.getRating().equalsIgnoreCase("false")){
+                            ratingLayout.setVisibility(View.VISIBLE);
+                        }else {
+                            ratingLayout.setVisibility(View.GONE);
+                        }
                         if (model.getMessage().equals("Shop")){
                             if (!model.getData().getStatus().equalsIgnoreCase("Preparing")&&!model.getData().getStatus().equalsIgnoreCase("On The Way")&&!model.getData().getStatus().equalsIgnoreCase("delivered") && !model.getData().getStatus().equalsIgnoreCase("Cancelled") && !model.getData().getStatus().equalsIgnoreCase("returned")) {
                                 btnCancel.setVisibility(View.VISIBLE);

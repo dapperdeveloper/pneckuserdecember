@@ -299,7 +299,14 @@ public interface APIRequests {
     Call<BookingResponse> getBookingList(@Field("user_id") String vendor_id,
                                          @Field("ep_token") String ep_token);
 
-
+    @FormUrlEncoded
+    @POST("rating")
+    Call<DeleteContact> ratingToVendor(@Field("user_id") String user_id,
+                                       @Field("order_id") String order_id,
+                                       @Field("res_id") String res_id,
+                                       @Field("msg") String msg,
+                                       @Field("rating") String rating
+                                       );
 
 
 }

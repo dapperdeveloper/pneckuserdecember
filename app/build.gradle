@@ -134,7 +134,8 @@ dependencies {
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-
+    //toast
+    implementation 'com.muddzdev:styleabletoast:2.2.0'
 
     //taxi 
     implementation 'com.akexorcist:googledirectionlibrary:1.1.1'

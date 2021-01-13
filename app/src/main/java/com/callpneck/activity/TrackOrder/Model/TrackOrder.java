@@ -71,6 +71,10 @@ public class TrackOrder {
     @Expose
     private String message;
 
+    @SerializedName("rating")
+    @Expose
+    private String rating;
+
     @SerializedName("item")
     @Expose
     private List<Item> item = null;
@@ -249,5 +253,13 @@ public class TrackOrder {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 }

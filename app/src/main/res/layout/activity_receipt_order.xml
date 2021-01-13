@@ -85,6 +85,9 @@
                     android:layout_marginTop="10dp"
                     android:orientation="vertical" />
 
+
+
+
                 <View
                     android:id="@+id/line2"
                     android:layout_width="match_parent"
@@ -93,13 +96,98 @@
                     android:layout_marginTop="10dp"
                     android:background="@color/bggray" />
 
+
+                <RelativeLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/line2"
+                    android:id="@+id/hj"
+                    android:visibility="gone"
+                    android:padding="24dp">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18dp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:id="@+id/clear_conversation_text"
+                        android:text="@string/TELL_YOUR_EXPERIENCE_WITH_PNECK"/>
+
+
+                    <RatingBar
+                        android:id="@+id/user_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/clear_conversation_text"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/comment_layout"
+                        android:layout_marginTop="16sp"
+                        android:layout_below="@+id/user_rating"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16dp"
+                            android:textColor="@color/black"
+                            android:id="@+id/user_comment"
+                            android:text="Feedback"/>
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:padding="10dp"
+                            android:layout_margin="@dimen/editpad5dp"
+                            android:inputType="text|textMultiLine|textCapSentences"
+                            android:background="@drawable/rectangle_back"
+                            android:layout_gravity="top"
+                            android:gravity="top"
+                            android:hint="Type your feedback"
+                            android:id="@+id/user_feed_back_comment"/>
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@+id/comment_layout">
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:textSize="18dp"
+                            android:id="@+id/submit_rating"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:text="@string/RATE"/>
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
                 <LinearLayout
                     android:id="@+id/lytotherdetail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/line2"
+                    android:layout_below="@+id/hj"
                     android:layout_margin="@dimen/margin_10dp"
                     android:orientation="vertical">
+
+
 
                     <LinearLayout
                         android:id="@+id/lytPriceDetail"
@@ -309,6 +397,9 @@
                             android:layout_marginTop="10dp"
                             android:background="@color/bggray" />
                     </LinearLayout>
+
+
+
 
                     <TextView
                         android:layout_width="match_parent"

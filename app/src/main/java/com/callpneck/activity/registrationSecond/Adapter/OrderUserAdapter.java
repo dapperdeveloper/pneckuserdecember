@@ -47,10 +47,17 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(itemList.get(position), listener);
+        holder.viewDetailBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openReceiptActivity(itemList.get(position).getId()+"");
+            }
+        });
     }
 
-    private void openReceiptActivity() {
+    private void openReceiptActivity(String oid) {
         Intent intent = new Intent(context, ReceiptOrderActivity.class);
+        intent.putExtra("status", oid);
         context.startActivity(intent);
         context.overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
@@ -67,7 +74,7 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
         TextView shopNameTv, orderStatusTv, orderType, orderIdTv,
                 totalAmountTv, addressTv,  dateOfOrderTv;
         CircleImageView productIv;
-        Button trackOrderBtn;
+        Button trackOrderBtn, viewDetailBtn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -80,6 +87,9 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
             totalAmountTv = itemView.findViewById(R.id.textView8);
             addressTv = itemView.findViewById(R.id.addressTv);
             dateOfOrderTv = itemView.findViewById(R.id.textView9);
+            viewDetailBtn = itemView.findViewById(R.id.viewDetailBtn);
+
+
         }
 
         public void bind(final OrderUserList item, OnItemClickListener listener){
@@ -91,14 +101,20 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
             if (status.equalsIgnoreCase("Cancelled")){
                 orderStatusTv.setTextColor(context.getResources().getColor(R.color.white));
                 orderStatusTv.setBackgroundColor(context.getResources().getColor(R.color.red));
+                viewDetailBtn.setVisibility(View.VISIBLE);
+                trackOrderBtn.setVisibility(View.GONE);
             }
             else if (status.equalsIgnoreCase("Delivered")){
                 orderStatusTv.setTextColor(context.getResources().getColor(R.color.white));
                 orderStatusTv.setBackgroundColor(context.getResources().getColor(R.color.blue1));
+                viewDetailBtn.setVisibility(View.VISIBLE);
+                trackOrderBtn.setVisibility(View.GONE);
             }
             else {
                 orderStatusTv.setTextColor(context.getResources().getColor(R.color.white));
                 orderStatusTv.setBackgroundColor(context.getResources().getColor(R.color.light_green));
+                viewDetailBtn.setVisibility(View.GONE);
+                trackOrderBtn.setVisibility(View.VISIBLE);
             }
             orderStatusTv.setText(status);
             totalAmountTv.setText(new StringBuilder("Rs.").append(item.getTotalAmount()));
