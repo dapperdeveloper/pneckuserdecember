@@ -139,7 +139,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
     Double empLattitude,empLongitude;
     TextView userOtp,mVehicleNumber,mDriverName,mcarName;
     ImageView driverAvatar,carAvatar;
-    Button callBtn;
+    LinearLayout callBtn;
     public static String timeReuired;
 
     String userLat;
@@ -199,8 +199,10 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
         dphoneno=intent.getStringExtra("phoneno");
         if (dname!=null)
         mDriverName.setText(dname.toString());
-        if (dphoneno!=null)
-        callBtn.setText("Call "+dphoneno.toString());
+       // if (dphoneno!=null)
+       // callBtn.setText("Call "+dphoneno.toString());
+
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -583,7 +585,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
         userOtp.setTextColor(Color.GREEN);
         mDriverName.setText(sessionManager.getDname());
         mVehicleNumber.setText(sessionManager.getvehiclenumber());
-        callBtn.setText("Call "+sessionManager.getDrivermobile());
+        //callBtn.setText("Call "+sessionManager.getDrivermobile());
         callBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
