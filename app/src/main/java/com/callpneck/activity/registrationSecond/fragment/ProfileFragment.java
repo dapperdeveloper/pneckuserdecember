@@ -110,7 +110,12 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        myName = sessionManager.getUserName();
+        user_name.setText(myName);
+    }
 
     private void getWalletBalance() {
         Call<GetWallet> call = APIClient.getInstance().getWallet(sessionManager.getUserid());

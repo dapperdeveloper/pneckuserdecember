@@ -429,7 +429,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        //ts   mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.pneck_retro_style));
+        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.pneck_retro_style));
         getDeviceLocation();
       /*TS  try {
             boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.uber_maps_style));
@@ -609,7 +609,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                             if (mLastKnownLocation!=null){
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mLastKnownLocation.getLatitude(),
-                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                                mLastKnownLocation.getLongitude()), 15.0f));
 
 
 

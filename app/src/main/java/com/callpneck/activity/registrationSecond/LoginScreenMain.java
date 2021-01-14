@@ -2,6 +2,7 @@ package com.callpneck.activity.registrationSecond;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -94,6 +95,7 @@ public class LoginScreenMain extends AppCompatActivity {
     SessionManager sessionManager;
     private AlertDialog progressDialog;
 
+    String newToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +121,13 @@ public class LoginScreenMain extends AppCompatActivity {
         sliderView.setScrollTimeInSec(3); //set scroll delay in seconds :
         sliderView.startAutoCycle();
         loadScreen();
+
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, instanceIdResult -> {
+            newToken = instanceIdResult.getToken();
+            Log.e("TOKENFIREBASE", newToken);
+           getPreferences(Context.MODE_PRIVATE).edit().putString("fb", newToken).apply();
+        });
         clicks();
     }
 
@@ -366,9 +375,9 @@ public class LoginScreenMain extends AppCompatActivity {
 
         params.put("first_name", fname);
         params.put("last_name", lname);
-//        params.put("name", fname.toString()+lname.toString());
+        params.put("name", fname.toString());
         params.put("email", email.toString());
-        params.put("device_token", "ddggfgffggfgffgfgfg");
+        params.put("device_token", newToken);
         params.put("social_id", socialid.toString());
         params.put("login_type", logintype.toString());
 //        progressDialog = new SpotsDialog(PneckMapLocation.this, R.style.Custom);

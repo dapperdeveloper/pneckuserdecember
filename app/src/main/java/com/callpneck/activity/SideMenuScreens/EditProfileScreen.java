@@ -349,11 +349,9 @@ public class EditProfileScreen extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         JSONObject data=innerResponse.getJSONObject("data");
 
-                        firstName.setText(data.getString("first_name"));
-                        lastName.setText(data.getString("last_name"));
+                        firstName.setText(data.getString("name"));
                         email.setText(data.getString("email"));
                         mobileNo.setText(data.getString("mobile"));
-                        firstName.setText(data.getString("first_name"));
                         int i=0;
                         for (i=0;i<gender.length-1;i++){
                             if (data.getString("usr_gender").equalsIgnoreCase(gender[i])){
@@ -395,8 +393,7 @@ public class EditProfileScreen extends AppCompatActivity {
 
         dataParams.put("user_id",sessionManager.getUserid());
         dataParams.put("ep_token",sessionManager.getUserToken());
-        dataParams.put("first_name",firstName.getText().toString());
-        dataParams.put("last_name",lastName.getText().toString());
+        dataParams.put("name",firstName.getText().toString());
         dataParams.put("usr_gender", gender[genderSelect.getSelectedItemPosition()]);
         dataParams.put("usr_address",address.getText().toString());
 
@@ -422,10 +419,12 @@ public class EditProfileScreen extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     Log.v("user_showProfile", "this is complete response " + response);
-                    //JSONObject innerResponse=response.getJSONObject("data");
+
                     if (response.getBoolean("success")) {
                         progressBar.setVisibility(View.GONE);
-                        //JSONObject data=innerResponse.getJSONObject("data");
+                        JSONObject innerResponse=response.getJSONObject("data");
+//                        JSONObject data=innerResponse.getJSONObject("data");
+                        sessionManager.setUserName(innerResponse.getString("name"));
                         Toast.makeText(EditProfileScreen.this,"Profile updated successfully",Toast.LENGTH_SHORT).show();
                         finish();
                     }

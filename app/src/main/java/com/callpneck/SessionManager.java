@@ -262,7 +262,7 @@ public class SessionManager {
     }
 
     public void createSession(String userName,String userMobile,String userid,String userLastname,
-                              String userToken,String userMail,String image){
+                              String userToken,String userMail,String image ){
         editor.putBoolean(IS_LOGGED_IN,true);
         editor.putString(USER_NAME, userName);
         editor.putString(USER_MOBILE, userMobile);
@@ -270,6 +270,7 @@ public class SessionManager {
         editor.putString(USER_LASTNAME, userLastname);
         editor.putString(USER_TOKEN, userToken);
         editor.putString(USER_MAIL, userMail);
+        editor.putString(CURRENT_USER_PROFILE_PIC,image);
         editor.putString(CURRENT_USER_PROFILE_PIC,image);
         editor.commit();
     }

@@ -464,6 +464,7 @@
     <string name="submit_feedback">SUBMIT FEEDBACK</string>
     <string name="directionkey">AIzaSyBTbcRRCLbhqeMVVGD5fnUevHfxj2MdgdI</string>
     <string name="products">Products</string>
+    <string name="full_name">Full Name</string>
     //end taxi string
 
 </resources>

@@ -529,5 +529,6 @@
     <string name="address_1">\nAddress :&#160;</string>
     <string name="cancel_order">Cancel Order</string>
     <string name="cancel_msg">Are you sure, you want to cancel this item ?</string>
+    <string name="full_name">Full Name</string>
 
 </resources>

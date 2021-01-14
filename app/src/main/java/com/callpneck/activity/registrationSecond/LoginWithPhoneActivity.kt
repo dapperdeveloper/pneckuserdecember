@@ -282,7 +282,7 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
                                 val isactive = jsonObject2.getInt("is_active")
                                 if (sessionManager!!.loginType.toString() == "1") {
                                     if (isactive.toString() == "1") {
-                                        val userFirstName = jsonObject2.getString("first_name")
+                                        val userFirstName = jsonObject2.getString("name")
                                         val userId = jsonObject2.getString("user_id")
                                         val userTokenNo = jsonObject2.getString("ep_token")
                                         val userLastName = jsonObject2.getString("last_name")
@@ -308,7 +308,7 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
                                         sessionManager!!.userid = userid.toString()
                                     }
                                 } else {
-                                    val userFirstName = jsonObject2.getString("first_name")
+                                    val userFirstName = jsonObject2.getString("name")
                                     val userId = jsonObject2.getString("user_id")
                                     val userTokenNo = jsonObject2.getString("ep_token")
                                     val userLastName = jsonObject2.getString("last_name")
