@@ -10,13 +10,15 @@
     >
 
 
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        android:layout_marginBottom="3dp"
+        >
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@color/white"
-            android:id="@+id/cardContainer">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/shopStatusTv"
@@ -32,153 +34,120 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
-            <ImageView
-                android:id="@+id/shopIv"
-                android:layout_width="120dp"
-                android:layout_height="130dp"
-                android:layout_marginLeft="8dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/abcdp"
-                android:layout_marginTop="@dimen/denim_20"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/shopStatusTv" />
-
-
             <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="0dp"
+                android:id="@+id/cd"
+                android:layout_below="@+id/shopStatusTv"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="@dimen/denim_20"
-                android:orientation="vertical"
-                android:padding="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/shopIv"
-                app:layout_constraintTop_toBottomOf="@+id/shopStatusTv">
-
-                <TextView
-                    android:id="@+id/shopNameTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="shop name" />
-
-                <TextView
-                    android:id="@+id/addressTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="shop description" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="delivery fee per person" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/linearLayout4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout2"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_location" />
+                    android:id="@+id/shopIv"
+                    android:layout_width="120dp"
+                    android:layout_height="130dp"
+                    android:layout_marginLeft="8dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/abcdp"
+                    android:layout_marginBottom="@dimen/margin_10dp"
+                    android:layout_marginTop="@dimen/margin_10dp"
+                   />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/shopNameTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:paddingLeft="4dp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:text="shop name" />
 
                     <TextView
-                        android:id="@+id/dTimeTv"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/addressTv"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="40 mins"
-                        android:textSize="18sp" />
+                        android:paddingLeft="4dp"
+                        android:text="shop hdkjshdkjhsajkhdkjsahdkjsahdjh"
+                        android:layout_marginTop="8dp"
+                        android:maxLines="3"
+                        android:drawableStart="@drawable/ic_location"
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dTimeTv"
-                        android:layout_centerInParent="true"
-                        android:text="Deivery Time" />
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="@dimen/margin_10dp"
+                        android:gravity="bottom">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/dTimeTv"
+                            android:paddingLeft="4dp"
+                            android:layout_centerInParent="true"
+                            android:text="Deivery Time: " />
+
+                        <TextView
+                            android:id="@+id/dTimeTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="40 mins"
+                            android:paddingLeft="4dp"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+
 
 
                 </LinearLayout>
             </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/linearLayout4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/linearLayout4"
-                app:layout_constraintTop_toTopOf="@+id/linearLayout4">
-
-                <TextView
-                    android:id="@+id/dFeeTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="Rs.20"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/dFeeTv"
-                    android:layout_centerInParent="true"
-                    android:text="For one" />
-
-
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-        <RelativeLayout
-            android:id="@+id/offerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="4dp"
-            android:layout_below="@+id/cardContainer"
-            android:background="@drawable/offer_bg"
-            >
-
-            <ImageView
-                android:id="@+id/dd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_discount"
-                android:layout_marginLeft="16dp"/>
-
-            <TextView
-                android:layout_toRightOf="@+id/dd"
-                android:id="@+id/offerLabelTv"
+            <RelativeLayout
+                android:id="@+id/offerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="4dp"
-                android:textColor="@color/white"
-                android:text="Get 8.00% off on order above Rs.125.00"/>
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:layout_below="@+id/cd"
+                >
+
+                <ImageView
+                    android:id="@+id/dd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_discount"
+                    android:layout_marginLeft="16dp"/>
+
+                <TextView
+                    android:layout_toRightOf="@+id/dd"
+                    android:id="@+id/offerLabelTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/black"
+                    android:text="Get 8.00% off on order above Rs.125.00"/>
 
 
+            </RelativeLayout>
         </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
 
 </RelativeLayout>

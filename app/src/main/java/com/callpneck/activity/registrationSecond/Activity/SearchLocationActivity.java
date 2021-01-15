@@ -210,7 +210,7 @@ public class SearchLocationActivity extends AppCompatActivity {
                 try {
                     ResponseAddress model = response.body();
                     if (model != null && model.getStatus()){
-                        homeAddBtn.setVisibility(View.VISIBLE);
+                        workAddBtn.setVisibility(View.VISIBLE);
                         destination_latti = model.getData().getLati();
                         destination_longi = model.getData().getLongi();
                         destination_address = model.getData().getAddress();
@@ -218,14 +218,14 @@ public class SearchLocationActivity extends AppCompatActivity {
                         SaveUserAddress(destination_latti, destination_longi, destination_address);
                     }
                 }catch (Exception e){
-                    homeAddBtn.setVisibility(View.GONE);
+                    workAddBtn.setVisibility(View.GONE);
                 }
 
             }
 
             @Override
             public void onFailure(Call<ResponseAddress> call, Throwable t) {
-                homeAddBtn.setVisibility(View.GONE);
+                workAddBtn.setVisibility(View.GONE);
                 Toast.makeText(SearchLocationActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
             }
         });

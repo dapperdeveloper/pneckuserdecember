@@ -3,10 +3,12 @@ package com.callpneck.activity.registrationSecond.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,18 +30,19 @@ import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.nex3z.notificationbadge.NotificationBadge;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import at.markushi.ui.CircleButton;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ShopDetailActivity extends AppCompatActivity {
 
-
-    TextView shopNameTv, ratingsTv, dTimeTv, offerLabelTv;
+    TextView restaurantNameTv, descriptionTv, phoneOneTv, phoneTwoTv;
     String shopName, shopAddress, shopAvatar,  rating, dTime, discount, discountMin;
     ImageButton cartBtn;
     //for test only
@@ -48,16 +51,16 @@ public class ShopDetailActivity extends AppCompatActivity {
     List<ProductList> itemList;
     MyRestaurantMenuAdapter adapter;
     private SessionManager sessionManager;
-
+    ImageView hotelImg;
     private TextView cartCountTv, nodata;
 
     String res_id = "";
     String address;
 
-
+    CircleButton callToOneBtn,callToTwoBtn;
     RoomDB database;
     List<MainData> dataList = new ArrayList<>();
-
+    String name, description, phoneOne="9058191818" , phoneTwo="8755555780", imageHotel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,15 +70,17 @@ public class ShopDetailActivity extends AppCompatActivity {
         AppBarLayout appBarLayout = findViewById(R.id.app_bar);
         notification_badge = findViewById(R.id.notification_badge);
         restaurantMenuRv = findViewById(R.id.restaurantMenuRv);
-
-
-        shopNameTv = findViewById(R.id.shopNameTv);
-        ratingsTv = findViewById(R.id.ratingsTv);
-        dTimeTv = findViewById(R.id.dTimeTv);
-        offerLabelTv = findViewById(R.id.offerLabelTv);
+        hotelImg = findViewById(R.id.hotelImg);
         cartCountTv = findViewById(R.id.cartCountTv);
         cartBtn = findViewById(R.id.cartBtn);
         nodata = findViewById(R.id.nodata);
+
+        restaurantNameTv = findViewById(R.id.restaurantNameTv);
+        descriptionTv = findViewById(R.id.descriptionTv);
+        phoneOneTv = findViewById(R.id.phoneOneTv);
+        phoneTwoTv = findViewById(R.id.phoneTwoTv);
+        callToOneBtn = findViewById(R.id.callToOneBtn);
+        callToTwoBtn = findViewById(R.id.callToTwoBtn);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null)
         {
@@ -100,17 +105,21 @@ public class ShopDetailActivity extends AppCompatActivity {
             discount = getIntent().getStringExtra("discount");
             discountMin = getIntent().getStringExtra("discountMin");
             res_id = getIntent().getStringExtra("res_id");
-            shopNameTv.setText(shopName);
-            ratingsTv.setText(rating);
-            dTimeTv.setText(dTime+" Mins");
-
-            if (discount.equalsIgnoreCase("0")){
-                offerLabelTv.setVisibility(View.GONE);
-            }
-            else {
-                offerLabelTv.setVisibility(View.VISIBLE);
-                offerLabelTv.setText("Get "+discount + "% off on order above Rs."+discountMin);
-            }
+            description = getIntent().getStringExtra("description");
+            restaurantNameTv.setText(shopName);
+            Picasso.get().load(shopAvatar).into(hotelImg);
+            descriptionTv.setText(description);
+//            shopNameTv.setText(shopName);
+//            ratingsTv.setText(rating);
+//            dTimeTv.setText(dTime+" Mins");
+//
+//            if (discount.equalsIgnoreCase("0")){
+//                offerLabelTv.setVisibility(View.GONE);
+//            }
+//            else {
+//                offerLabelTv.setVisibility(View.VISIBLE);
+//                offerLabelTv.setText("Get "+discount + "% off on order above Rs."+discountMin);
+//            }
 
 
 
@@ -158,9 +167,28 @@ public class ShopDetailActivity extends AppCompatActivity {
             }
         });
 
+        callToOneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (phoneOne!= null)
+                    callToNumber(phoneOne);
+            }
+        });
+        callToTwoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (phoneTwo!= null)
+                    callToNumber(phoneTwo);
+            }
+        });
+
         notification_badge.setText(String.valueOf(10));
     }
+    private void callToNumber(String number) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", number, null));
+        startActivity(intent);
 
+    }
     public void cartCount() {
         //store database value in data list
         dataList = database.mainDao().getAll();

@@ -54,7 +54,7 @@ public class MyShopAdapter extends RecyclerView.Adapter<MyShopAdapter.ViewHolder
 
         RelativeLayout offerLayout;
         ImageView shopIv;
-        TextView shopStatusTv, shopNameTv, addressTv, dTimeTv, dFeeTv, offerLabelTv;
+        TextView shopStatusTv, shopNameTv, addressTv, dTimeTv,  offerLabelTv;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -69,14 +69,11 @@ public class MyShopAdapter extends RecyclerView.Adapter<MyShopAdapter.ViewHolder
             shopNameTv = itemView.findViewById(R.id.shopNameTv);
             addressTv = itemView.findViewById(R.id.addressTv);
             dTimeTv = itemView.findViewById(R.id.dTimeTv);
-            dFeeTv = itemView.findViewById(R.id.dFeeTv);
             offerLabelTv = itemView.findViewById(R.id.offerLabelTv);
 
         }
 
         public void bind(final ProductFood item, OnItemClickListener listener){
-
-
             if (item.getIsopen().equalsIgnoreCase("1")){
                 shopStatusTv.setText("Open");
             }
@@ -84,7 +81,9 @@ public class MyShopAdapter extends RecyclerView.Adapter<MyShopAdapter.ViewHolder
                 shopStatusTv.setText("Close");
             }
 
+
             shopNameTv.setText(item.getName());
+            addressTv.setText(item.getAddress()+"");
             dTimeTv.setText(item.getDeliveryTime()+" Mins");
             Glide.with(context).load(item.getImage()).placeholder(R.drawable.pneck_logo).into(shopIv);
 

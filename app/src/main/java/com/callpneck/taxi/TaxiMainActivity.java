@@ -954,15 +954,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
 
     private Marker addCarMarkerAndGet( LatLng latLng) {
         BitmapDescriptor bitmapDescriptor= BitmapDescriptorFactory.fromBitmap(getCarBitmap());
-//        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//            @Override
-//            public boolean onMarkerClick(Marker marker) {
-//                String id = marker.getId();
-//                Toast.makeText(TaxiMainActivity.this, ""+id, Toast.LENGTH_SHORT).show();
-//                return false;
-//            }
-//        });
-        return mMap.addMarker(new MarkerOptions().position(latLng).flat(false).title("Distance ").icon(bitmapDescriptor).snippet(String.valueOf(distance).substring(0,3)+" Km away"));
+        return mMap.addMarker(new MarkerOptions().position(latLng).flat(true).title("Distance ").icon(bitmapDescriptor).snippet(String.valueOf(distance).substring(0,3)+" Km away"));
     }
 
     public Bitmap getCarBitmap()

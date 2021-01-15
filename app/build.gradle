@@ -137,7 +137,8 @@ dependencies {
     //toast
     implementation 'com.muddzdev:styleabletoast:2.2.0'
     implementation 'com.merhold.extensiblepageindicator:extensiblepageindicator:1.0.1'
-
+    //circleButton
+    implementation 'com.github.markushi:circlebutton:1.1'
     //taxi 
     implementation 'com.akexorcist:googledirectionlibrary:1.1.1'
 

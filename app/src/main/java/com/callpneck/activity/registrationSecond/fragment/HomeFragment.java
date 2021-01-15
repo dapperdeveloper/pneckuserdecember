@@ -53,6 +53,7 @@ import com.callpneck.activity.registrationSecond.Activity.ShopHomeActivity;
 import com.callpneck.activity.registrationSecond.Adapter.MyCategoryAdapter;
 import com.callpneck.activity.registrationSecond.Adapter.MyCustomPagerAdapter;
 import com.callpneck.activity.registrationSecond.Model.Category;
+import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.api.retrofit.RetrofitClient;
 import com.callpneck.model.dashboard.BannerSliderImage;
 import com.callpneck.model.dashboard.MainDashboard;
@@ -101,23 +102,11 @@ HomeFragment extends Fragment {
         // Required empty public constructor
     }
     public static final int PERMISSIONS_REQUEST_TOKEN = 2001;
-    private String city = "";
-    private String state = "";
-    private String SubAdminAreaAfterState = "";
-    private String country = "";
-    private String postalCode = "";
-    private String knownName = "";
-    private String locality = "";
     private String currentFullAddress = "";
     private String UserLatitude = "";
     private String UserLongitude = "";
     private double latitude, longitude;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private Location mLastKnownLocation = null;
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2002;
-
-    private LatLng mDefaultLocation;
-    private float DEFAULT_ZOOM = 17.0f;
 
     private RecyclerView recyclerView;
     List<Category> categoryList;
@@ -126,9 +115,6 @@ HomeFragment extends Fragment {
 
     private ImageView searchIcon;
     private AVLoadingIndicatorView progressBar;
-
-
-    private boolean mLocationPermissionGranted = true;
     ImageView loc, ll;
     TextView addressTv;
 
@@ -139,7 +125,6 @@ HomeFragment extends Fragment {
     private Context mContext;
     MyCustomPagerAdapter myCustomPagerAdapter;
     private static final int LOCATION_REQUEST_CODE = 100;
-    private String[] locationPermission;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,6 +138,10 @@ HomeFragment extends Fragment {
     }
 
     private void init(View view) {
+        loc = view.findViewById(R.id.loc);
+        addressTv = view.findViewById(R.id.addressTv);
+        ll = view.findViewById(R.id.ll);
+        locationBtn = view.findViewById(R.id.locationBtn);
         searchIcon = view.findViewById(R.id.searchIcon);
         recyclerView = view.findViewById(R.id.recycler_view);
         progressBar = view.findViewById(R.id.progress_bar);
@@ -169,19 +158,14 @@ HomeFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         init(view);
         initView();
-        loc = view.findViewById(R.id.loc);
-        addressTv = view.findViewById(R.id.addressTv);
-        ll = view.findViewById(R.id.ll);
-        locationBtn = view.findViewById(R.id.locationBtn);
-
-
+        //init permission
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         sessionManager = new SessionManager(getContext());
 
         if (AppController.isConnected(getActivity()))
         getData();
 
-
+/*
         sessionManager.setSesBookingId(null);
         sessionManager.setOtpVerified(false);
         sessionManager.setOrderStatus(null);
@@ -190,23 +174,19 @@ HomeFragment extends Fragment {
         sessionManager.setUserValues("...","...","...","...","Generating");
         sessionManager.clearOrderSession();
 
-        ll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (checkPermission()){
-                    settingsrequest();
-                }else {
-                    askForPermission();
-                }
-            }
-        });
 
+ */
         if(checkLocationPermission()){
             detectLocation();
-        }else {
-            requestLocationPermission();
         }
 
+        clickListener();
+
+        return view;
+
+    }
+
+    private void clickListener() {
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -223,9 +203,16 @@ HomeFragment extends Fragment {
                 openSearchActivity();
             }
         });
-
-        return view;
-
+        ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (checkPermission()){
+                    settingsrequest();
+                }else {
+                    askForPermission();
+                }
+            }
+        });
     }
 
 
@@ -235,9 +222,7 @@ HomeFragment extends Fragment {
                 (PackageManager.PERMISSION_GRANTED);
         return result;
     }
-    private void requestLocationPermission(){
-        ActivityCompat.requestPermissions(getActivity(),locationPermission,LOCATION_REQUEST_CODE);
-    }
+
 
     private boolean checkPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -501,8 +486,7 @@ HomeFragment extends Fragment {
 
     private void getData() {
         progressBar.setVisibility(View.VISIBLE);
-        Call<MainDashboard> mainDashboardCall = RetrofitClient.getInstance()
-                .getApi()
+        Call<MainDashboard> mainDashboardCall = APIClient.getInstance()
                 .getDashData();
         mainDashboardCall.enqueue(new Callback<MainDashboard>() {
             @Override
@@ -530,11 +514,6 @@ HomeFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
             }
         });
-
-
-        //  Call<DashBoard> dashBoardCall = APIClient.getInstance()
-        //      .getApi()
-        //     .dashboard(email,pass);
     }
 
     private void loadCategoryView(List<SubcategoryList> subcategoryList) {

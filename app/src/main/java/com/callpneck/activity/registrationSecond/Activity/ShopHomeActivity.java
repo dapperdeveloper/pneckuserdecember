@@ -53,7 +53,7 @@ public class ShopHomeActivity extends AppCompatActivity {
     RecyclerView restaurantListRecyclerView;
     List<Cuisines> categoryList;
     MyRestaurantListAdapter adapter;
-    TextView titleTv, filterTv;
+    TextView titleTv, filterTv, addressTv;
     String title;
 
     private EditText searchView;
@@ -93,7 +93,7 @@ public class ShopHomeActivity extends AppCompatActivity {
         filterTv = findViewById(R.id.filterTv);
         searchView = findViewById(R.id.searchView);
         cuisinesLayout = findViewById(R.id.cuisinesLayout);
-
+        addressTv = findViewById(R.id.addressTv);
         progressDialog = findViewById(R.id.progress_bar);
         categoryList = new ArrayList<>();
         shopList = new ArrayList<>();
@@ -105,6 +105,7 @@ public class ShopHomeActivity extends AppCompatActivity {
         latitude = sessionManager.getUserLatitude();
         longitude = sessionManager.getUserLongitude();
 
+        addressTv.setText(sessionManager.getUserScreenAddress());
         if (AppController.isConnected(ShopHomeActivity.this)){
             loadCategoryData();
             if (validation())
@@ -290,6 +291,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("dTime", item.getDeliveryTime());
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
+                                intent.putExtra("description", item.getDescription());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
@@ -340,6 +342,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("dTime", item.getDeliveryTime());
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
+                                intent.putExtra("description", item.getDescription());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
@@ -383,6 +386,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("dTime", item.getDeliveryTime());
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
+                                intent.putExtra("description", item.getDescription());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
@@ -426,6 +430,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("dTime", item.getDeliveryTime());
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
+                                intent.putExtra("description", item.getDescription());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
@@ -469,6 +474,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("dTime", item.getDeliveryTime());
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
+                                intent.putExtra("description", item.getDescription());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
@@ -513,6 +519,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("dTime", item.getDeliveryTime());
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
+                                intent.putExtra("description", item.getDescription());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
@@ -557,6 +564,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("dTime", item.getDeliveryTime());
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
+                                intent.putExtra("description", item.getDescription());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
@@ -602,6 +610,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                                 intent.putExtra("dTime", item.getDeliveryTime());
                                 intent.putExtra("discount", item.getDiscount());
                                 intent.putExtra("discountMin", item.getDiscountMin());
+                                intent.putExtra("description", item.getDescription());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 
@@ -699,6 +708,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                             intent.putExtra("dTime", item.getDeliveryTime());
                             intent.putExtra("discount", item.getDiscount());
                             intent.putExtra("discountMin", item.getDiscountMin());
+                            intent.putExtra("description", item.getDescription());
                             startActivity(intent);
                             overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
 

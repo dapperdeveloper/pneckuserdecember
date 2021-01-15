@@ -24,6 +24,7 @@ import com.callpneck.activity.registrationSecond.Model.sendMoneyResponse.CheckUs
 import com.callpneck.activity.registrationSecond.Model.showContact.ShowEmegencyContact;
 import com.callpneck.activity.registrationSecond.Model.userList.PneckUserList;
 import com.callpneck.activity.registrationSecond.Model.walletOrder.WalletOrder;
+import com.callpneck.model.dashboard.MainDashboard;
 import com.squareup.okhttp.ResponseBody;
 
 import okhttp3.RequestBody;
@@ -40,6 +41,11 @@ public interface APIRequests {
 
     @GET("getcategory")
     Call<ResponseFoodHome> getCategoryData();
+
+
+    @GET("vendorHome")
+    Call<MainDashboard> getDashData();
+
 
 
     @FormUrlEncoded
