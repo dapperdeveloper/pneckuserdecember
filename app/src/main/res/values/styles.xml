@@ -119,10 +119,10 @@
         <item name="stTextBold">true</item>
         <item name="stTextColor">#fff</item>
         <item name="stTextSize">14sp</item>
-        <item name="stColorBackground">#c7b348f5</item>
+        <item name="stColorBackground">@color/colorPrimary</item>
         <item name="stSolidBackground">true</item>
         <item name="stStrokeWidth">3dp</item>
-        <item name="stStrokeColor">#3cb623c9</item>
+        <item name="stStrokeColor">@color/colorAccent</item>
         <item name="stLength">SHORT</item>
         LONG or SHORT
         <item name="stGravity">center</item>

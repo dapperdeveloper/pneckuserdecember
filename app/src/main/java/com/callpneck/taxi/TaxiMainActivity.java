@@ -947,13 +947,22 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
     {
         shownearbyCabLocations.clear();
         for (int i=0; i<nearbyCabLocations.size(); i++) {
+
             Marker  nearbyCabMarker = addCarMarkerAndGet(nearbyCabLocations.get(i));
         }
     }
 
     private Marker addCarMarkerAndGet( LatLng latLng) {
         BitmapDescriptor bitmapDescriptor= BitmapDescriptorFactory.fromBitmap(getCarBitmap());
-        return mMap.addMarker(new MarkerOptions().position(latLng).flat(true).icon(bitmapDescriptor));
+//        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//            @Override
+//            public boolean onMarkerClick(Marker marker) {
+//                String id = marker.getId();
+//                Toast.makeText(TaxiMainActivity.this, ""+id, Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//        });
+        return mMap.addMarker(new MarkerOptions().position(latLng).flat(false).title("Distance ").icon(bitmapDescriptor).snippet(String.valueOf(distance).substring(0,3)+" Km away"));
     }
 
     public Bitmap getCarBitmap()
@@ -1148,7 +1157,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Volley.newRequestQueue(TaxiMainActivity.this).add(dataParamsJsonReq);
     }
-
+    double distance;
     private Response.Listener<JSONObject> NearBySuccessListeners() {
         return new Response.Listener<JSONObject>() {
             @Override
@@ -1171,6 +1180,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                             double latitude = Double.parseDouble(object.getString("curr_latitude"));
                             double longitude =   Double.parseDouble(object.getString("curr_longitude"));
                             LatLng latLng = new LatLng(latitude, longitude);
+                            distance = object.getDouble("distance");
                             nearbyCabLocations.add(latLng);
 
                         }

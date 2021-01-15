@@ -34,6 +34,7 @@ import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
     Button nextBtn;
     EditText mailEt;
 
-    String userMailOrNumber, user_id, money, receiverId;
+    String user_id, money, receiverId;
     ProgressDialog progressDialog;
     SessionManager sessionManager;
     RecyclerView pneckUserRv;
@@ -103,7 +104,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (mailEt.getText().toString().trim().equals(sessionManager.getUserMail()) || mailEt.getText().toString().equals(sessionManager.getUserMobile())){
-                    showSnackBar(TransferMoneyActivity.this, "You can not send money to yourself");
+                    StyleableToast.makeText(TransferMoneyActivity.this, "You can not send money to yourself", Toast.LENGTH_LONG, R.style.mytoast).show();
                 }else {
                     moneyDialog();
                 }
@@ -134,10 +135,11 @@ public class TransferMoneyActivity extends AppCompatActivity {
                         pneckUserRv.setAdapter(adapter);
                     }
                     else if (model != null && !model.getStatus()){
-                        showSnackBar(TransferMoneyActivity.this,model.getMessage());
+                        StyleableToast.makeText(TransferMoneyActivity.this, model.getMessage(), Toast.LENGTH_LONG, R.style.mytoast).show();
                     }
                     else {
-                        showSnackBar(TransferMoneyActivity.this, "Server Error");
+                        StyleableToast.makeText(TransferMoneyActivity.this, "Server Error", Toast.LENGTH_LONG, R.style.mytoast).show();
+
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -146,7 +148,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PneckUserList> call, Throwable t) {
-                showSnackBar(TransferMoneyActivity.this, t.getMessage());
+
             }
         });
     }
@@ -169,11 +171,11 @@ public class TransferMoneyActivity extends AppCompatActivity {
                 receiverId = sessionManager.getReceiverId();
                 user_id = sessionManager.getUserid();
                 if (TextUtils.isEmpty(money)){
-                    Toast.makeText(TransferMoneyActivity.this, "Enter money", Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(TransferMoneyActivity.this, "Enter Money", Toast.LENGTH_LONG, R.style.mytoast).show();
                     return;
                 }
                 if (TextUtils.isEmpty(receiverId)){
-                    Toast.makeText(TransferMoneyActivity.this, "Receiver id required", Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(TransferMoneyActivity.this, "Receiver id required", Toast.LENGTH_LONG, R.style.mytoast).show();
                     return;
                 }
                 sendMoney(user_id,money,receiverId);
@@ -191,16 +193,17 @@ public class TransferMoneyActivity extends AppCompatActivity {
                 try {
                     SendMoneyResponse model = response.body();
                     if (model != null && model.getStatus()){
-                       showSnackBar(TransferMoneyActivity.this,model.getMessage());
+                        StyleableToast.makeText(TransferMoneyActivity.this, model.getMessage(), Toast.LENGTH_LONG, R.style.mytoast).show();
                         progressDialog.dismiss();
                         onBackPressed();
                     }
                     else if(model != null && !model.getStatus()){
-                        showSnackBar(TransferMoneyActivity.this,model.getMessage());
+                        StyleableToast.makeText(TransferMoneyActivity.this, model.getMessage(), Toast.LENGTH_LONG, R.style.mytoast).show();
                         progressDialog.dismiss();
                     }
                     else {
-                        showSnackBar(TransferMoneyActivity.this,"Server Error");
+                        StyleableToast.makeText(TransferMoneyActivity.this, "Server Error", Toast.LENGTH_LONG, R.style.mytoast).show();
+
                         progressDialog.dismiss();
                     }
                 }catch (Exception e){
@@ -212,7 +215,6 @@ public class TransferMoneyActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<SendMoneyResponse> call, Throwable t) {
                 progressDialog.dismiss();
-                showSnackBar(TransferMoneyActivity.this,t.getMessage());
             }
         });
     }
@@ -236,7 +238,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
                     else {
                         nextBtn.setEnabled(false);
                         mailEt.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                        showSnackBar(TransferMoneyActivity.this, "Server Error");
+                        StyleableToast.makeText(TransferMoneyActivity.this, "Server Error", Toast.LENGTH_LONG, R.style.mytoast).show();
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -248,27 +250,8 @@ public class TransferMoneyActivity extends AppCompatActivity {
             public void onFailure(Call<CheckUserForMoney> call, Throwable t) {
                 mailEt.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 nextBtn.setEnabled(false);
-                showSnackBar(TransferMoneyActivity.this, t.getMessage());
             }
         });
-    }
-    public static void showSnackBar(Activity activity, String snackTitle) {
-        View Parentview=activity.findViewById(android.R.id.content);
-        Snackbar snackbar = Snackbar.make(Parentview, snackTitle, Snackbar.LENGTH_SHORT);
-        snackbar.show();
-        View view = snackbar.getView();
-        TextView txtv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
-        txtv.setGravity(Gravity.CENTER_HORIZONTAL);
-    }
-    private boolean validation(){
-        boolean valid = true;
-        userMailOrNumber = mailEt.getText().toString();
-        if(TextUtils.isEmpty(userMailOrNumber)){
-            Toast.makeText(this, "Enter mail or mobile", Toast.LENGTH_SHORT).show();
-            return  false;
-        }
-
-        return valid;
     }
 
     @Override

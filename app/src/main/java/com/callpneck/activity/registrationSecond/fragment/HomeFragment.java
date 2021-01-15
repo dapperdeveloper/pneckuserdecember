@@ -93,7 +93,8 @@ import static com.callpneck.activity.registrationSecond.helper.Constant.LAUNCH_A
 import static com.callpneck.activity.registrationSecond.helper.Constant.REQUEST_CHECK_SETTINGS;
 
 
-public class HomeFragment extends Fragment {
+public class
+HomeFragment extends Fragment {
 
 
     public HomeFragment() {

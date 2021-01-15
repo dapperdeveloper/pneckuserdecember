@@ -94,7 +94,9 @@ public class ProfileFragment extends Fragment {
         sessionManager = new SessionManager(getContext());
         myMobile = sessionManager.getUserMobile();
         myName = sessionManager.getUserName();
+        if (myName!=null)
         user_name.setText(myName);
+        if (user_mobile!=null)
         user_mobile.setText("+91 "+myMobile);
 
         getWalletBalance();
