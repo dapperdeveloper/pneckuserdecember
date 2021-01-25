@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
@@ -55,6 +57,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -114,7 +117,7 @@ public class LoginScreenMain extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken("182788656846-btceh6jioc0vmvh1f9r71oarn1q42ge1.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(LoginScreenMain.this,gso);
@@ -404,6 +407,7 @@ public class LoginScreenMain extends AppCompatActivity {
             public void onResponse(JSONObject jsonObject) {
                 // Utility.dismissProgressDialog();
                 progressDialog.dismiss();
+
                 try {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("response");
                     Boolean pass = jsonObject1.getBoolean("success");

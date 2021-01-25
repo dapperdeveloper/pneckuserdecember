@@ -2,6 +2,8 @@ package com.callpneck.activity.registrationSecond.api;
 
 
 import com.callpneck.activity.TrackOrder.Model.TrackOrderModel;
+import com.callpneck.activity.deliveryboy.model.DriverList;
+import com.callpneck.activity.deliveryboy.model.OrderSubmit;
 import com.callpneck.activity.registrationSecond.Model.BookingResponse.BookingResponse;
 import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
@@ -27,6 +29,7 @@ import com.callpneck.activity.registrationSecond.Model.walletOrder.WalletOrder;
 import com.callpneck.model.dashboard.MainDashboard;
 import com.squareup.okhttp.ResponseBody;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -314,5 +317,28 @@ public interface APIRequests {
                                        @Field("rating") String rating
                                        );
 
+
+
+    @FormUrlEncoded
+    @POST("driver_list")
+    Call<DriverList> getDeliveryBoyData(@Field("latitude") String latitude, @Field("longitude") String longitude);
+
+
+    @Multipart
+    @POST("orderlistuser")
+    Call<OrderSubmit> createOrderByUser(@Part("orde_list") RequestBody orde_list,
+                                       @Part("start_address") RequestBody start_address,
+                                       @Part("drop_address") RequestBody drop_address,
+                                       @Part("user_id") RequestBody user_id,
+                                       @Part("user_name") RequestBody user_name,
+                                       @Part("user_mobile") RequestBody user_mobile,
+                                        @Part("emp_id") RequestBody emp_id,
+                                        @Part("emp_name") RequestBody emp_name,
+                                        @Part("emp_address") RequestBody emp_address,
+                                        @Part("delivery_charge") RequestBody empFee,
+                                       @Part MultipartBody.Part order_image
+
+
+    );
 
 }

@@ -8,6 +8,7 @@
     <dimen name="ll_mar40">40dp</dimen>
     <dimen name="editpad5dp">5dp</dimen>
     <dimen name="margin_signup">15dp</dimen>
+    <dimen name="label_text_size">16sp</dimen>
 
 
     <dimen name="top_menu_margin">6dp</dimen>

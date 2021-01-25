@@ -94,7 +94,7 @@
                             android:layout_below="@id/dTimeTv"
                             android:paddingLeft="4dp"
                             android:layout_centerInParent="true"
-                            android:text="Deivery Time: " />
+                            android:text="Delivery Time: " />
 
                         <TextView
                             android:id="@+id/dTimeTv"

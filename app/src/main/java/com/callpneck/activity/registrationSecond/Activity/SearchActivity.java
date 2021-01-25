@@ -40,6 +40,7 @@ public class SearchActivity extends AppCompatActivity {
 
     List<SearchListModel> searchListModelList;
     AdapterSearch adapterSearch;
+    String spokenText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,15 @@ public class SearchActivity extends AppCompatActivity {
         ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_search);
 
+        if (getIntent() != null){
+            spokenText = getIntent().getStringExtra("spokenText");
+            Toast.makeText(this, ""+spokenText, Toast.LENGTH_SHORT).show();
+            if ((spokenText != null &&
+                    spokenText.length() > 0)){
+
+            }
+
+        }
         suggestionView = findViewById(R.id.suggestionView);
         recycleview = findViewById(R.id.recycleview);
         searchView = findViewById(R.id.searchview);

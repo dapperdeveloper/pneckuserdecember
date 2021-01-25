@@ -10,6 +10,8 @@
     <color name="colorGrey1">#888888</color>
     <color name="windowBackground">#eeeeee</color>
 
+    <color name="colorLabel">#FF323F51</color>
+    <color name="colorText">#000111</color>
     <color name="btn_back_color">#00ffff</color>
     <color name="text_color">#0C0FE9</color>
     <color name="my_color">#99000000</color>
@@ -123,4 +125,45 @@
     <color name="warning_color">#F44E41</color>
     <color name="colorPrimaryText">#000000</color>
     <color name="colorSecondaryText">#979696</color>
+
+
+
+    <!--Color for Day Mode-->
+
+
+    <color name="colorHeading">#FF323F51</color>
+    <color name="colorNormal">#FF323F51</color>
+    <color name="colorMenuWhiteDay">#FFFFFF</color>
+    <color name="colorMenuDarkDay">#FF323F51</color>
+    <color name="tagline">#AAAAAA</color>
+    <color name="colorGreenDay">#36B24D</color>
+    <color name="colorWhiteDay">#FFFFFF</color>
+
+    <color name="colorTintColourFullDay">#323f51</color>
+    <color name="colorTintColourFixedDay">#FFFFFF</color>
+
+    <color name="colorDefaultNavigationIconDay">#858D9B</color>
+    <color name="colorSelectedNavigationIconDay">#ffffffff</color>
+    <color name="colorBottomNavigationDay">#2DFFFFFF</color>
+
+    <color name="colorDefaultFavouriteDay">#8DCCCCCC</color>
+    <color name="colorSelectedFavouriteDay">#EB0B0B</color>
+
+    <color name="colorRatingIconDay">#ffd500</color>
+    <color name="colorRequiredDay">#276FBF</color>
+    <color name="colorRequiredBackgroundDay">#5BCDE0F7</color>
+    <color name="colorTransparentBackgroundDay">#00000000</color>
+
+    <color name="colorButtonDay">#FF323F51</color>
+    <color name="colorProgressDay">#FF323F51</color>
+    <color name="colorCardDay">#ffffffff</color>
+    <color name="colorSelectorDay">#FF323F51</color>
+    <color name="colorSwitchTrackOnDay">#FF323F51</color>
+    <color name="colorSwitchTrackOffDay">#DBDFE5</color>
+    <color name="colorBackgroundLightDay">#2ccccccc</color>
+    <color name="colorReadingBarDay">#ffd500</color>
+    <color name="colorMenuBackgroundDay">#11D06B</color>
+    <color name="colorLinkDay">#0008f2</color>
+    <color name="colorNutritionBackgroundDay">#65CCCCCC</color>
+    <color name="colorDeleteDay">#ae1212</color>
 </resources>

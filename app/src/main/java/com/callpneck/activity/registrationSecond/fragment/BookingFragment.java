@@ -6,7 +6,9 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +67,7 @@ public class BookingFragment extends Fragment {
     private TextView emptyView, noOrderTv, noBookingTv;
     CustPrograssbar custPrograssbar;
     String user_id;
+    SwipeRefreshLayout swipeLayout, swipeLayoutSecond;
     public BookingFragment() {
         // Required empty public constructor
     }
@@ -107,11 +110,37 @@ public class BookingFragment extends Fragment {
             public void onClick(View v) {
                 if (AppController.isConnected(getActivity()))
                     getUserOrderList();
+
                 //load orders
                 showOrdersUI();
             }
         });
 
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getBookingList();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
+
+        swipeLayoutSecond.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getUserOrderList();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeLayoutSecond.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
         if (AppController.isConnected(getActivity()))
             getBookingList();
 
@@ -204,7 +233,8 @@ public class BookingFragment extends Fragment {
 
 
     private void init(View view) {
-
+        swipeLayout = view.findViewById(R.id.swipeLayout);
+        swipeLayoutSecond = view.findViewById(R.id.swipeLayoutSecond);
         tabOrdersTv = view.findViewById(R.id.tabOrdersTv);
         tabBookingTv = view.findViewById(R.id.tabBookingTv);
         bookingRl = view.findViewById(R.id.bookingRl);

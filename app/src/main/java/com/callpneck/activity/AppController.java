@@ -23,6 +23,7 @@ public class AppController {
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 
+
         if (networkInfo != null && networkInfo.isConnected() == true) {
             check = true;
         } else {

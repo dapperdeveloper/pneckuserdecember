@@ -39,6 +39,7 @@ public class SessionManager {
     public static final String USER_LONGITUDE="user_longitude";
     public static  final  String DEVICE_TOKEN ="device_token";
 
+    private static final String CURRENT_ORDER_DELIVERY_ID="current_delivery_id";
 
     public static final String CURRENT_ORDER_RESPONSE="current_order_response";
 
@@ -84,6 +85,18 @@ public class SessionManager {
     private int PRIVATE_MODE = 0;
 
 
+    public String getCurrentDeliveryOrderId(){
+        return pref.getString(CURRENT_ORDER_DELIVERY_ID,"");
+    }
+    public boolean clearDeliveryOrderSession(){
+        editor.putString(CURRENT_ORDER_DELIVERY_ID,"");
+        editor.commit();
+        return true;
+    }
+    public void saveCurrentOrderDeliveryId(String deliveryId){
+        editor.putString(CURRENT_ORDER_DELIVERY_ID,deliveryId);
+        editor.commit();
+    }
     public boolean clearOrderSession(){
         editor.putString(SES_BOOKING_ID,null);
         editor.putString(CURRENT_ORDER_RESPONSE,"");

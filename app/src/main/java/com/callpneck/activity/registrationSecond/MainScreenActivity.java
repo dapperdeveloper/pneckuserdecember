@@ -90,7 +90,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 }).withListener(new MultiplePermissionsListener() {
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
-                    setContentView(R.layout.activity_main_screen);
+                setContentView(R.layout.activity_main_screen);
 
 
                 bottom_navigation = findViewById(R.id.bottom_navigation);
@@ -112,10 +112,11 @@ public class MainScreenActivity extends AppCompatActivity {
                         return loadFragment(fragment);
                     }
                 });
-bottom_navigation.setSelectedItemId(R.id.action_home);
+                bottom_navigation.setSelectedItemId(R.id.action_home);
 
 
-                    showDialog();
+
+                showDialog();
 
 
             }
@@ -158,6 +159,6 @@ bottom_navigation.setSelectedItemId(R.id.action_home);
                 dialog.dismiss();
 
             }
-        }, 2000);
+        }, 1000);
     }
 }

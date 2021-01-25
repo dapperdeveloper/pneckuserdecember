@@ -3,7 +3,6 @@ package com.callpneck.activity.registrationSecond.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,17 +14,15 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.speech.RecognizerIntent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,12 +34,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
 
-import com.bumptech.glide.Glide;
+import com.callpneck.LaunchActivityClass;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
+import com.callpneck.activity.deliveryboy.DeliveryBoyListActivity;
 import com.callpneck.activity.deliveryboy.DeliveryMainActivity;
 import com.callpneck.activity.registrationSecond.Activity.MyWalletActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderActivity;
@@ -54,7 +51,6 @@ import com.callpneck.activity.registrationSecond.Adapter.MyCategoryAdapter;
 import com.callpneck.activity.registrationSecond.Adapter.MyCustomPagerAdapter;
 import com.callpneck.activity.registrationSecond.Model.Category;
 import com.callpneck.activity.registrationSecond.api.APIClient;
-import com.callpneck.api.retrofit.RetrofitClient;
 import com.callpneck.model.dashboard.BannerSliderImage;
 import com.callpneck.model.dashboard.MainDashboard;
 import com.callpneck.model.dashboard.SubcategoryList;
@@ -70,7 +66,6 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -105,6 +100,7 @@ HomeFragment extends Fragment {
     private String currentFullAddress = "";
     private String UserLatitude = "";
     private String UserLongitude = "";
+    private String spokenText ="";
     private double latitude, longitude;
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
@@ -113,7 +109,7 @@ HomeFragment extends Fragment {
     private MyCategoryAdapter adapter;
     MainDashboard mainDashboard;
 
-    private ImageView searchIcon;
+    private ImageView searchIcon, voiceSearch;
     private AVLoadingIndicatorView progressBar;
     ImageView loc, ll;
     TextView addressTv;
@@ -124,6 +120,8 @@ HomeFragment extends Fragment {
     TabLayout tabview;
     private Context mContext;
     MyCustomPagerAdapter myCustomPagerAdapter;
+    private static final int SPEECH_REQUEST_CODE = 0;
+
     private static final int LOCATION_REQUEST_CODE = 100;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -143,6 +141,7 @@ HomeFragment extends Fragment {
         ll = view.findViewById(R.id.ll);
         locationBtn = view.findViewById(R.id.locationBtn);
         searchIcon = view.findViewById(R.id.searchIcon);
+        voiceSearch = view.findViewById(R.id.voiceSearch);
         recyclerView = view.findViewById(R.id.recycler_view);
         progressBar = view.findViewById(R.id.progress_bar);
         viewPager = view.findViewById(R.id.viewPager);
@@ -164,6 +163,7 @@ HomeFragment extends Fragment {
 
         if (AppController.isConnected(getActivity()))
         getData();
+
 
 /*
         sessionManager.setSesBookingId(null);
@@ -197,10 +197,20 @@ HomeFragment extends Fragment {
                 }
             }
         });
+        voiceSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+// Start the activity, the intent will be populated with the speech text
+                startActivityForResult(intent, SPEECH_REQUEST_CODE);
+            }
+        });
         searchIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openSearchActivity();
+                openSearchActivity(spokenText);
             }
         });
         ll.setOnClickListener(new View.OnClickListener() {
@@ -478,8 +488,10 @@ HomeFragment extends Fragment {
 
     }
 
-    private void openSearchActivity() {
+
+    private void openSearchActivity(String spokenText) {
         Intent intent = new Intent(getActivity(), SearchActivity.class);
+        intent.putExtra("spokenText", spokenText);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
@@ -555,10 +567,18 @@ HomeFragment extends Fragment {
                 }
                 else if(item.getCate_type().equalsIgnoreCase("delivery")){
                     if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
-                        Intent intent = new Intent(getContext(), DeliveryMainActivity.class);
-                        intent.putExtra("categoryName", item.getTitle());
-                        startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+
+                        if (sessionManager.getCurrentDeliveryOrderId()!=null&&
+                                sessionManager.getCurrentDeliveryOrderId().length()>0){
+                            LaunchActivityClass.LaunchTrackingDeliveryScreen(getActivity());
+                        }
+                        else {
+                            Intent intent = new Intent(getContext(), DeliveryMainActivity.class);
+                            intent.putExtra("categoryName", item.getTitle());
+                            startActivity(intent);
+                            getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                        }
+
                     }
                 }
                 else if(item.getCate_type().equalsIgnoreCase("wallet")){
@@ -619,6 +639,13 @@ HomeFragment extends Fragment {
                 sessionManager.setUserLocation(UserLatitude, UserLongitude);
                 addressTv.setText(sessionManager.getUserScreenAddress());
             }
+        }
+        else if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK){
+            List<String> results = data.getStringArrayListExtra(
+                    RecognizerIntent.EXTRA_RESULTS);
+            spokenText = results.get(0);
+            // Do something with spokenText
+            openSearchActivity(spokenText);
         }
     }
 

@@ -17,15 +17,19 @@
 
     <application
         android:name=".PneckUserApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.SecurityActivity"></activity>
+        <activity android:name=".activity.deliveryboy.TrackOrderDeliveryActivity"></activity>
+        <activity android:name=".activity.deliveryboy.DeliveryBoyListActivity" />
+        <activity android:name=".activity.SecurityActivity" />
         <activity android:name=".activity.registrationSecond.Activity.CancelOrderScreenActivity" />
         <activity
             android:name=".activity.registrationSecond.Activity.ReceiptOrderActivity"
@@ -37,7 +41,10 @@
         <activity android:name=".activity.registrationSecond.Activity.EditShopCartActivity" />
         <activity android:name=".activity.registrationSecond.Activity.FullScreenImageActivity" />
         <activity android:name=".activity.GoogleMapTrackingAddressSet" />
-        <activity android:name=".activity.deliveryboy.DeliveryMainActivity" />
+        <activity
+            android:name=".activity.deliveryboy.DeliveryMainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".activity.registrationSecond.Activity.OrderPlacedActivity" />
         <activity android:name=".activity.registrationSecond.Activity.MapsActivity" />
         <activity android:name=".activity.registrationSecond.Activity.ProviderDetailActivity" />
@@ -81,6 +88,9 @@
             android:name=".activity.registrationSecond.MainScreenActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
+
+
         <activity
             android:name=".activity.Vendor.VendorSearchActivity"
             android:label="@string/title_activity_vendor_search"
@@ -205,12 +215,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-        <service android:name="com.callpneck.Notification.FirebaseMessaging">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
 
         <uses-library
             android:name="org.apache.http.legacy"

@@ -149,102 +149,83 @@
 
         </RelativeLayout>
 
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/grey_10"
-            android:layout_below="@+id/toolbarRl">
+
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:background="@color/white"
+                android:layout_below="@+id/toolbarRl"
                 >
 
-                <LinearLayout
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipeLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:id="@+id/cuisinesLayout">
+                    android:layout_height="match_parent"
 
-                    <TextView
+                    >
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cuisines"
-                        android:textAllCaps="true"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
-                        android:layout_margin="10dp"/>
+                        android:layout_height="match_parent"
+                        android:weightSum="2"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/titleTv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Title"
+                            android:textAllCaps="true"
+                            android:layout_toLeftOf="@+id/filterTv"
+                            android:textSize="18sp"
+                            android:textColor="@color/black"
+                            android:layout_margin="10dp"/>
+                        <TextView
+                            android:id="@+id/filterTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter"
+                            android:layout_alignParentEnd="true"
+                            android:textAllCaps="true"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_margin="10dp"/>
 
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/restaurantListRecyclerView"
-                        android:layout_width="match_parent"
-                        android:background="@color/colorWhite"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/shopRv"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:listitem="@layout/layout_restaurant_name_item"
+                            android:layout_below="@+id/filterTv"
+                            android:layout_marginBottom="24dp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            />
 
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="2"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/titleTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Title"
-                        android:textAllCaps="true"
-                        android:layout_toLeftOf="@+id/filterTv"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
-                        android:layout_margin="10dp"/>
-                    <TextView
-                        android:id="@+id/filterTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/filter"
-                        android:layout_alignParentEnd="true"
-                        android:textAllCaps="true"
-                        android:textSize="18sp"
-                        android:textColor="@color/colorPrimary"
-                        android:layout_margin="10dp"/>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/shopRv"
-                        android:layout_below="@+id/filterTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="24dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/layout_restaurant_name_item"/>
 
 
-                    <com.wang.avi.AVLoadingIndicatorView
-                        android:id="@+id/progress_bar"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:visibility="visible"
-                        android:layout_centerInParent="true"
-                        app:indicatorName="BallScaleMultipleIndicator"
-                        app:indicatorColor="@color/colorPrimaryDark" />
-                </RelativeLayout>
+
+
+
+                        <com.wang.avi.AVLoadingIndicatorView
+                            android:id="@+id/progress_bar"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:visibility="visible"
+                            android:layout_centerInParent="true"
+                            app:indicatorName="BallScaleMultipleIndicator"
+                            app:indicatorColor="@color/colorPrimaryDark" />
+                    </RelativeLayout>
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
 
             </LinearLayout>
-
-
-        </androidx.core.widget.NestedScrollView>
-
-
-
-
-
 
 
 

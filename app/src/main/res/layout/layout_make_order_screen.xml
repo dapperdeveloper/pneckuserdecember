@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/card_shadow"
+    >
+
+
+    <ImageView
+        android:id="@+id/closeBtn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_close"
+        android:layout_gravity="end"
+        android:tint="@color/black"
+        android:layout_marginBottom="8dp"
+        />
+
+        <EditText
+            android:id="@+id/orderEt"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:text=""
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:layout_gravity="top"
+            android:layout_margin="@dimen/editpad5dp"
+            android:gravity="top"
+            android:hint="Type your order here......."
+            android:fontFamily="@font/raleway_semibold"
+            android:textColor="@color/grey_700"
+            android:background="@drawable/rectangle_back"
+            android:scrollbars="vertical"
+            android:inputType="textMultiLine"
+            android:imeOptions="actionDone"
+            />
+        <RelativeLayout
+            android:id="@+id/addPhotoBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Order Image"
+                android:fontFamily="@font/raleway_semibold"
+                android:textColor="@color/black"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_photo_camera"
+                android:layout_alignParentEnd="true"
+                />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/orderIV"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:src="@drawable/pneck_banner"
+            />
+
+
+        <Button
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Make Your Order"
+            android:background="@color/colorAccent"
+            android:padding="5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:textColor="@color/colorWhite"
+            android:textAllCaps="false"
+            />
+
+
+
+    </LinearLayout>

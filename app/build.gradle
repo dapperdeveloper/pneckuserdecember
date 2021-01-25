@@ -1,3 +1,4 @@
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
@@ -10,6 +11,11 @@ android {
         versionCode 10
         versionName "1.00.10"
         multiDexEnabled true
+
+        manifestPlaceholders = [onesignal_app_id:            '5ce7de9f-17df-4360-8612-80be102ca3ae',
+                                // Project number pulled from dashboard, local value is ignored.
+                                onesignal_google_project_number: 'REMOTE']
+
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.useSupportLibrary = true
         useLibrary 'org.apache.http.legacy'
@@ -60,6 +66,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
     implementation 'androidx.multidex:multidex:2.0.0'
 
+    //onesignal
+    implementation 'com.onesignal:OneSignal:3.15.6'
 
     implementation 'com.github.d-max:spots-dialog:0.4@aar'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -86,14 +94,15 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'org.apache.httpcomponents:httpcore:4.4.1'
     implementation 'androidx.multidex:multidex:2.0.0'
-    //Firebase Authentication
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
+
     // Firestore Firestore
     implementation 'com.google.firebase:firebase-firestore:21.6.0'
 
+    implementation 'io.nlopez.smartlocation:library:3.3.3'
     //google
+    implementation 'com.google.firebase:firebase-auth:19.3.2'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
-
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
     //Google Play Services for Maps
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
@@ -134,6 +143,8 @@ dependencies {
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+
+    implementation 'net.bohush.geometricprogressview:geometricprogressview:1.1.1'
     //toast
     implementation 'com.muddzdev:styleabletoast:2.2.0'
     implementation 'com.merhold.extensiblepageindicator:extensiblepageindicator:1.0.1'

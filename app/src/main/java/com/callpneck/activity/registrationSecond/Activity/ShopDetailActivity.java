@@ -60,7 +60,7 @@ public class ShopDetailActivity extends AppCompatActivity {
     CircleButton callToOneBtn,callToTwoBtn;
     RoomDB database;
     List<MainData> dataList = new ArrayList<>();
-    String name, description, phoneOne="9058191818" , phoneTwo="8755555780", imageHotel;
+    String name, description, phoneOne, phoneTwo, imageHotel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,9 +106,14 @@ public class ShopDetailActivity extends AppCompatActivity {
             discountMin = getIntent().getStringExtra("discountMin");
             res_id = getIntent().getStringExtra("res_id");
             description = getIntent().getStringExtra("description");
+            phoneOne = getIntent().getStringExtra("phoneOne");
+            phoneTwo = getIntent().getStringExtra("phoneTwo");
             restaurantNameTv.setText(shopName);
             Picasso.get().load(shopAvatar).into(hotelImg);
             descriptionTv.setText(description);
+
+            phoneOneTv.setText(phoneOne);
+            phoneTwoTv.setText(phoneTwo);
 //            shopNameTv.setText(shopName);
 //            ratingsTv.setText(rating);
 //            dTimeTv.setText(dTime+" Mins");

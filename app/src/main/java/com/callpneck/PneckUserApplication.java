@@ -10,6 +10,7 @@ import android.util.Log;
 import com.callpneck.activity.registrationSecond.AppSignatureHelper;
 import com.callpneck.taxi.map.GoogleMap;
 import com.google.maps.GeoApiContext;
+import com.onesignal.OneSignal;
 
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
@@ -119,6 +120,13 @@ public class PneckUserApplication extends Application {
 		GoogleMap.geoApiContext = new GeoApiContext.Builder()
 				.apiKey("AIzaSyBTbcRRCLbhqeMVVGD5fnUevHfxj2MdgdI")
 				.build();
+
+
+		OneSignal.startInit(getApplicationContext())
+				.inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+				.unsubscribeWhenNotificationsAreDisabled(true)
+				.init();
+
 
 		//logUser();
 	}

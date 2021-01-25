@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -13,10 +14,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
@@ -35,6 +38,7 @@ import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.utils.Constants;
 import com.google.android.material.snackbar.Snackbar;
+import com.muddzdev.styleabletoast.StyleableToast;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -50,9 +54,6 @@ public class ShopHomeActivity extends AppCompatActivity {
 
     String categoryName;
 
-    RecyclerView restaurantListRecyclerView;
-    List<Cuisines> categoryList;
-    MyRestaurantListAdapter adapter;
     TextView titleTv, filterTv, addressTv;
     String title;
 
@@ -74,7 +75,7 @@ public class ShopHomeActivity extends AppCompatActivity {
     List<MainData> dataList = new ArrayList<>();
 
     String latitude, longitude;
-
+    SwipeRefreshLayout swipeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,19 +88,16 @@ public class ShopHomeActivity extends AppCompatActivity {
             categoryName = intent.getStringExtra("categoryName");
         }
 
-        restaurantListRecyclerView = findViewById(R.id.restaurantListRecyclerView);
         titleTv = findViewById(R.id.titleTv);
         shopRv = findViewById(R.id.shopRv);
         filterTv = findViewById(R.id.filterTv);
         searchView = findViewById(R.id.searchView);
-        cuisinesLayout = findViewById(R.id.cuisinesLayout);
         addressTv = findViewById(R.id.addressTv);
         progressDialog = findViewById(R.id.progress_bar);
-        categoryList = new ArrayList<>();
+        swipeLayout = findViewById(R.id.swipeLayout);
         shopList = new ArrayList<>();
         productFoods = new ArrayList<>();
 
-        initView();
 
         sessionManager = new SessionManager(this);
         latitude = sessionManager.getUserLatitude();
@@ -107,7 +105,6 @@ public class ShopHomeActivity extends AppCompatActivity {
 
         addressTv.setText(sessionManager.getUserScreenAddress());
         if (AppController.isConnected(ShopHomeActivity.this)){
-            loadCategoryData();
             if (validation())
                 loadShopData();
             search();
@@ -124,6 +121,21 @@ public class ShopHomeActivity extends AppCompatActivity {
         titleTv.setText("All");
 
 
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (AppController.isConnected(ShopHomeActivity.this)){
+                    if (validation())
+                        loadShopData();
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
         findViewById(R.id.Goback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,19 +293,27 @@ public class ShopHomeActivity extends AppCompatActivity {
                         shopAdapter = new MyShopAdapter(ShopHomeActivity.this,productFoods, new MyShopAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(ProductFood item) {
+                                if (item.getIsopen().equalsIgnoreCase("1")){
+                                    Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
+                                    intent.putExtra("shopName",item.getName());
+                                    intent.putExtra("shopAvatar",item.getImage()+"");
+                                    intent.putExtra("shopAddress",item.getAddress());
+                                    intent.putExtra("ratings", item.getRating());
+                                    intent.putExtra("res_id", item.getId()+"");
+                                    intent.putExtra("dTime", item.getDeliveryTime());
+                                    intent.putExtra("discount", item.getDiscount());
+                                    intent.putExtra("discountMin", item.getDiscountMin());
+                                    intent.putExtra("description", item.getDescription());
+                                    intent.putExtra("phoneOne", item.getPhone());
+                                    intent.putExtra("phoneTwo", item.getMobile());
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                }
+                                else {
+                                    StyleableToast.makeText(ShopHomeActivity.this, "This Restaurant not taking any order!", Toast.LENGTH_LONG, R.style.mytoast).show();
 
-                                Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
-                                intent.putExtra("shopName",item.getName());
-                                intent.putExtra("shopAvatar",item.getImage()+"");
-                                intent.putExtra("shopAddress",item.getAddress());
-                                intent.putExtra("ratings", item.getRating());
-                                intent.putExtra("res_id", item.getId()+"");
-                                intent.putExtra("dTime", item.getDeliveryTime());
-                                intent.putExtra("discount", item.getDiscount());
-                                intent.putExtra("discountMin", item.getDiscountMin());
-                                intent.putExtra("description", item.getDescription());
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                }
+
 
                             }
                         });
@@ -333,18 +353,26 @@ public class ShopHomeActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(ProductFood item) {
 
-                                Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
-                                intent.putExtra("shopName",item.getName());
-                                intent.putExtra("shopAvatar",item.getImage()+"");
-                                intent.putExtra("shopAddress",item.getAddress());
-                                intent.putExtra("res_id", item.getId()+"");
-                                intent.putExtra("ratings", item.getRating());
-                                intent.putExtra("dTime", item.getDeliveryTime());
-                                intent.putExtra("discount", item.getDiscount());
-                                intent.putExtra("discountMin", item.getDiscountMin());
-                                intent.putExtra("description", item.getDescription());
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                if (item.getIsopen().equalsIgnoreCase("1")){
+                                    Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
+                                    intent.putExtra("shopName",item.getName());
+                                    intent.putExtra("shopAvatar",item.getImage()+"");
+                                    intent.putExtra("shopAddress",item.getAddress());
+                                    intent.putExtra("ratings", item.getRating());
+                                    intent.putExtra("res_id", item.getId()+"");
+                                    intent.putExtra("dTime", item.getDeliveryTime());
+                                    intent.putExtra("discount", item.getDiscount());
+                                    intent.putExtra("discountMin", item.getDiscountMin());
+                                    intent.putExtra("description", item.getDescription());
+                                    intent.putExtra("phoneOne", item.getPhone());
+                                    intent.putExtra("phoneTwo", item.getMobile());
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                }
+                                else {
+                                    StyleableToast.makeText(ShopHomeActivity.this, "This Restaurant not taking any order!", Toast.LENGTH_LONG, R.style.mytoast).show();
+
+                                }
 
                             }
                         });
@@ -377,18 +405,26 @@ public class ShopHomeActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(ProductFood item) {
 
-                                Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
-                                intent.putExtra("shopName",item.getName());
-                                intent.putExtra("shopAvatar",item.getImage()+"");
-                                intent.putExtra("shopAddress",item.getAddress());
-                                intent.putExtra("res_id", item.getId()+"");
-                                intent.putExtra("ratings", item.getRating());
-                                intent.putExtra("dTime", item.getDeliveryTime());
-                                intent.putExtra("discount", item.getDiscount());
-                                intent.putExtra("discountMin", item.getDiscountMin());
-                                intent.putExtra("description", item.getDescription());
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                if (item.getIsopen().equalsIgnoreCase("1")){
+                                    Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
+                                    intent.putExtra("shopName",item.getName());
+                                    intent.putExtra("shopAvatar",item.getImage()+"");
+                                    intent.putExtra("shopAddress",item.getAddress());
+                                    intent.putExtra("ratings", item.getRating());
+                                    intent.putExtra("res_id", item.getId()+"");
+                                    intent.putExtra("dTime", item.getDeliveryTime());
+                                    intent.putExtra("discount", item.getDiscount());
+                                    intent.putExtra("discountMin", item.getDiscountMin());
+                                    intent.putExtra("description", item.getDescription());
+                                    intent.putExtra("phoneOne", item.getPhone());
+                                    intent.putExtra("phoneTwo", item.getMobile());
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                }
+                                else {
+                                    StyleableToast.makeText(ShopHomeActivity.this, "This Restaurant not taking any order!", Toast.LENGTH_LONG, R.style.mytoast).show();
+
+                                }
 
                             }
                         });
@@ -420,19 +456,26 @@ public class ShopHomeActivity extends AppCompatActivity {
                         shopAdapter = new MyShopAdapter(ShopHomeActivity.this,productFoods, new MyShopAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(ProductFood item) {
+                                if (item.getIsopen().equalsIgnoreCase("1")){
+                                    Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
+                                    intent.putExtra("shopName",item.getName());
+                                    intent.putExtra("shopAvatar",item.getImage()+"");
+                                    intent.putExtra("shopAddress",item.getAddress());
+                                    intent.putExtra("ratings", item.getRating());
+                                    intent.putExtra("res_id", item.getId()+"");
+                                    intent.putExtra("dTime", item.getDeliveryTime());
+                                    intent.putExtra("discount", item.getDiscount());
+                                    intent.putExtra("discountMin", item.getDiscountMin());
+                                    intent.putExtra("description", item.getDescription());
+                                    intent.putExtra("phoneOne", item.getPhone());
+                                    intent.putExtra("phoneTwo", item.getMobile());
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                }
+                                else {
+                                    StyleableToast.makeText(ShopHomeActivity.this, "This Restaurant not taking any order!", Toast.LENGTH_LONG, R.style.mytoast).show();
 
-                                Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
-                                intent.putExtra("shopName",item.getName());
-                                intent.putExtra("shopAvatar",item.getImage()+"");
-                                intent.putExtra("shopAddress",item.getAddress());
-                                intent.putExtra("ratings", item.getRating());
-                                intent.putExtra("res_id", item.getId()+"");
-                                intent.putExtra("dTime", item.getDeliveryTime());
-                                intent.putExtra("discount", item.getDiscount());
-                                intent.putExtra("discountMin", item.getDiscountMin());
-                                intent.putExtra("description", item.getDescription());
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                }
 
                             }
                         });
@@ -465,19 +508,26 @@ public class ShopHomeActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(ProductFood item) {
 
-                                Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
-                                intent.putExtra("shopName",item.getName());
-                                intent.putExtra("shopAvatar",item.getImage()+"");
-                                intent.putExtra("ratings", item.getRating());
-                                intent.putExtra("shopAddress",item.getAddress());
-                                intent.putExtra("res_id", item.getId()+"");
-                                intent.putExtra("dTime", item.getDeliveryTime());
-                                intent.putExtra("discount", item.getDiscount());
-                                intent.putExtra("discountMin", item.getDiscountMin());
-                                intent.putExtra("description", item.getDescription());
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                if (item.getIsopen().equalsIgnoreCase("1")){
+                                    Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
+                                    intent.putExtra("shopName",item.getName());
+                                    intent.putExtra("shopAvatar",item.getImage()+"");
+                                    intent.putExtra("shopAddress",item.getAddress());
+                                    intent.putExtra("ratings", item.getRating());
+                                    intent.putExtra("res_id", item.getId()+"");
+                                    intent.putExtra("dTime", item.getDeliveryTime());
+                                    intent.putExtra("discount", item.getDiscount());
+                                    intent.putExtra("discountMin", item.getDiscountMin());
+                                    intent.putExtra("description", item.getDescription());
+                                    intent.putExtra("phoneOne", item.getPhone());
+                                    intent.putExtra("phoneTwo", item.getMobile());
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                }
+                                else {
+                                    StyleableToast.makeText(ShopHomeActivity.this, "This Restaurant not taking any order!", Toast.LENGTH_LONG, R.style.mytoast).show();
 
+                                }
                             }
                         });
                     shopRv.setAdapter(shopAdapter);
@@ -510,18 +560,26 @@ public class ShopHomeActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(ProductFood item) {
 
-                                Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
-                                intent.putExtra("shopName",item.getName());
-                                intent.putExtra("shopAvatar",item.getImage()+"");
-                                intent.putExtra("ratings", item.getRating());
-                                intent.putExtra("shopAddress",item.getAddress());
-                                intent.putExtra("res_id", item.getId()+"");
-                                intent.putExtra("dTime", item.getDeliveryTime());
-                                intent.putExtra("discount", item.getDiscount());
-                                intent.putExtra("discountMin", item.getDiscountMin());
-                                intent.putExtra("description", item.getDescription());
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                if (item.getIsopen().equalsIgnoreCase("1")){
+                                    Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
+                                    intent.putExtra("shopName",item.getName());
+                                    intent.putExtra("shopAvatar",item.getImage()+"");
+                                    intent.putExtra("shopAddress",item.getAddress());
+                                    intent.putExtra("ratings", item.getRating());
+                                    intent.putExtra("res_id", item.getId()+"");
+                                    intent.putExtra("dTime", item.getDeliveryTime());
+                                    intent.putExtra("discount", item.getDiscount());
+                                    intent.putExtra("discountMin", item.getDiscountMin());
+                                    intent.putExtra("description", item.getDescription());
+                                    intent.putExtra("phoneOne", item.getPhone());
+                                    intent.putExtra("phoneTwo", item.getMobile());
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                }
+                                else {
+                                    StyleableToast.makeText(ShopHomeActivity.this, "This Restaurant not taking any order!", Toast.LENGTH_LONG, R.style.mytoast).show();
+
+                                }
 
                             }
                         });
@@ -555,18 +613,26 @@ public class ShopHomeActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(ProductFood item) {
 
-                                Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
-                                intent.putExtra("shopName",item.getName());
-                                intent.putExtra("shopAvatar",item.getImage()+"");
-                                intent.putExtra("shopAddress",item.getAddress());
-                                intent.putExtra("ratings", item.getRating());
-                                intent.putExtra("res_id", item.getId()+"");
-                                intent.putExtra("dTime", item.getDeliveryTime());
-                                intent.putExtra("discount", item.getDiscount());
-                                intent.putExtra("discountMin", item.getDiscountMin());
-                                intent.putExtra("description", item.getDescription());
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                if (item.getIsopen().equalsIgnoreCase("1")){
+                                    Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
+                                    intent.putExtra("shopName",item.getName());
+                                    intent.putExtra("shopAvatar",item.getImage()+"");
+                                    intent.putExtra("shopAddress",item.getAddress());
+                                    intent.putExtra("ratings", item.getRating());
+                                    intent.putExtra("res_id", item.getId()+"");
+                                    intent.putExtra("dTime", item.getDeliveryTime());
+                                    intent.putExtra("discount", item.getDiscount());
+                                    intent.putExtra("discountMin", item.getDiscountMin());
+                                    intent.putExtra("description", item.getDescription());
+                                    intent.putExtra("phoneOne", item.getPhone());
+                                    intent.putExtra("phoneTwo", item.getMobile());
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                }
+                                else {
+                                    StyleableToast.makeText(ShopHomeActivity.this, "This Restaurant not taking any order!", Toast.LENGTH_LONG, R.style.mytoast).show();
+
+                                }
 
                             }
                         });
@@ -601,18 +667,26 @@ public class ShopHomeActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(ProductFood item) {
 
-                                Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
-                                intent.putExtra("shopName",item.getName());
-                                intent.putExtra("shopAvatar",item.getImage()+"");
-                                intent.putExtra("shopAddress",item.getAddress());
-                                intent.putExtra("ratings", item.getRating());
-                                intent.putExtra("res_id", item.getId()+"");
-                                intent.putExtra("dTime", item.getDeliveryTime());
-                                intent.putExtra("discount", item.getDiscount());
-                                intent.putExtra("discountMin", item.getDiscountMin());
-                                intent.putExtra("description", item.getDescription());
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                if (item.getIsopen().equalsIgnoreCase("1")){
+                                    Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
+                                    intent.putExtra("shopName",item.getName());
+                                    intent.putExtra("shopAvatar",item.getImage()+"");
+                                    intent.putExtra("shopAddress",item.getAddress());
+                                    intent.putExtra("ratings", item.getRating());
+                                    intent.putExtra("res_id", item.getId()+"");
+                                    intent.putExtra("dTime", item.getDeliveryTime());
+                                    intent.putExtra("discount", item.getDiscount());
+                                    intent.putExtra("discountMin", item.getDiscountMin());
+                                    intent.putExtra("description", item.getDescription());
+                                    intent.putExtra("phoneOne", item.getPhone());
+                                    intent.putExtra("phoneTwo", item.getMobile());
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                                }
+                                else {
+                                    StyleableToast.makeText(ShopHomeActivity.this, "This Restaurant not taking any order!", Toast.LENGTH_LONG, R.style.mytoast).show();
+
+                                }
 
                             }
                         });
@@ -637,11 +711,7 @@ public class ShopHomeActivity extends AppCompatActivity {
     }
 
 
-    private void initView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        restaurantListRecyclerView.setLayoutManager(layoutManager);
-    }
+
 
     public static void showSnackBar(Activity activity, String snackTitle) {
         View Parentview=activity.findViewById(android.R.id.content);
@@ -652,36 +722,6 @@ public class ShopHomeActivity extends AppCompatActivity {
         txtv.setGravity(Gravity.CENTER_HORIZONTAL);
     }
 
-    private void loadCategoryData() {
-        progressDialog.setVisibility(View.VISIBLE);
-        Call<ResponseFoodHome> call = APIClient.getInstance().getCategoryData();
-        call.enqueue(new Callback<ResponseFoodHome>() {
-            @Override
-            public void onResponse(Call<ResponseFoodHome> call, Response<ResponseFoodHome> response) {
-
-                responseFoodHome = response.body();
-                if (responseFoodHome.getError_code()==0 &&responseFoodHome.getCuisines().size()>0)
-                    adapter = new MyRestaurantListAdapter(ShopHomeActivity.this, responseFoodHome.getCuisines(), new MyRestaurantListAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(Cuisines item) {
-//                       getRestaurantByCategory(item.getId()+"");
-                            titleTv.setText(item.getName());
-
-                        }
-                    });
-                restaurantListRecyclerView.setAdapter(adapter);
-                progressDialog.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onFailure(Call<ResponseFoodHome> call, Throwable t) {
-                progressDialog.setVisibility(View.GONE);
-            }
-        });
-
-
-
-    }
 
     private void getRestaurantByCategory(String id) {
 
@@ -699,18 +739,26 @@ public class ShopHomeActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(ProductFood item) {
 
-                            Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
-                            intent.putExtra("shopName",item.getName());
-                            intent.putExtra("shopAvatar",item.getImage()+"");
-                            intent.putExtra("shopAddress",item.getAddress());
-                            intent.putExtra("ratings", item.getRating());
-                            intent.putExtra("res_id", item.getId()+"");
-                            intent.putExtra("dTime", item.getDeliveryTime());
-                            intent.putExtra("discount", item.getDiscount());
-                            intent.putExtra("discountMin", item.getDiscountMin());
-                            intent.putExtra("description", item.getDescription());
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                            if (item.getIsopen().equalsIgnoreCase("1")){
+                                Intent intent = new Intent(ShopHomeActivity.this, ShopDetailActivity.class);
+                                intent.putExtra("shopName",item.getName());
+                                intent.putExtra("shopAvatar",item.getImage()+"");
+                                intent.putExtra("shopAddress",item.getAddress());
+                                intent.putExtra("ratings", item.getRating());
+                                intent.putExtra("res_id", item.getId()+"");
+                                intent.putExtra("dTime", item.getDeliveryTime());
+                                intent.putExtra("discount", item.getDiscount());
+                                intent.putExtra("discountMin", item.getDiscountMin());
+                                intent.putExtra("description", item.getDescription());
+                                intent.putExtra("phoneOne", item.getPhone());
+                                intent.putExtra("phoneTwo", item.getMobile());
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                            }
+                            else {
+                                StyleableToast.makeText(ShopHomeActivity.this, "This Restaurant not taking any order!", Toast.LENGTH_LONG, R.style.mytoast).show();
+
+                            }
 
                         }
                     });

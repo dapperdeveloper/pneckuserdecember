@@ -24,8 +24,11 @@ import com.callpneck.activity.SideMenuScreens.SettingScreen;
 import com.callpneck.activity.SideMenuScreens.UserFeedbackScreen;
 import com.callpneck.activity.SideMenuScreens.WalletScreen;
 import com.callpneck.activity.SideMenuScreens.WebPageScreen;
+import com.callpneck.activity.TrackOrder.TrackOrderActivity;
 import com.callpneck.activity.Vendor.DisplayCompleteVendor;
 import com.callpneck.activity.Vendor.VendorMainPage;
+import com.callpneck.activity.deliveryboy.DeliveryBoyListActivity;
+import com.callpneck.activity.deliveryboy.TrackOrderDeliveryActivity;
 import com.callpneck.activity.registrationSecond.LoginScreenMain;
 import com.callpneck.taxi.TaxiMainActivity;
 
@@ -39,6 +42,12 @@ public class LaunchActivityClass {
         activity.startActivity(intent);
     }
 
+    public static void LaunchTrackingDeliveryScreen(Activity activity) {
+        Intent intent=new Intent(activity, TrackOrderDeliveryActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+    }
     public static void LaunchOTPActivity(Activity activity, Bundle bundle) {
         Intent intent=new Intent(activity, VerifyOtpActivity.class);
         intent.putExtras(bundle);
@@ -50,6 +59,12 @@ public class LaunchActivityClass {
         activity.startActivityForResult(intent,LAUNCH_ADDRESS_SET_SCREEN);
     }
 
+    public static void LaunchDeliveryBoyListActivity(Activity activity, Bundle bundle) {
+        Intent intent=new Intent(activity, DeliveryBoyListActivity.class);
+        intent.putExtras(bundle);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+    }
     public static void LaunchLoginScreen(Activity activity) {
     //    Intent intent=new Intent(activity, LoginActivity.class);
         Intent intent=new Intent(activity, LoginScreenMain.class);
