@@ -67,7 +67,6 @@ public class ShopHomeActivity extends AppCompatActivity {
 
     TextView titleTv, filterTv, addressTv;
     String title;
-
     private EditText searchView;
     RecyclerView shopRv;
     List<FoodShop> shopList;
