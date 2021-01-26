@@ -4,19 +4,23 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -27,18 +31,25 @@ import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
 import com.callpneck.activity.Database.MainData;
 import com.callpneck.activity.Database.RoomDB;
+import com.callpneck.activity.registrationSecond.Adapter.AdapterAutoSliderExample;
 import com.callpneck.activity.registrationSecond.Adapter.MyRestaurantListAdapter;
 import com.callpneck.activity.registrationSecond.Adapter.MyShopAdapter;
 import com.callpneck.activity.registrationSecond.Model.FoodShop;
+import com.callpneck.activity.registrationSecond.Model.bannerData.BannerDataResponse;
+import com.callpneck.activity.registrationSecond.Model.bannerData.Datum;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.Cuisines;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductFood;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductResponse;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ResponseFoodHome;
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
+import com.callpneck.model.ModelSliderMain;
 import com.callpneck.utils.Constants;
 import com.google.android.material.snackbar.Snackbar;
 import com.muddzdev.styleabletoast.StyleableToast;
+import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
+import com.smarteist.autoimageslider.SliderAnimations;
+import com.smarteist.autoimageslider.SliderView;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -63,7 +74,6 @@ public class ShopHomeActivity extends AppCompatActivity {
     List<ProductFood> productFoods;
     MyShopAdapter shopAdapter;
 
-    ResponseFoodHome responseFoodHome;
 
 
     private AVLoadingIndicatorView  progressDialog;
@@ -76,6 +86,14 @@ public class ShopHomeActivity extends AppCompatActivity {
 
     String latitude, longitude;
     SwipeRefreshLayout swipeLayout;
+
+    AdapterAutoSliderExample adapter;
+    List<ModelSliderMain> categoryList;
+    //sliderLayout
+    private SliderView sliderView;
+
+    List<Datum> bannerList;
+    CardView bannerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +116,11 @@ public class ShopHomeActivity extends AppCompatActivity {
         shopList = new ArrayList<>();
         productFoods = new ArrayList<>();
 
+        sliderView = findViewById(R.id.sliderLayout);
+        bannerLayout = findViewById(R.id.bannerLayout);
+        categoryList = new ArrayList<>();
+
+
 
         sessionManager = new SessionManager(this);
         latitude = sessionManager.getUserLatitude();
@@ -105,9 +128,16 @@ public class ShopHomeActivity extends AppCompatActivity {
 
         addressTv.setText(sessionManager.getUserScreenAddress());
         if (AppController.isConnected(ShopHomeActivity.this)){
-            if (validation())
+            if (validation()){
                 loadShopData();
+                loadCategoryData();
+            }
+
+            sliderView.setScrollTimeInSec(4); //set scroll delay in seconds :
+            sliderView.startAutoCycle();
+
             search();
+
         }
 
 
@@ -125,8 +155,12 @@ public class ShopHomeActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 if (AppController.isConnected(ShopHomeActivity.this)){
-                    if (validation())
+
+                    if (validation()){
+                        loadCategoryData();
                         loadShopData();
+                    }
+
                 }
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -225,14 +259,56 @@ public class ShopHomeActivity extends AppCompatActivity {
         });
     }
 
+    private void loadCategoryData() {
+        bannerList = new ArrayList<>();
+        Call<BannerDataResponse> call = APIClient.getInstance().getBanner(latitude, longitude);
+        Log.e("BannerData", latitude+"\n"+longitude);
+        call.enqueue(new Callback<BannerDataResponse>() {
+            @Override
+            public void onResponse(Call<BannerDataResponse> call, Response<BannerDataResponse> response) {
+
+                if(response.isSuccessful()){
+                    try {
+                        BannerDataResponse responseFoodHome = response.body();
+                        Log.e("BannerData", response.body().getData()+"");
+                        if (responseFoodHome!=null){
+                            if (responseFoodHome.getErrorCode()==0 && responseFoodHome.getData().size() > 0){
+                                bannerLayout.setVisibility(View.VISIBLE);
+                                bannerList.clear();
+                                bannerList = responseFoodHome.getData();
+                                adapter= new AdapterAutoSliderExample(ShopHomeActivity.this,bannerList);
+                                sliderView.setSliderAdapter(adapter);
+                            }
+                        }
+
+                    }catch (Exception e){
+                        bannerLayout.setVisibility(View.GONE);
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<BannerDataResponse> call, Throwable t) {
+                Log.e("BannerData", t.getMessage()+"");
+                bannerLayout.setVisibility(View.GONE);
+
+            }
+        });
+
+
+
+    }
     private boolean validation(){
         boolean valid = true;
         if(TextUtils.isEmpty(latitude)){
-            showSnackBar(ShopHomeActivity.this, "Location not set yet!");
+            StyleableToast.makeText(ShopHomeActivity.this, "Location not set yet!", Toast.LENGTH_LONG, R.style.mytoast).show();
             valid = false;
         }
         else if(TextUtils.isEmpty(longitude)){
-           showSnackBar(ShopHomeActivity.this, "Location not set yet!");
+
+            StyleableToast.makeText(ShopHomeActivity.this, "Location not set yet!", Toast.LENGTH_LONG, R.style.mytoast).show();
             valid = false;
         }
 
@@ -269,7 +345,8 @@ public class ShopHomeActivity extends AppCompatActivity {
 
                 else {
                     cuisinesLayout.setVisibility(View.VISIBLE);
-                   showSnackBar(ShopHomeActivity.this,"No Result Found...!");
+                    StyleableToast.makeText(ShopHomeActivity.this, "No Result Found...!", Toast.LENGTH_LONG, R.style.mytoast).show();
+
                 }
             }
         });
@@ -349,6 +426,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                     productFoods= body.getProductFoodList();
 
                     if (body.getError_code()==0 && productFoods.size() > 0)
+
                         shopAdapter = new MyShopAdapter(ShopHomeActivity.this,productFoods, new MyShopAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(ProductFood item) {
@@ -713,14 +791,6 @@ public class ShopHomeActivity extends AppCompatActivity {
 
 
 
-    public static void showSnackBar(Activity activity, String snackTitle) {
-        View Parentview=activity.findViewById(android.R.id.content);
-        Snackbar snackbar = Snackbar.make(Parentview, snackTitle, Snackbar.LENGTH_SHORT);
-        snackbar.show();
-        View view = snackbar.getView();
-        TextView txtv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
-        txtv.setGravity(Gravity.CENTER_HORIZONTAL);
-    }
 
 
     private void getRestaurantByCategory(String id) {

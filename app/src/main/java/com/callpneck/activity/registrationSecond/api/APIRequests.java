@@ -4,6 +4,7 @@ package com.callpneck.activity.registrationSecond.api;
 import com.callpneck.activity.TrackOrder.Model.TrackOrderModel;
 import com.callpneck.activity.deliveryboy.model.DriverList;
 import com.callpneck.activity.deliveryboy.model.OrderSubmit;
+import com.callpneck.activity.deliveryboy.model.TrackMyOrder;
 import com.callpneck.activity.registrationSecond.Model.BookingResponse.BookingResponse;
 import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
@@ -12,6 +13,7 @@ import com.callpneck.activity.registrationSecond.Model.VenderDetailModel.VendorD
 import com.callpneck.activity.registrationSecond.Model.addContact.AddEmegencyContact;
 import com.callpneck.activity.registrationSecond.Model.addContact.DeleteContact;
 import com.callpneck.activity.registrationSecond.Model.addressResponse.AddAddressResponse;
+import com.callpneck.activity.registrationSecond.Model.bannerData.BannerDataResponse;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ProductResponse.ProductResponse;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ResponseFoodHome;
 import com.callpneck.activity.registrationSecond.Model.foodDashboard.ResponseOrderSubmit.ResponseOrderSubmit;
@@ -49,11 +51,20 @@ public interface APIRequests {
     @GET("vendorHome")
     Call<MainDashboard> getDashData();
 
+    @FormUrlEncoded
+    @POST("UserOrderStatusShow")
+    Call<TrackMyOrder> userOrderStatusShow(@Field("order_id") String order_id);
+
 
 
     @FormUrlEncoded
     @POST("getproducts")
     Call<ProductResponse> getProductData(@Field("latitude") String latitude, @Field("longitude") String longitude);
+
+    @FormUrlEncoded
+    @POST("ResBanner")
+    Call<BannerDataResponse> getBanner(@Field("latitude") String latitude, @Field("longitude") String longitude);
+
 
     @FormUrlEncoded
     @POST("getopenproductsbycosthightolow")

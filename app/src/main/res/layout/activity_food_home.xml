@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorPrimary"
     tools:context=".activity.registrationSecond.Activity.ShopHomeActivity">
 
         <RelativeLayout
             android:id="@+id/toolbarRl"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -149,61 +149,97 @@
 
         </RelativeLayout>
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_below="@+id/toolbarRl"
+        >
 
-
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+          >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="@color/white"
-                android:layout_below="@+id/toolbarRl"
                 >
-
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/swipeLayout"
+                <androidx.cardview.widget.CardView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-
+                    android:layout_height="200dp"
+                    android:id="@+id/bannerLayout"
+                    android:layout_margin="16dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="16dp"
+                    xmlns:tools="http://schemas.android.com/tools"
                     >
-                    <RelativeLayout
+
+
+                    <com.smarteist.autoimageslider.SliderView
+                        android:id="@+id/sliderLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:weightSum="2"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/titleTv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Title"
-                            android:textAllCaps="true"
-                            android:layout_toLeftOf="@+id/filterTv"
-                            android:textSize="18sp"
-                            android:textColor="@color/black"
-                            android:layout_margin="10dp"/>
-                        <TextView
-                            android:id="@+id/filterTv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/filter"
-                            android:layout_alignParentEnd="true"
-                            android:textAllCaps="true"
-                            android:textSize="18sp"
-                            android:textColor="@color/colorPrimary"
-                            android:layout_margin="10dp"/>
+                        app:sliderAnimationDuration="600"
+                        app:sliderAutoCycleDirection="back_and_forth"
+                        app:sliderAutoCycleEnabled="true"
+                        app:sliderIndicatorAnimationDuration="600"
+                        app:sliderIndicatorGravity="center_horizontal|bottom"
+                        app:sliderIndicatorMargin="15dp"
+                        app:sliderIndicatorOrientation="horizontal"
+                        app:sliderIndicatorPadding="3dp"
+                        app:sliderIndicatorRadius="2dp"
+                        app:sliderIndicatorSelectedColor="#5A5A5A"
+                        app:sliderIndicatorUnselectedColor="#FFF"
+                        app:sliderScrollTimeInSec="1"
+                        app:sliderIndicatorEnabled="false"
+                        app:sliderIndicatorMarginBottom="40dp"
+                        app:sliderStartAutoCycle="true" />
 
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/shopRv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            tools:listitem="@layout/layout_restaurant_name_item"
-                            android:layout_below="@+id/filterTv"
-                            android:layout_marginBottom="24dp"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            />
+                </androidx.cardview.widget.CardView>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/titleTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Title"
+                        android:textAllCaps="true"
+                        android:layout_toLeftOf="@+id/filterTv"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_margin="10dp"/>
+                    <TextView
+                        android:id="@+id/filterTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/filter"
+                        android:layout_alignParentEnd="true"
+                        android:textAllCaps="true"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_margin="10dp"/>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/shopRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:listitem="@layout/layout_restaurant_name_item"
+                        android:layout_below="@+id/filterTv"
+                        android:layout_marginBottom="24dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        />
 
 
 
@@ -211,21 +247,22 @@
 
 
 
-                        <com.wang.avi.AVLoadingIndicatorView
-                            android:id="@+id/progress_bar"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:visibility="visible"
-                            android:layout_centerInParent="true"
-                            app:indicatorName="BallScaleMultipleIndicator"
-                            app:indicatorColor="@color/colorPrimaryDark" />
-                    </RelativeLayout>
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
-
+                    <com.wang.avi.AVLoadingIndicatorView
+                        android:id="@+id/progress_bar"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:visibility="visible"
+                        android:layout_centerInParent="true"
+                        app:indicatorName="BallScaleMultipleIndicator"
+                        app:indicatorColor="@color/colorPrimaryDark" />
+                </RelativeLayout>
 
             </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
 
 

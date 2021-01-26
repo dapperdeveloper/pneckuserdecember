@@ -47,6 +47,15 @@ public class SessionManager {
 
     public static final String RECEIVER_ID="receiver_id";
 
+    public static String isopen = "isopen";
+
+    public void setBooleanData(String key, Boolean val) {
+        editor.putBoolean(key, val);
+        editor.commit();
+    }
+    public boolean getBooleanData(String key) {
+        return pref.getBoolean(key, false);
+    }
 
     public void saveUserMobileAndPass(String mobile,String pass){
         editor.putString(USER_PASS_WORD,pass);

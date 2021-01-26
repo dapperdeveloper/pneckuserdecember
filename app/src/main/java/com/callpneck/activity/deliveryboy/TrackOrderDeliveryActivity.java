@@ -2,31 +2,63 @@ package com.callpneck.activity.deliveryboy;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.callpneck.R;
+import com.callpneck.SessionManager;
+import com.callpneck.activity.AppController;
+import com.callpneck.activity.deliveryboy.model.TrackMyOrder;
 import com.callpneck.activity.registrationSecond.MainScreenActivity;
 import com.callpneck.activity.registrationSecond.MainSplashScreen;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import at.markushi.ui.CircleButton;
+import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.callpneck.SessionManager.isopen;
 
 public class TrackOrderDeliveryActivity extends AppCompatActivity implements View.OnClickListener {
 
     View view_order_placed,view_order_confirmed,view_order_processed,view_order_pickup,con_divider,ready_divider,placed_divider;
     ImageView img_orderconfirmed,orderprocessed,orderpickup;
-    TextView textorderpickup,text_confirmed,textorderprocessed;
+    TextView textorderpickup,text_confirmed,textorderprocessed, orderNumberTv, orderTimeTv, nameTv;
 
     LinearLayout toolbar_layout;
+
+    SessionManager sessionManager;
+    CardView callBtnLayout;
+    CircleImageView deliveryBoyAvatar;
+    CircleButton call_Btn;
+    private ScheduledExecutorService executor;
+    ConstraintLayout statusLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +82,152 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
         img_orderconfirmed=findViewById(R.id.img_orderconfirmed);
         orderprocessed=findViewById(R.id.orderprocessed);
         orderpickup=findViewById(R.id.orderpickup);
-        Intent intent=getIntent();
-        String orderStatus="1";
 
+        orderNumberTv = findViewById(R.id.textView4);
+        orderTimeTv = findViewById(R.id.textView3);
+        callBtnLayout = findViewById(R.id.callBtn);
+        nameTv = findViewById(R.id.nameTv);
+        deliveryBoyAvatar = findViewById(R.id.deliveryBoyAvatar);
+        call_Btn = findViewById(R.id.call_Btn);
+
+        statusLayout = findViewById(R.id.statusLayout);
+        Intent intent=getIntent();
+
+
+        sessionManager = new SessionManager(this);
+        executor =
+                Executors.newSingleThreadScheduledExecutor();
         toolbar_layout.setOnClickListener(this);
-        getOrderStatus(orderStatus);
+
+        if (AppController.isConnected (TrackOrderDeliveryActivity.this)){
+            Runnable periodicTask = new Runnable() {
+                public void run() {
+                    Log.d("TahseenKhan","calling");
+                    // Invoke method(s) to do the work
+                    getTrackOrderData(sessionManager.getCurrentDeliveryOrderId());
+                }
+            };
+            executor.scheduleAtFixedRate(periodicTask, 0, 4, TimeUnit.SECONDS);
+
+
+
+        }
+
+
+        call_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (phoneNumber!= null)
+                    callToNumber(phoneNumber);
+            }
+        });
+
 
     }
+    private void callToNumber(String number) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", number, null));
+        startActivity(intent);
+
+    }
+    String orderStatus="";
+    String phoneNumber="";
+    BottomSheetDialog bottomSheet;
+    private void getTrackOrderData(String oid) {
+        Call<TrackMyOrder> call = APIClient.getInstance().userOrderStatusShow(oid);
+        call.enqueue(new Callback<TrackMyOrder>() {
+            @Override
+            public void onResponse(Call<TrackMyOrder> call, Response<TrackMyOrder> response) {
+                if(response.isSuccessful()){
+                    try {
+                        TrackMyOrder trackMyOrder= response.body();
+                        if(trackMyOrder!= null && trackMyOrder.getSuccess()){
+
+                            orderNumberTv.setText(trackMyOrder.getData().getOrderNumber()+"");
+                            orderTimeTv.setText(trackMyOrder.getData().getTime()+"");
+
+                            phoneNumber = trackMyOrder.getData().getEmpMobile();
+                            nameTv.setText(trackMyOrder.getData().getEmpName()+"");
+                            try {
+                                Glide.with(TrackOrderDeliveryActivity.this).load(trackMyOrder.getData().getEmpProfile()).into(deliveryBoyAvatar);
+
+                            }catch (Exception e){
+                                e.toString();
+                            }
+
+                            String totalAmount = trackMyOrder.getData().getTotal_amount()+"";
+
+                            if (totalAmount!=null){
+                               /*
+                                if (!sessionManager.getBooleanData(SessionManager.isopen)){
+                                    final View view = getLayoutInflater().inflate(R.layout.layout_delivery_fee_amount_dialog, null);
+                                    bottomSheet = new BottomSheetDialog(TrackOrderDeliveryActivity.this);
+                                    bottomSheet.setContentView(view);
+                                    bottomSheet.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    bottomSheet.setCancelable(false);
+
+                                    TextView orderAmount = (TextView)view.findViewById( R.id.order_amount );
+                                    AppCompatButton paymentDoneBtn = (AppCompatButton)view.findViewById( R.id.payment_done_btn );
+                                    orderAmount.setText("Pay : ₹"+totalAmount);
+                                    paymentDoneBtn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            bottomSheet.dismiss();
+                                            sessionManager.setBooleanData(isopen, true);
+                                        }
+                                    });
+                                    bottomSheet.show();
+                                }
+
+
+                                */
+                            }
+
+                            String status = trackMyOrder.getData().getStatus()+"";
+                            if (status.equalsIgnoreCase("Pending")){
+                                statusLayout.setVisibility(View.GONE);
+                                callBtnLayout.setVisibility(View.GONE);
+                            }
+                            if (status.equalsIgnoreCase("Received")){
+                                orderStatus = "0";
+                                getOrderStatus(orderStatus);
+                                statusLayout.setVisibility(View.VISIBLE);
+                                callBtnLayout.setVisibility(View.GONE);
+                            }
+                            else if (status.equalsIgnoreCase("Preparing")){
+                                orderStatus="1";
+                                getOrderStatus(orderStatus);
+                                callBtnLayout.setVisibility(View.VISIBLE);
+                            }
+                            else if (status.equalsIgnoreCase("On The Way")){
+                                orderStatus = "2";
+                                getOrderStatus(orderStatus);
+                                callBtnLayout.setVisibility(View.VISIBLE);
+
+                            }
+                            else if (status.equalsIgnoreCase("Delivered")){
+                                orderStatus= "3";
+                                getOrderStatus(orderStatus);
+                                callBtnLayout.setVisibility(View.VISIBLE);
+                                sessionManager.clearDeliveryOrderSession();
+                                sessionManager.setBooleanData(isopen, false);
+                            }
+
+
+                        }
+                    }catch (Exception e){
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TrackMyOrder> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void getOrderStatus(String orderStatus) {
         if (orderStatus.equals("0")){
             float alfa= (float) 0.5;
@@ -146,8 +317,6 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
         orderpickup.setAlpha(alfa);
     }
 
-
-    boolean doubleBackToExitPressedOnce = false;
     AlertDialog.Builder builder;
     @Override
     public void onBackPressed() {

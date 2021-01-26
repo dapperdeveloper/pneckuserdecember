@@ -466,6 +466,7 @@
     <string name="products">Products</string>
     <string name="full_name">Full Name</string>
     <string name="wait">Kindly wait...</string>
+    <string name="including_delivery_charges">Including Delivery Charges.</string>
     //end taxi string
 
 </resources>
