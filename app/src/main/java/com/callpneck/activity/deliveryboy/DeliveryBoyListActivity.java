@@ -83,6 +83,7 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
             dropAddress = getIntent().getStringExtra("dropAddress");
             UserLatitude = getIntent().getStringExtra("UserLatitude");
             UserLongitude = getIntent().getStringExtra("UserLongitude");
+
         }
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -159,8 +160,6 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
                                     else {
                                         deliveryFee = "100";
                                     }
-
-                                    Toast.makeText(DeliveryBoyListActivity.this, ""+deliveryFee, Toast.LENGTH_SHORT).show();
                                     showMAkeOrderDialog(item.getId()+"", item.getFirstName()+" "+item.getLastName()+"", item.getEmpAddress()+"", deliveryFee);
                                 }
                             });
@@ -249,8 +248,8 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
     File file;
     private void orderWithImage(BottomSheetDialog bottomSheetDialog, String emp_id, String emp_name, String emp_address, String deliveryFee) {
         RequestBody orde_list  = RequestBody.create(MediaType.parse("multipart/form-data"), orderEt.getText().toString()+"");
-        RequestBody start_address  = RequestBody.create(MediaType.parse("multipart/form-data"), "Mohalla Rampura");
-        RequestBody drop_address  = RequestBody.create(MediaType.parse("multipart/form-data"), "JabtaGunj");
+        RequestBody start_address  = RequestBody.create(MediaType.parse("multipart/form-data"), pickupAddress);
+        RequestBody drop_address  = RequestBody.create(MediaType.parse("multipart/form-data"), dropAddress);
         RequestBody user_id  = RequestBody.create(MediaType.parse("multipart/form-data"), sessionManager.getUserid()+"");
         RequestBody user_name  = RequestBody.create(MediaType.parse("multipart/form-data"), sessionManager.getUserName()+"");
         RequestBody user_mobile  = RequestBody.create(MediaType.parse("multipart/form-data"), sessionManager.getUserMobile()+"");

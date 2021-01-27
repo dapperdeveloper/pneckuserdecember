@@ -107,6 +107,8 @@ public class DeliveryMainActivity extends AppCompatActivity implements
     private String UserLongitude = "";
     private String dropAddress="";
 
+    private String dropLatitude = "";
+    private String dropLongitude = "";
     Map<String, MapPointerModel> allMarkersMap = new HashMap<>();
     private ArrayList<MapPointerModel> mapsList=new ArrayList<>();
     private SessionManager sessionManager;
@@ -401,8 +403,11 @@ public class DeliveryMainActivity extends AppCompatActivity implements
         else if (requestCode==LAUNCH_ADDRESS_SET_SCREEN){
             if (data!=null&&data.hasExtra("user_complete_address")){
                 String address =data.getStringExtra("user_complete_address");
-                UserLatitude=data.getStringExtra("user_latitude");
-                UserLongitude=data.getStringExtra("user_longitude");
+
+                dropLatitude=data.getStringExtra("user_latitude");
+                dropLongitude=data.getStringExtra("user_longitude");
+
+
                 dropAddress = address;
                 destinationAddress.setText(dropAddress);
             }

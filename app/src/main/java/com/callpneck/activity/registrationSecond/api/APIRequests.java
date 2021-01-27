@@ -110,6 +110,9 @@ public interface APIRequests {
     Call<OrderUser> getUserOrderList(@Field("user_id") String user_id);
 
     @FormUrlEncoded
+    @POST("order_list_user_shop")
+    Call<OrderUser> getUserOrderShop(@Field("user_id") String user_id);
+    @FormUrlEncoded
     @POST("get_user_address")
     Call<ResponseAddress> getHomeAddress(@Field("user_id") String user_id);
 

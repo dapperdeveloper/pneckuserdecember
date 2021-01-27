@@ -68,6 +68,8 @@ public class BookingFragment extends Fragment {
     CustPrograssbar custPrograssbar;
     String user_id;
     SwipeRefreshLayout swipeLayout, swipeLayoutSecond;
+
+
     public BookingFragment() {
         // Required empty public constructor
     }

@@ -42,6 +42,7 @@ import com.callpneck.activity.registrationSecond.Adapter.MyCustomPagerAdapter;
 import com.callpneck.activity.registrationSecond.Model.Category;
 import com.callpneck.activity.registrationSecond.fragment.BookingFragment;
 import com.callpneck.activity.registrationSecond.fragment.HomeFragment;
+import com.callpneck.activity.registrationSecond.fragment.OrderFragment;
 import com.callpneck.activity.registrationSecond.fragment.ProfileFragment;
 import com.callpneck.activity.registrationSecond.fragment.WalletFragment;
 import com.callpneck.model.dashboard.MainDashboard;
@@ -102,7 +103,7 @@ public class MainScreenActivity extends AppCompatActivity {
                         if (item.getItemId() == R.id.action_home)
                             fragment = new HomeFragment();
                         else if (item.getItemId() == R.id.action_booking)
-                            fragment = new BookingFragment();
+                            fragment = new OrderFragment();
                         else if (item.getItemId() == R.id.action_wallet)
                             fragment = new WalletFragment();
                         else if (item.getItemId() == R.id.action_profile)

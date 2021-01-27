@@ -23,7 +23,10 @@ public class Data {
     private String status;
     @SerializedName("total_amount")
     @Expose
-    private String total_amount;
+    private String totalAmount;
+    @SerializedName("delivery_charge")
+    @Expose
+    private String deliveryCharge;
     @SerializedName("time")
     @Expose
     private String time;
@@ -68,6 +71,22 @@ public class Data {
         this.status = status;
     }
 
+    public String getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(String totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public String getDeliveryCharge() {
+        return deliveryCharge;
+    }
+
+    public void setDeliveryCharge(String deliveryCharge) {
+        this.deliveryCharge = deliveryCharge;
+    }
+
     public String getTime() {
         return time;
     }
@@ -76,11 +95,4 @@ public class Data {
         this.time = time;
     }
 
-    public String getTotal_amount() {
-        return total_amount;
-    }
-
-    public void setTotal_amount(String total_amount) {
-        this.total_amount = total_amount;
-    }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -30,8 +31,10 @@ import com.callpneck.activity.deliveryboy.model.TrackMyOrder;
 import com.callpneck.activity.registrationSecond.MainScreenActivity;
 import com.callpneck.activity.registrationSecond.MainSplashScreen;
 import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.taxi.TaxiMainActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -99,6 +102,8 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
                 Executors.newSingleThreadScheduledExecutor();
         toolbar_layout.setOnClickListener(this);
 
+        StyleableToast.makeText(TrackOrderDeliveryActivity.this, sessionManager.getCurrentDeliveryOrderId(), Toast.LENGTH_LONG, R.style.mytoast).show();
+
         if (AppController.isConnected (TrackOrderDeliveryActivity.this)){
             Runnable periodicTask = new Runnable() {
                 public void run() {
@@ -108,7 +113,6 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
                 }
             };
             executor.scheduleAtFixedRate(periodicTask, 0, 4, TimeUnit.SECONDS);
-
 
 
         }
@@ -127,7 +131,6 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
     private void callToNumber(String number) {
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", number, null));
         startActivity(intent);
-
     }
     String orderStatus="";
     String phoneNumber="";
@@ -154,11 +157,12 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
                                 e.toString();
                             }
 
-                            String totalAmount = trackMyOrder.getData().getTotal_amount()+"";
+                            String totalAmount = trackMyOrder.getData().getTotalAmount()+"";
+                            double deliverFee = Double.parseDouble(trackMyOrder.getData().getDeliveryCharge());
 
-                            if (totalAmount!=null){
-                               /*
+                            if (!totalAmount.equalsIgnoreCase("0")){
                                 if (!sessionManager.getBooleanData(SessionManager.isopen)){
+                                    sessionManager.setBooleanData(isopen, true);
                                     final View view = getLayoutInflater().inflate(R.layout.layout_delivery_fee_amount_dialog, null);
                                     bottomSheet = new BottomSheetDialog(TrackOrderDeliveryActivity.this);
                                     bottomSheet.setContentView(view);
@@ -167,19 +171,20 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
 
                                     TextView orderAmount = (TextView)view.findViewById( R.id.order_amount );
                                     AppCompatButton paymentDoneBtn = (AppCompatButton)view.findViewById( R.id.payment_done_btn );
-                                    orderAmount.setText("Pay : ₹"+totalAmount);
+
+                                    double amount = Double.parseDouble(totalAmount);
+
+                                    double total = deliverFee+amount;
+                                    orderAmount.setText("Pay : ₹"+total);
                                     paymentDoneBtn.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
                                             bottomSheet.dismiss();
-                                            sessionManager.setBooleanData(isopen, true);
                                         }
                                     });
                                     bottomSheet.show();
                                 }
 
-
-                                */
                             }
 
                             String status = trackMyOrder.getData().getStatus()+"";
@@ -196,21 +201,35 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
                             else if (status.equalsIgnoreCase("Preparing")){
                                 orderStatus="1";
                                 getOrderStatus(orderStatus);
+                                statusLayout.setVisibility(View.VISIBLE);
                                 callBtnLayout.setVisibility(View.VISIBLE);
                             }
                             else if (status.equalsIgnoreCase("On The Way")){
                                 orderStatus = "2";
                                 getOrderStatus(orderStatus);
+                                statusLayout.setVisibility(View.VISIBLE);
                                 callBtnLayout.setVisibility(View.VISIBLE);
 
                             }
                             else if (status.equalsIgnoreCase("Delivered")){
                                 orderStatus= "3";
                                 getOrderStatus(orderStatus);
+                                statusLayout.setVisibility(View.VISIBLE);
                                 callBtnLayout.setVisibility(View.VISIBLE);
-                                sessionManager.clearDeliveryOrderSession();
-                                sessionManager.setBooleanData(isopen, false);
+                                StyleableToast.makeText(TrackOrderDeliveryActivity.this, "Thank You For Ordering!", Toast.LENGTH_LONG, R.style.mytoast).show();
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        sessionManager.clearDeliveryOrderSession();
+                                        sessionManager.setBooleanData(isopen, false);
+                                        Intent intent=new Intent(TrackOrderDeliveryActivity.this, MainScreenActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                    }
+                                }, 2000);
                             }
+
 
 
                         }

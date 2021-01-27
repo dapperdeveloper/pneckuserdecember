@@ -85,6 +85,7 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static com.callpneck.SessionManager.isopen;
 import static com.callpneck.activity.registrationSecond.helper.Constant.LAUNCH_ADDRESS_SET_SCREEN;
 import static com.callpneck.activity.registrationSecond.helper.Constant.REQUEST_CHECK_SETTINGS;
 
@@ -164,6 +165,8 @@ HomeFragment extends Fragment {
         if (AppController.isConnected(getActivity()))
         getData();
 
+//        sessionManager.clearDeliveryOrderSession();
+//        sessionManager.setBooleanData(isopen, false);
 
 /*
         sessionManager.setSesBookingId(null);
