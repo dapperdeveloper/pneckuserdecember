@@ -27,6 +27,9 @@ public class ProductList {
     @SerializedName("price")
     @Expose
     private String price;
+    @SerializedName("offer_price")
+    @Expose
+    private String offer_price;
     @SerializedName("discount")
     @Expose
     private String discount;
@@ -139,4 +142,11 @@ public class ProductList {
         this.updatedAt = updatedAt;
     }
 
+    public String getOffer_price() {
+        return offer_price;
+    }
+
+    public void setOffer_price(String offer_price) {
+        this.offer_price = offer_price;
+    }
 }

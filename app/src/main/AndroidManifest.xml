@@ -27,7 +27,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.deliveryboy.TrackOrderDeliveryActivity"></activity>
+        <activity android:name=".activity.registrationSecond.fragmentOrder.CustomerOrderDetailActivity"></activity>
+        <activity android:name=".activity.deliveryboy.TrackOrderDeliveryActivity" />
         <activity android:name=".activity.deliveryboy.DeliveryBoyListActivity" />
         <activity android:name=".activity.SecurityActivity" />
         <activity android:name=".activity.registrationSecond.Activity.CancelOrderScreenActivity" />
@@ -88,9 +89,6 @@
             android:name=".activity.registrationSecond.MainScreenActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-
-
         <activity
             android:name=".activity.Vendor.VendorSearchActivity"
             android:label="@string/title_activity_vendor_search"

@@ -142,7 +142,7 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
             public void run() {
                 callFetchApi(String.valueOf(bookingId));
             }
-        }, 10000);
+        }, 20000);
     }
 
     private void userCancelBooking(String userid, String userToken, String sesBookingId, String cancel_by_user) {

@@ -28,6 +28,7 @@ import com.callpneck.activity.registrationSecond.Model.sendMoneyResponse.CheckUs
 import com.callpneck.activity.registrationSecond.Model.showContact.ShowEmegencyContact;
 import com.callpneck.activity.registrationSecond.Model.userList.PneckUserList;
 import com.callpneck.activity.registrationSecond.Model.walletOrder.WalletOrder;
+import com.callpneck.activity.registrationSecond.fragmentOrder.ModelDelivery.CustumerOrderDetail;
 import com.callpneck.activity.registrationSecond.fragmentOrder.ModelDelivery.DeliveryOrder;
 import com.callpneck.model.dashboard.MainDashboard;
 import com.squareup.okhttp.ResponseBody;
@@ -358,6 +359,11 @@ public interface APIRequests {
                                        @Part MultipartBody.Part order_image
 
 
+    );
+
+    @FormUrlEncoded
+    @POST("DeliveryBoyOrderList")
+    Call<CustumerOrderDetail> deliveryBoyOrderList(@Field("order_id") String order_id
     );
 
 }

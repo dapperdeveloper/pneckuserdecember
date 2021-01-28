@@ -88,7 +88,14 @@ public class DeliveryList extends Fragment {
                             else {
                                 orderUserList.clear();
                                 orderUserList = orderUser.getData();
-                                Toast.makeText(getContext(), ""+orderUserList, Toast.LENGTH_SHORT).show();
+                                orderRv.setAdapter(new DeliveryUserAdapter(getActivity(), orderUserList, new DeliveryUserAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(DeliveryData item) {
+                                        Intent intent = new Intent(getContext(), CustomerOrderDetailActivity.class);
+                                        intent.putExtra("oid",item.getId()+"");
+                                        startActivity(intent);
+                                    }
+                                }));
                                 noOrderTv.setVisibility(View.GONE);
                             }
 

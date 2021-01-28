@@ -102,7 +102,6 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
                 Executors.newSingleThreadScheduledExecutor();
         toolbar_layout.setOnClickListener(this);
 
-        StyleableToast.makeText(TrackOrderDeliveryActivity.this, sessionManager.getCurrentDeliveryOrderId(), Toast.LENGTH_LONG, R.style.mytoast).show();
 
         if (AppController.isConnected (TrackOrderDeliveryActivity.this)){
             Runnable periodicTask = new Runnable() {

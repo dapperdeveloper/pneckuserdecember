@@ -45,6 +45,7 @@ public class DeliveryData {
     @SerializedName("emp_name")
     @Expose
     private String empName;
+
     @SerializedName("emp_address")
     @Expose
     private String empAddress;
@@ -63,6 +64,10 @@ public class DeliveryData {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+
+    @SerializedName("emp_image")
+    @Expose
+    private String empImage;
 
     public Integer getId() {
         return id;
@@ -216,4 +221,11 @@ public class DeliveryData {
         this.updatedAt = updatedAt;
     }
 
+    public String getEmpImage() {
+        return empImage;
+    }
+
+    public void setEmpImage(String empImage) {
+        this.empImage = empImage;
+    }
 }

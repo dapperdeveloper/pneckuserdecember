@@ -278,7 +278,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
 
 
         if (sessionManager.getSesBookingId()!=null){
-            startActivity(new Intent(TaxiMainActivity.this, JobRealTimeTrackingScreen.class));
+            startActivity(new Intent(TaxiMainActivity.this, RealTimeActivity.class));
         }
 
 
@@ -431,121 +431,9 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.pneck_retro_style));
         getDeviceLocation();
-      /*TS  try {
-            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.uber_maps_style));
-            if (!success)
-                Log.e("DAPPER_ERROR","Style parsing error");
-        }catch (Resources.NotFoundException e){
-            Log.e("DAPPER_ERROR", e.getMessage());
-        }*/
 
     }
 
-
-    //get Employee to show on map
-
-    private void getEmployeeList() {
-
-        // progressBar.setVisibility(View.VISIBLE);
-        String ServerURL = getResources().getString(R.string.pneck_app_url) + "/userNearByEmployeesList";
-        HashMap<String, String> dataParams = new HashMap<String, String>();
-
-        dataParams.put("user_id", sessionManager.getUserid());
-        dataParams.put("ep_token", sessionManager.getUserToken());
-        dataParams.put("curr_lat", "" + UserLatitude);
-        dataParams.put("curr_long", "" + UserLongitude);
-        dataParams.put("curr_address", currentFullAddress);
-
-        Log.d("Seraj", "this is url " + ServerURL);
-
-        Log.d("Seraj", "this is we sending " + dataParams.toString());
-
-        CustomRequest dataParamsJsonReq = new CustomRequest(JsonUTF8Request.Method.POST,
-                ServerURL,
-                dataParams,
-                SuccessListeners(),
-                RegistrationError());
-        dataParamsJsonReq.setRetryPolicy(new DefaultRetryPolicy(
-                (int) TimeUnit.SECONDS.toMillis(Const.VOLLEY_RETRY_TIMEOUT),
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Volley.newRequestQueue(TaxiMainActivity.this).add(dataParamsJsonReq);
-    }
-
-
-    private Response.Listener<JSONObject> SuccessListeners() {
-        return new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    Log.d("Seraj", "this is complete response " + response);
-                    JSONObject innerResponse = response.getJSONObject("response");
-                    //mMap.clear();
-                    mapsList.clear();
-                    allMarkersMap.clear();
-
-                    if (innerResponse.getBoolean("success")) {
-                        Log.d("Seraj", "This is complete response ");
-
-                        JSONObject dataObj = innerResponse.getJSONObject("data");
-                        JSONArray array = dataObj.getJSONArray("employees");
-
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject object = array.getJSONObject(i);
-
-                            LatLng point = new LatLng(Double.parseDouble(object.getString("curr_latitude")), Double.parseDouble(object.getString("curr_longitude")));
-                            mMap.addMarker(new MarkerOptions().position(point).icon(PublicMethod.convertToBitmapFromVector(TaxiMainActivity.this,
-                                    R.drawable.car_photo)).title(object.getString("first_name")
-                                    + " " + object.getString("distance_km") + " away").snippet(object.getString("curr_loc_address")));
-
-
-                            MapPointerModel mapModel = new MapPointerModel(object.getString("first_name"),
-                                    object.getString("is_online"), object.getString("duty_status"),
-                                    object.getString("distance_km"), object.getString("curr_latitude"),
-                                    object.getString("curr_longitude"), object.getString("curr_loc_address"));
-                            mapsList.add(mapModel);
-
-                            allMarkersMap.put(object.getString("curr_latitude") + "," + object.getString("curr_longitude"), mapModel);
-                        }
-
-                        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                            @Override
-                            public boolean onMarkerClick(Marker marker) {
-
-                                try {
-                                    if (marker != null) {
-                                        Log.d("Seraj", "this is marker clicked");
-
-                                        Toast.makeText(TaxiMainActivity.this, "this is marker clicked", Toast.LENGTH_SHORT).show();
-
-                                    }
-                                } catch (Exception e) {
-
-                                }
-                                return true;
-                            }
-                        });
-                    }
-
-                } catch (Exception e) {
-                    Log.v("emoloyee_list", "inside catch block  " + e.getMessage());
-                    // e.printStackTrace();
-                }
-            }
-        };
-    }
-
-    private Response.ErrorListener RegistrationError() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // error.printStackTrace();
-                Log.v("emoloyee_list", "inside error block  " + error.getMessage());
-            }
-        };
-    }
-
-    //end get employee
 
     private void getCompleteAddressString(double latitude, double longitude) {
 
@@ -726,109 +614,6 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
 
     }
 
-
-
-
-    public void sendLocation(String userId, String currentLati, String currentLongi,
-                             String epToken, String desinationAddress,String c) {
-        if (sessionManager.setUserLocation(""+currentLati,""+currentLongi)){
-            Map<String, String> params = new HashMap<>();
-            params.put("user_id", userId);
-            params.put("user_lat", currentLati);
-            params.put("user_long", currentLongi);
-            params.put("ep_token", epToken);
-            params.put("user_currentAddress", desinationAddress);
-
-            params.put("destination_latti", destination_latti);
-            params.put("destination_longi", destination_longi);
-            params.put("cash_offered", c);
-
-            //sessionManager.setUserLocation(""+currentLati,""+currentLongi);
-            Log.d("Seraj","this is data we sending "+params);
-
-            Log.d("Seraj","this is data we latitude "+sessionManager.getUserLatitude()+
-                    " longitude "+sessionManager.getUserLongitude());
-            //progressDialog = new SpotsDialog(TaxiMainActivity.this, R.style.Custom);
-            //progressDialog.show();
-            //Utility.showProgressDialog(this);
-            RequestQueue requestQueue = Volley.newRequestQueue(TaxiMainActivity.this);
-            JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, AllUrl.sendLocation, new JSONObject(params), new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    Log.d("Seraj", jsonObject.toString());
-                    try {
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("response");
-                        Log.d("Seraj", jsonObject1.toString());
-                        //Log.d("pass",pass);
-                        String msg = jsonObject1.getString("message");
-                        Log.d("Seraj", msg);
-                        boolean resp_status = true;
-                        Log.d("Seraj","this is success result "+jsonObject1.getBoolean("success"));
-                        if (jsonObject1.getBoolean("success")) {
-
-                            JSONObject jsonObject2 = jsonObject1.getJSONObject("data");
-                            String msge = jsonObject2.getString("msg");
-                            String ses_booking_id = jsonObject2.getString("ses_booking_id");
-                            your_booking_number = jsonObject2.getString("your_booking_number");
-                            your_booking_status = jsonObject2.getString("your_booking_status");
-                            your_booking_status_msg = jsonObject2.getString("your_booking_status_msg");
-                            bookingId=ses_booking_id;
-                            Log.d("Serajbid",bookingId);
-                            Toast.makeText(TaxiMainActivity.this, msg, Toast.LENGTH_LONG).show();
-                            cashOfferLinearLayout.setVisibility(View.INVISIBLE);
-                            Log.d("Seraj"," calling getAvailableAtOfferDriverList()");
-                            Intent intent=new Intent(TaxiMainActivity.this, DriverListActivity.class);
-                            intent.putExtra("bookin_id",bookingId);
-                            intent.putExtra("cash",c+"");
-                            startActivity(intent);
-
-                        } else {
-                            Toast.makeText(TaxiMainActivity.this, msg, Toast.LENGTH_LONG).show();
-                            Log.d("Seraj"," error");
-                        }
-                    } catch (Exception e) {
-                        Log.e("Seraj","this is error  "+e.getMessage());
-                        // e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d("Seraj", "Error: " + error.getMessage());
-
-                    VolleyLog.d("Error", "Error: " + error.getMessage());
-                    Toast.makeText(TaxiMainActivity.this,"System error "+error.getMessage(),Toast.LENGTH_LONG).show();
-                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                        Log.d("Seraj", "TimeoutError");
-
-                    } else if (error instanceof AuthFailureError) {
-                        Log.d("Seraj", "AuthFailureError");
-
-                    } else if (error instanceof ServerError) {
-                        Log.d("Seraj", "ServerError "+error.getMessage());
-
-                    } else if (error instanceof NetworkError) {
-                        Log.d("Seraj", "NetworkError");
-
-                    } else if (error instanceof ParseError) {
-                        Log.d("Seraj", "ParseError");
-
-                    }
-                }
-            }) {
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<>();
-                    headers.put("Content-Type", "application/json");
-                    return headers;
-                }
-            };
-            requestQueue.add(stringRequest);
-        }else {
-            Toast.makeText(TaxiMainActivity.this,"Location not set",Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     public void onBackPressed() {

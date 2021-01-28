@@ -196,7 +196,7 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
 
         CircleImageView productIv;
         ImageView  addToCartBtn;
-        TextView productTitleTv,productPriceTv, descriptionTv, ingredientsTv;
+        TextView productTitleTv,productPriceTv, descriptionTv, ingredientsTv, offerLabelTv;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -207,6 +207,7 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
             addToCartBtn = itemView.findViewById(R.id.addToCartBtn);
             descriptionTv = itemView.findViewById(R.id.descriptionTv);
             ingredientsTv = itemView.findViewById(R.id.ingredientsTv);
+            offerLabelTv = itemView.findViewById(R.id.offerLabelTv);
 
         }
 
