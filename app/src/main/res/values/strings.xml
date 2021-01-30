@@ -532,5 +532,6 @@
     <string name="full_name">Full Name</string>
     <string name="wait">Kindly wait...</string>
     <string name="including_delivery_charges">Including Delivery Charges.</string>
+    <string name="category">Category</string>
 
 </resources>

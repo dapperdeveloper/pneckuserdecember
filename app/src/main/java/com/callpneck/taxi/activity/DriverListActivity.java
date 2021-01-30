@@ -62,6 +62,7 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
     private boolean isAccepted=false;
     ImageView loadingIV;
 
+    String desLat="", desLong="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +73,13 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
         progressBar=findViewById(R.id.pb);
 
         Intent intent=getIntent();
-        bookingId=intent.getStringExtra("bookin_id");
-        cash=intent.getStringExtra("cash");
+        if (intent!=null){
+            bookingId=intent.getStringExtra("bookin_id");
+            cash=intent.getStringExtra("cash");
+            desLat=intent.getStringExtra("desLat");
+            desLong=intent.getStringExtra("desLong");
+        }
+
 
 
 
@@ -198,9 +204,6 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
     }
 
 
-    private void doPeriodicWork() {
-        callFetchApi(String.valueOf(bookingId));
-    }
     private void cashUp(RecyclerView driverRecycler, int bookind_id) {
         String new_cash=String.valueOf(Integer.valueOf(cash)+10);
         Log.d("Seraj","cash up value "+new_cash);
@@ -361,7 +364,7 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
     public void updatelocation(int value)
     {
         com.callpneck.taxi.map.GoogleMap.requesttimedistance(
-                DriverListActivity.this,Double.parseDouble(tempagreeDriverDataList.get(value).getEmployeeLat()),Double.parseDouble(tempagreeDriverDataList.get(value).getEmployeeLong()),30.7411,76.7790,value
+                DriverListActivity.this,Double.parseDouble(tempagreeDriverDataList.get(value).getEmployeeLat()),Double.parseDouble(tempagreeDriverDataList.get(value).getEmployeeLong()), Double.parseDouble(desLat), Double.parseDouble(desLong),value
         );
     }
 

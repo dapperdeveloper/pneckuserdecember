@@ -27,7 +27,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.registrationSecond.fragmentOrder.CustomerOrderDetailActivity"></activity>
+        <activity android:name=".activity.registrationSecond.Activity.MoreActivity"></activity>
+        <activity android:name=".activity.registrationSecond.Activity.ReviewActivity" />
+        <activity android:name=".activity.registrationSecond.Activity.SettingActivity" />
+        <activity android:name=".activity.registrationSecond.fragmentOrder.CustomerOrderDetailActivity" />
         <activity android:name=".activity.deliveryboy.TrackOrderDeliveryActivity" />
         <activity android:name=".activity.deliveryboy.DeliveryBoyListActivity" />
         <activity android:name=".activity.SecurityActivity" />

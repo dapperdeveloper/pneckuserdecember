@@ -12,17 +12,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.callpneck.R;
 import com.callpneck.activity.registrationSecond.Model.ModelReview;
+import com.callpneck.activity.registrationSecond.Model.ReviewModel.ReviewData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdapterReview extends RecyclerView.Adapter<AdapterReview.HolderReview>{
 
     private Context context;
-    private ArrayList<ModelReview> reviewArrayList;
+    private List<ReviewData> reviewArrayList;
 
-    public AdapterReview(Context context, ArrayList<ModelReview> reviewArrayList) {
+    public AdapterReview(Context context, List<ReviewData> reviewArrayList) {
         this.context = context;
         this.reviewArrayList = reviewArrayList;
     }
@@ -38,7 +41,16 @@ public class AdapterReview extends RecyclerView.Adapter<AdapterReview.HolderRevi
     @Override
     public void onBindViewHolder(@NonNull HolderReview holder, int position) {
 
+        ReviewData item = reviewArrayList.get(position);
         holder.nameTv.setText(reviewArrayList.get(position).getName());
+        holder.dateTv.setText(item.getDates()+"");
+        holder.ratingBar.setRating(Float.parseFloat(item.getRating()));
+        holder.reviewTv.setText(item.getMsg()+"");
+        try{
+            Glide.with(context).load(item.getProfileImage()).into(holder.profileIv);
+        }catch (Exception e){
+
+        }
 
     }
 

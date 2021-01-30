@@ -41,6 +41,7 @@ import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
 import com.callpneck.activity.deliveryboy.DeliveryBoyListActivity;
 import com.callpneck.activity.deliveryboy.DeliveryMainActivity;
+import com.callpneck.activity.registrationSecond.Activity.MoreActivity;
 import com.callpneck.activity.registrationSecond.Activity.MyWalletActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderDetailActivity;
@@ -586,6 +587,11 @@ HomeFragment extends Fragment {
                 }
                 else if(item.getCate_type().equalsIgnoreCase("wallet")){
                     Intent intent = new Intent(getContext(), MyWalletActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+                }
+                else if(item.getCate_type().equalsIgnoreCase("more")){
+                    Intent intent = new Intent(getContext(), MoreActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                 }

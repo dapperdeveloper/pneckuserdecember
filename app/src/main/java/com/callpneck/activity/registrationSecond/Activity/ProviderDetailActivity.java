@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,9 +24,12 @@ import com.callpneck.activity.registrationSecond.Adapter.AdapterReview;
 import com.callpneck.activity.registrationSecond.Adapter.ImageAdapter;
 import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.ModelReview;
+import com.callpneck.activity.registrationSecond.Model.ReviewModel.ReviewData;
+import com.callpneck.activity.registrationSecond.Model.ReviewModel.ShopReviewRes;
 import com.callpneck.activity.registrationSecond.Model.VenderDetailModel.VendorDetail;
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +45,13 @@ public class ProviderDetailActivity extends AppCompatActivity {
     RelativeLayout serviceRl, galleryRl, reviewRl;
     RecyclerView   reviewRv;
 
-    ArrayList<ModelReview> reviewList;
+    List<ReviewData> reviewList;
     AdapterReview adapterReview;
     String shopId, shopName, shopAvatar, shopRating, shopAddress, category;
     CircleImageView shopAvatarIv;
     TextView descriptionTv,professionTv, addressTv,working_daysTv, openTimeTv, closingTimeTv, websiteTv,
             shopNameTv;
+    RatingBar rating_bar;
     private void findViews() {
         tabServiceTv = findViewById(R.id.tabServiceTv);
         tabGalleryTv = findViewById(R.id.tabGalleryTv);
@@ -66,6 +71,7 @@ public class ProviderDetailActivity extends AppCompatActivity {
         websiteTv = findViewById(R.id.websiteTv);
         shopNameTv = findViewById(R.id.shopNameTv);
 
+        rating_bar = findViewById(R.id.rating_bar);
         grid_view = findViewById(R.id.grid_view);
     }
     @Override
@@ -85,6 +91,12 @@ public class ProviderDetailActivity extends AppCompatActivity {
             category = getIntent().getStringExtra("categoryName");
             shopNameTv.setText(shopName);
             getVendorDetails(shopId);
+            try {
+                rating_bar.setRating(Float.parseFloat(shopRating));
+            }catch (Exception e){
+
+            }
+
             Glide.with(this).load(shopAvatar).placeholder(R.drawable.ic_user_replace).into(shopAvatarIv);
             final ObjectAnimator animation = ObjectAnimator.ofFloat(shopAvatarIv, "rotationY", 0.0f, 360f);  // HERE 360 IS THE ANGLE OF ROTATE, YOU CAN USE 90, 180 IN PLACE OF IT,  ACCORDING TO YOURS REQUIREMENT
             animation.setDuration(1000); // HERE 500 IS THE DURATION OF THE ANIMATION, YOU CAN INCREASE OR DECREASE ACCORDING TO YOURS REQUIREMENT
@@ -125,7 +137,7 @@ public class ProviderDetailActivity extends AppCompatActivity {
         });
 
 
-        loadReviews();
+        loadReviews(shopId);
 
 
     }
@@ -206,12 +218,42 @@ public class ProviderDetailActivity extends AppCompatActivity {
 
 
 
-    private void loadReviews() {
-        reviewList.add(new ModelReview("Jimmy"));
-        reviewList.add(new ModelReview("Chu Chu"));
-        reviewList.add(new ModelReview("Ramesh"));
-        adapterReview = new AdapterReview(this, reviewList);
-        reviewRv.setAdapter(adapterReview);
+    private void loadReviews(String shopId) {
+            reviewList = new ArrayList<>();
+            Call<ShopReviewRes> call = APIClient.getInstance().reviewData(shopId);
+            call.enqueue(new Callback<ShopReviewRes>() {
+                @Override
+                public void onResponse(Call<ShopReviewRes> call, Response<ShopReviewRes> response) {
+                    if (response.isSuccessful()){
+                        try {
+                            ShopReviewRes res = response.body();
+                            if (res != null&& res.getSuccess()){
+                                if (res.getData().size()>0){
+                                    reviewList.clear();
+                                    reviewList = res.getData();
+                                    adapterReview = new AdapterReview(ProviderDetailActivity.this, reviewList);
+                                    reviewRv.setAdapter(adapterReview);
+
+                                }else {
+                                    StyleableToast.makeText(ProviderDetailActivity.this, "No review available at this moment...!", Toast.LENGTH_LONG, R.style.mytoast).show();
+
+                                }
+
+                            }
+
+
+                        }catch (Exception e){
+                            e.toString();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ShopReviewRes> call, Throwable t) {
+
+                }
+            });
+
     }
 
     private void showServicesUI() {

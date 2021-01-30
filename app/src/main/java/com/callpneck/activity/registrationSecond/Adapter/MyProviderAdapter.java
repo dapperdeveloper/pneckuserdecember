@@ -102,12 +102,7 @@ public class MyProviderAdapter extends RecyclerView.Adapter<MyProviderAdapter.My
            shopNameTv.setText(item.getShopTitle()+"");
             shopDistanceTv.setText(item.getDistanceKm()+" Km Away");
 
-            try {
-                float rating = item.getRating();
-                ratingBar.setRating(rating);
-            }catch (Exception e){
-                ratingBar.setRating(0f);
-            }
+            ratingBar.setRating(Float.parseFloat(item.getRating()));
 
 
             Glide.with(context).load(item.getImage()).placeholder(R.drawable.ic_user_replace).into(shopIV);

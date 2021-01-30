@@ -9,6 +9,7 @@ import com.callpneck.activity.registrationSecond.Model.BookingResponse.BookingRe
 import com.callpneck.activity.registrationSecond.Model.GalleryResponse.ServiceGalleyResponse;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.Model.ProductModel;
+import com.callpneck.activity.registrationSecond.Model.ReviewModel.ShopReviewRes;
 import com.callpneck.activity.registrationSecond.Model.VenderDetailModel.VendorDetail;
 import com.callpneck.activity.registrationSecond.Model.addContact.AddEmegencyContact;
 import com.callpneck.activity.registrationSecond.Model.addContact.DeleteContact;
@@ -52,6 +53,8 @@ public interface APIRequests {
 
     @GET("vendorHome")
     Call<MainDashboard> getDashData();
+    @GET("vendorHomefull")
+    Call<MainDashboard> getDashFullData();
 
     @FormUrlEncoded
     @POST("UserOrderStatusShow")
@@ -364,6 +367,11 @@ public interface APIRequests {
     @FormUrlEncoded
     @POST("DeliveryBoyOrderList")
     Call<CustumerOrderDetail> deliveryBoyOrderList(@Field("order_id") String order_id
+    );
+
+    @FormUrlEncoded
+    @POST("ShopRating")
+    Call<ShopReviewRes> reviewData(@Field("res_id") String order_id
     );
 
 }

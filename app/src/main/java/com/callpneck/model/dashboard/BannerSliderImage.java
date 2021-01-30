@@ -16,6 +16,10 @@ public class BannerSliderImage {
     @Expose
     private String image;
 
+    @SerializedName("type")
+    @Expose
+    private String cate_type;
+
     public Integer getId() {
         return id;
     }
@@ -40,4 +44,11 @@ public class BannerSliderImage {
         this.image = image;
     }
 
+    public String getCate_type() {
+        return cate_type;
+    }
+
+    public void setCate_type(String cate_type) {
+        this.cate_type = cate_type;
+    }
 }

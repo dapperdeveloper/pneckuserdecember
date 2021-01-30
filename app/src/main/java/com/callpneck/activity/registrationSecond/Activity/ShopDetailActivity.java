@@ -44,7 +44,7 @@ public class ShopDetailActivity extends AppCompatActivity {
 
     TextView restaurantNameTv, descriptionTv, phoneOneTv, phoneTwoTv;
     String shopName, shopAddress, shopAvatar,  rating, dTime, discount, discountMin;
-    ImageButton cartBtn;
+    ImageButton cartBtn, reviewBtn;
     //for test only
     NotificationBadge notification_badge;
     RecyclerView restaurantMenuRv;
@@ -74,7 +74,7 @@ public class ShopDetailActivity extends AppCompatActivity {
         cartCountTv = findViewById(R.id.cartCountTv);
         cartBtn = findViewById(R.id.cartBtn);
         nodata = findViewById(R.id.nodata);
-
+        reviewBtn = findViewById(R.id.reviewBtn);
         restaurantNameTv = findViewById(R.id.restaurantNameTv);
         descriptionTv = findViewById(R.id.descriptionTv);
         phoneOneTv = findViewById(R.id.phoneOneTv);
@@ -186,9 +186,23 @@ public class ShopDetailActivity extends AppCompatActivity {
                     callToNumber(phoneTwo);
             }
         });
+        reviewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openReviewActivty();
+            }
+        });
 
         notification_badge.setText(String.valueOf(10));
     }
+
+    private void openReviewActivty() {
+        Intent intent = new Intent(ShopDetailActivity.this, ReviewActivity.class);
+        intent.putExtra("id",res_id);
+        startActivity(intent);
+        overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+    }
+
     private void callToNumber(String number) {
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", number, null));
         startActivity(intent);

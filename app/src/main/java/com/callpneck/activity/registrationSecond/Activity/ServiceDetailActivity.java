@@ -37,8 +37,11 @@ import com.callpneck.activity.registrationSecond.Model.ModelReview;
 import com.callpneck.activity.registrationSecond.Model.ModelServices;
 import com.callpneck.activity.registrationSecond.Model.Product;
 import com.callpneck.activity.registrationSecond.Model.ProductModel;
+import com.callpneck.activity.registrationSecond.Model.ReviewModel.ReviewData;
+import com.callpneck.activity.registrationSecond.Model.ReviewModel.ShopReviewRes;
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +62,7 @@ public class ServiceDetailActivity extends AppCompatActivity {
     CircleImageView shopAvatarIv;
     List<ModelServices> servicesList;
     MyServicesAdapter adapter;
-    ArrayList<ModelReview> reviewList;
+    List<ReviewData> reviewList;
     AdapterReview adapterReview;
     RatingBar rating_bar;
     String shopId, shopName,shopAddress, shopAvatar, shopRating, shopDescription, category;
@@ -101,12 +104,8 @@ public class ServiceDetailActivity extends AppCompatActivity {
             shopRating = getIntent().getStringExtra("shopRating");
             shopAddress = getIntent().getStringExtra("shopAddress");
             category = getIntent().getStringExtra("categoryName");
-            try {
-                float rating = Float.parseFloat(shopRating);
-                rating_bar.setRating(rating);
-            }catch (Exception e){
-                rating_bar.setRating(1.5f);
-            }
+
+            rating_bar.setRating(Float.parseFloat(shopRating));
 
             Glide.with(this).load(shopAvatar).placeholder(R.drawable.ic_user_replace).into(shopAvatarIv);
             shopNameTv.setText(shopName);
@@ -148,12 +147,46 @@ public class ServiceDetailActivity extends AppCompatActivity {
 
         clickListeners();
         getProduct();
-        loadReviews();
+        loadReviews(shopId);
 
 
 
     }
 
+    private void loadReviews(String shopId) {
+        reviewList = new ArrayList<>();
+        Call<ShopReviewRes> call = APIClient.getInstance().reviewData(shopId);
+        call.enqueue(new Callback<ShopReviewRes>() {
+            @Override
+            public void onResponse(Call<ShopReviewRes> call, Response<ShopReviewRes> response) {
+                if (response.isSuccessful()){
+                    try {
+                        ShopReviewRes res = response.body();
+                        if (res != null&& res.getSuccess()){
+                            if (res.getData().size()>0){
+                                reviewList.clear();
+                                reviewList = res.getData();
+                                adapterReview = new AdapterReview(ServiceDetailActivity.this, reviewList);
+                                reviewRv.setAdapter(adapterReview);
+
+                            }else {
+                                StyleableToast.makeText(ServiceDetailActivity.this, "No review available at this moment...!", Toast.LENGTH_LONG, R.style.mytoast).show();
+
+                            }
+                        }
+                    }catch (Exception e){
+                        e.toString();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShopReviewRes> call, Throwable t) {
+
+            }
+        });
+
+    }
     private void clickListeners() {
         tabServiceTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -291,13 +324,6 @@ public class ServiceDetailActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
-    private void loadReviews() {
-        reviewList.add(new ModelReview("Jimmy"));
-        reviewList.add(new ModelReview("Chu Chu"));
-        reviewList.add(new ModelReview("Ramesh"));
-        adapterReview = new AdapterReview(this, reviewList);
-        reviewRv.setAdapter(adapterReview);
-    }
 
     private void showServicesUI() {
         serviceRl.setVisibility(View.VISIBLE);

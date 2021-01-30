@@ -1,6 +1,7 @@
 package com.callpneck.activity.registrationSecond.Adapter;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -55,13 +57,29 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
         ProductList item = itemList.get(position);
         holder.productTitleTv.setText(item.getName());
         Glide.with(context).load(item.getImage()).into(holder.productIv);
-        holder.productPriceTv.setText(new StringBuilder("Rs.").append(item.getPrice()));
+
+        //holder.productPriceTv.setText(new StringBuilder("Rs.").append(item.getPrice()));
 
         holder.descriptionTv.setText(item.getDescription());
         holder.ingredientsTv.setText("Ingredients: "+item.getIngredients());
         //Initialize database
         database = RoomDB.getInstance(context);
 
+        holder.discountPriceTv.setText("Rs."+item.getOffer_price());
+        holder.productPriceTv.setText("Rs."+item.getPrice());
+        String discountAvailable = item.getDiscount_available();
+        if (discountAvailable.equals("true")){
+            holder.discountPriceTv.setVisibility(View.VISIBLE);
+            holder.discountNoteTv.setVisibility(View.VISIBLE);
+            holder.offerLabelTv.setText(item.getDiscount()+"%");
+            holder.productPriceTv.setPaintFlags(holder.productPriceTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        }else {
+            holder.discountPriceTv.setVisibility(View.GONE);
+            holder.discountNoteTv.setVisibility(View.GONE);
+            holder.offerLabelTv.setText(item.getDiscount()+"%");
+            holder.productPriceTv.setPaintFlags(0);
+        }
 
         holder.addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +128,7 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
 
 
         final String price;
-        price = modelProduct.getPrice();
+        price = modelProduct.getOffer_price();
 
         cost = Double.parseDouble(price.replaceAll("Rs.",""));
         finalCost = Double.parseDouble(price.replaceAll("Rs.",""));
@@ -129,7 +147,7 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
         discountNoteTv.setText(""+discount);
 
         quantityTv.setText(""+quantity);
-        originalPriceTv.setText("Rs."+modelProduct.getPrice());
+        originalPriceTv.setText("Rs."+modelProduct.getOffer_price());
         finalPriceTv.setText("Rs."+finalCost);
         bottomSheetDialog.show();
 
@@ -196,8 +214,9 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
 
         CircleImageView productIv;
         ImageView  addToCartBtn;
-        TextView productTitleTv,productPriceTv, descriptionTv, ingredientsTv, offerLabelTv;
+        TextView productTitleTv,productPriceTv, descriptionTv, ingredientsTv, offerLabelTv, discountPriceTv;
 
+        ConstraintLayout discountNoteTv;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -208,7 +227,8 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
             descriptionTv = itemView.findViewById(R.id.descriptionTv);
             ingredientsTv = itemView.findViewById(R.id.ingredientsTv);
             offerLabelTv = itemView.findViewById(R.id.offerLabelTv);
-
+            discountNoteTv = itemView.findViewById(R.id.discountNoteTv);
+            discountPriceTv = itemView.findViewById(R.id.discountPriceTv);
         }
 
 

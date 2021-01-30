@@ -21,7 +21,6 @@ public class SearchListModel {
     @Expose
     private String title;
 
-
     @SerializedName("code")
     @Expose
     private String code;
@@ -30,6 +29,9 @@ public class SearchListModel {
     @Expose
     private String body;
 
+    @SerializedName("cate_type")
+    @Expose
+    private String cate_type;
     @SerializedName("created_at")
     @Expose
     private String created_at;
@@ -38,6 +40,13 @@ public class SearchListModel {
     @Expose
     private String updated_at;
 
+    public String getCate_type() {
+        return cate_type;
+    }
+
+    public void setCate_type(String cate_type) {
+        this.cate_type = cate_type;
+    }
 
     public int getId() {
         return id;

@@ -47,7 +47,7 @@ public class Vendor {
     private String days;
     @SerializedName("rating")
     @Expose
-    private Integer rating;
+    private String rating;
     @SerializedName("distance_km")
     @Expose
     private String distanceKm;
@@ -165,11 +165,11 @@ public class Vendor {
         this.days = days;
     }
 
-    public Integer getRating() {
+    public String getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(String rating) {
         this.rating = rating;
     }
 

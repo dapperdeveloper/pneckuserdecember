@@ -235,6 +235,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
     ServiceAdapter adapter;
     int bk_id;
 
+    String cash;
     Boolean isEditable = true;
     private static final LatLngBounds BOUNDS_INDIA = new LatLngBounds(new LatLng(-0, 0), new LatLng(0, 0));
     private PlaceAutoCompleteAdapter mAutoCompleteAdapter;
@@ -578,7 +579,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onClick(View view) {
 
-                String cash=cashOffered.getText().toString();
+                cash=cashOffered.getText().toString();
                 String discriptiontxt=discription.getText().toString();
                 int id = 0;
                 adapter.getCarTypeList();
@@ -871,7 +872,11 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                         cashOfferLinearLayout.setVisibility(View.INVISIBLE);
                         Log.d("TahseenKhan"," calling getAvailableAtOfferDriverList()");
                         Intent intent=new Intent(TaxiMainActivity.this, DriverListActivity.class);
+                        intent.putExtra("cash", cash+"");
                         intent.putExtra("bookin_id",bookingId);
+                        intent.putExtra("desLat",destination_latti+"");
+                        intent.putExtra("desLong",destination_longi+"");
+
                         startActivity(intent);
                     }else {
                         Toast.makeText(TaxiMainActivity.this, msg, Toast.LENGTH_LONG).show();

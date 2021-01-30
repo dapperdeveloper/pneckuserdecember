@@ -243,14 +243,7 @@
             app:reverseLayout="true"
             app:stackFromEnd="true"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="review"
-            android:layout_centerInParent="true"
-            android:textColor="@color/black"/>
+
     </RelativeLayout>
 
 </RelativeLayout>

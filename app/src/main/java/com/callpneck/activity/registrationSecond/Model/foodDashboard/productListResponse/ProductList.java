@@ -36,6 +36,9 @@ public class ProductList {
     @SerializedName("description")
     @Expose
     private String description;
+    @SerializedName("discount_available")
+    @Expose
+    private String discount_available;
     @SerializedName("ingredients")
     @Expose
     private String ingredients;
@@ -45,6 +48,14 @@ public class ProductList {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+
+    public String getDiscount_available() {
+        return discount_available;
+    }
+
+    public void setDiscount_available(String discount_available) {
+        this.discount_available = discount_available;
+    }
 
     public Integer getId() {
         return id;

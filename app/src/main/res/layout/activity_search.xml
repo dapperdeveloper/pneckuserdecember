@@ -7,33 +7,62 @@
     tools:context=".activity.registrationSecond.Activity.SearchActivity">
 
 
-    <SearchView
-        android:id="@+id/searchview"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:queryHint="@string/search_here"
-        android:iconifiedByDefault="false"
-        android:layout_alignParentTop="true" />
 
-    <View
-        android:id="@+id/divider"
+    <LinearLayout
+        android:id="@+id/lvl_actionsearch"
         android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:layout_below="@+id/searchview"
-        android:background="@drawable/drop_shadow" />
+        android:layout_height="?actionBarSize"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/denim_20"
+        android:background="@drawable/rounded_search"
+        android:gravity="center|right"
+        android:orientation="horizontal">
+
+
+        <EditText
+            android:id="@+id/ed_search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:gravity="left|center"
+            android:hint="Search.."
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:paddingLeft="8dp"
+            android:textColor="@color/colorGrey1"
+            android:textColorHint="@color/colorGrey1" />
+
+        <ImageView
+            android:id="@+id/img_search"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:padding="13dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_search"
+            tools:targetApi="lollipop" />
+    </LinearLayout>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/suggestionView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/divider"
+        android:layout_below="@+id/lvl_actionsearch"
         android:visibility="gone" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/divider">
+        android:layout_marginTop="@dimen/editpad5dp"
+        android:layout_below="@+id/lvl_actionsearch">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycleview"

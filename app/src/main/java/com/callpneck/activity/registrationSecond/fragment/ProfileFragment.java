@@ -41,6 +41,7 @@ import com.callpneck.Language.LanguageSettingActivity;
 import com.callpneck.activity.registrationSecond.Activity.MyBookingActivity;
 import com.callpneck.activity.registrationSecond.Activity.MyWalletActivity;
 import com.callpneck.activity.registrationSecond.Activity.NotificationsActivity;
+import com.callpneck.activity.registrationSecond.Activity.SettingActivity;
 import com.callpneck.activity.registrationSecond.Activity.TransferMoneyActivity;
 import com.callpneck.activity.registrationSecond.Activity.WorkMapActivity;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
@@ -62,7 +63,7 @@ public class ProfileFragment extends Fragment {
     RelativeLayout logoutLayout, myBookingRBtn, notificationsBtn,  inviteRBtn, emergencyContactBtn,  changeCurrencyBtn
             ,changeLanguageBtn,  myWalletBtn, addMoneyBtn, sendMoneyBtn,
             addHomeBtn, addWorkBtn, personalDetailBtn,
-            aboutUsBtn, privacyPolicyBtn, termNConditionBtn, feedbackBtn, contactUsBtn;
+            aboutUsBtn, privacyPolicyBtn, termNConditionBtn, feedbackBtn, contactUsBtn, settingBtn;
     LinearLayout inviteAndEarnBtn, topUpBtn, walletBtn, bookingBtn;
     View view;
     private SessionManager sessionManager;
@@ -140,6 +141,13 @@ public class ProfileFragment extends Fragment {
         });
     }
     private void clickListeners() {
+        settingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(getContext(), SettingActivity.class));
+            }
+        });
         addHomeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -476,6 +484,7 @@ public class ProfileFragment extends Fragment {
         emergencyContactBtn = view.findViewById(R.id.emergencyContactBtn);
         changeCurrencyBtn = view.findViewById(R.id.changeCurrencyBtn);
         changeLanguageBtn = view.findViewById(R.id.changeLanguageBtn);
+        settingBtn = view.findViewById(R.id.settingBtn);
         //
         //
         myWalletBtn = view.findViewById(R.id.myWalletBtn);

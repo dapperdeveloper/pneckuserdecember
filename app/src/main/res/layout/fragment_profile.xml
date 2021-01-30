@@ -307,6 +307,48 @@
 
 
                     <RelativeLayout
+                        android:id="@+id/settingBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/po"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
+                            android:padding="6dp"
+                            android:background="@drawable/shape_circle01"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/setting"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings"
+                            android:textColor="@color/black"
+                            android:layout_toRightOf="@+id/po"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/forward_arrow"/>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?android:attr/listDivider" />
+
+
+                    <RelativeLayout
                         android:id="@+id/notificationsBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
