@@ -78,7 +78,7 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_marginLeft="76dp"
-           android:singleLine="true"
+           android:maxLines="2"
            android:layout_marginTop="1dp"
            android:text="12.34 km away"
            android:textSize="16sp"

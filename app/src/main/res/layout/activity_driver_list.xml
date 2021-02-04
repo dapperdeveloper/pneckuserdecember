@@ -27,6 +27,7 @@
             android:progressDrawable="@drawable/custom_rounded_progress_bar"
             android:indeterminate="false"
             android:layout_height="6dp"
+            android:visibility="gone"
             android:layout_marginBottom="5dp"
             android:layout_marginRight="4dp"
             android:layout_marginLeft="4dp"

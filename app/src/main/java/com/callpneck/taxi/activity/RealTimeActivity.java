@@ -582,7 +582,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
                 Log.d("serajdraw","otp");
                 drawRoutes(source,destination);
                 mcarName.setText("On Ride");
-                mcarName.setTextColor(Color.GREEN);
+                mcarName.setTextColor(Color.BLACK);
                 userOtp.setText("You are on ride.");
                 userOtp.setTextColor(Color.GREEN);
                 mDriverName.setText(sessionManager.getDname());

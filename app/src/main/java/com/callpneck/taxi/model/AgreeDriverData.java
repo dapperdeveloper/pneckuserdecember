@@ -13,20 +13,11 @@ public class AgreeDriverData {
     private String description;
     private String status;
     private String empCashOffered;
-
-    public String getEmployeeDistanceToReach() {
-        return employeeDistanceToReach;
-    }
-
-    public void setEmployeeDistanceToReach(String employeeDistanceToReach) {
-        this.employeeDistanceToReach = employeeDistanceToReach;
-    }
-
     private String employeeDistanceToReach;
+    private String image;
+    private String rating;
 
-
-
-    public AgreeDriverData(String id, String bookibgId, String employeeId, String epToken, String employeeLat, String employeeLong, String employeeName, String employeePhone, String employeeTimeToReach, String description, String status, String empCashOffered,String employeeDistanceToReach) {
+    public AgreeDriverData(String id, String bookibgId, String employeeId, String epToken, String employeeLat, String employeeLong, String employeeName, String employeePhone, String employeeTimeToReach, String description, String status, String empCashOffered, String employeeDistanceToReach, String image, String rating) {
         this.id = id;
         this.bookibgId = bookibgId;
         this.employeeId = employeeId;
@@ -36,10 +27,28 @@ public class AgreeDriverData {
         this.employeeName = employeeName;
         this.employeePhone = employeePhone;
         this.employeeTimeToReach = employeeTimeToReach;
-        this.employeeDistanceToReach = employeeDistanceToReach;
         this.description = description;
         this.status = status;
         this.empCashOffered = empCashOffered;
+        this.employeeDistanceToReach = employeeDistanceToReach;
+        this.image = image;
+        this.rating = rating;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     public String getId() {
@@ -137,4 +146,13 @@ public class AgreeDriverData {
     public void setEmpCashOffered(String empCashOffered) {
         this.empCashOffered = empCashOffered;
     }
+
+    public String getEmployeeDistanceToReach() {
+        return employeeDistanceToReach;
+    }
+
+    public void setEmployeeDistanceToReach(String employeeDistanceToReach) {
+        this.employeeDistanceToReach = employeeDistanceToReach;
+    }
+
 }

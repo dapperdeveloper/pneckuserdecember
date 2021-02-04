@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.callpneck.Const;
 import com.callpneck.R;
 import com.callpneck.Requests.CustomRequest;
@@ -35,6 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyHolder> {
     Context context;
@@ -63,10 +67,11 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyHolder> 
         holder.cashOffer.setText("INR "+data.get(position).getEmpCashOffered());
         holder.driverName.setText(data.get(position).getEmployeeName());
         holder.arrivalTime.setText(data.get(position).getEmployeeTimeToReach());
-        holder.ratings.setText("Ratings("+rate+")");
+        holder.ratings.setRating(Float.parseFloat(data.get(position).getRating()));
         holder.distance.setText(data.get(position).getEmployeeDistanceToReach());
         bookingId=data.get(position).getBookibgId();
 
+        Glide.with(context).load(data.get(position).getImage()).into(holder.driver_image);
 
         holder.acceptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +118,6 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyHolder> 
                         Intent intent=new Intent(context, RealTimeActivity.class);
                         context.startActivity(intent);
 
-
                     }else {
                         Log.d("Seraj","change to fail status");
                     }
@@ -143,12 +147,14 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyHolder> 
     }
 
     class MyHolder extends RecyclerView.ViewHolder{
-        ImageView driverImg;
-        TextView carType,driverName,cashOffer,arrivalTime,ratings,distance;
+        CircleImageView driver_image;
+        TextView carType,driverName,cashOffer,arrivalTime,distance;
         Button declineBtn,acceptBtn;
 
+        RatingBar ratings;
         public MyHolder(@NonNull View itemView) {
             super(itemView);
+            driver_image = itemView.findViewById(R.id.driver_image);
             carType=itemView.findViewById(R.id.car_name);
             cashOffer=itemView.findViewById(R.id.cash_offer);
             ratings=itemView.findViewById(R.id.driver_rating);

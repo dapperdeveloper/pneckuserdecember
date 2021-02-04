@@ -90,13 +90,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <RatingBar
                 android:id="@+id/driver_rating"
+                style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:text="Rating"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                android:layout_marginStart="2dp"
+                android:isIndicator="true" />
 
             <TextView
                 android:id="@+id/away_from_distance"

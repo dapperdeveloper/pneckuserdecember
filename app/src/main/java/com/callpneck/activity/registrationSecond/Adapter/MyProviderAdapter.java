@@ -100,7 +100,7 @@ public class MyProviderAdapter extends RecyclerView.Adapter<MyProviderAdapter.My
             String sourceLatitude = sessionManager.getUserLatitude();
             String sourceLongitude = sessionManager.getUserLongitude();
            shopNameTv.setText(item.getShopTitle()+"");
-            shopDistanceTv.setText(item.getDistanceKm()+" Km Away");
+            shopDistanceTv.setText(item.getCurrLocAddress()+"");
 
             ratingBar.setRating(Float.parseFloat(item.getRating()));
 

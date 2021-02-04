@@ -112,11 +112,6 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
 
 
         mHandler = new Handler();
-        c=0;
-        startRepeatingTask();
-
-
-
 
         driverAdapter=new DriverAdapter(DriverListActivity.this,agreeDriverDataList);
         driverAdapter.notifyDataSetChanged();
@@ -287,27 +282,24 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
                     Log.d("Serajcpa", "this is complete response " + response);
                     JSONObject innerResponse=response.getJSONObject("response");
                     if (innerResponse.getBoolean("success")) {
+
                         Log.d("Serajad","responce success");
                         JSONArray jsonArray=innerResponse.getJSONArray("data");
 
 //                        int size=agreeDriverDataList.size();
 //                        agreeDriverDataList.clear();
+                        progressBar.setVisibility(View.VISIBLE);
                         loadingIV.setVisibility(View.GONE);
-
+                        c=0;
+                        startRepeatingTask();
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject object=jsonArray.getJSONObject(i);
                             Log.d("Serajemp",object.getString("employee_name"));
                             //agreeDriverDataList.add(new AgreeDriverData(""+object.getInt("id"),""+object.getInt("booking_id"),""+object.getInt("employee_id"),""+object.getString("ep_token"),""+object.getString("employee_lat"),""+object.getString("employee_lng"),""+object.getString("employee_name"),""+object.getString("employee_phone"),""+object.getString("employee_time_to_reach"),""+object.getString("description"),""+object.getString("status"),""+object.getString("employee_cash_offer"),""));
-                            tempagreeDriverDataList.add(new AgreeDriverData(""+object.getInt("id"),""+object.getInt("booking_id"),""+object.getInt("employee_id"),""+object.getString("ep_token"),""+object.getString("employee_lat"),""+object.getString("employee_lng"),""+object.getString("employee_name"),""+object.getString("employee_phone"),""+object.getString("employee_time_to_reach"),""+object.getString("description"),""+object.getString("status"),""+object.getString("employee_cash_offer"),""));
+                            tempagreeDriverDataList.add(new AgreeDriverData(""+object.getInt("id"),""+object.getInt("booking_id"),""+object.getInt("employee_id"),""+object.getString("ep_token"),""+object.getString("employee_lat"),""+object.getString("employee_lng"),""+object.getString("employee_name"),""+object.getString("employee_phone"),""+object.getString("employee_time_to_reach"),""+object.getString("description"),""+object.getString("status"),""+object.getString("employee_cash_offer"),"", ""+object.getString("image"),""+object.getString("rating")));
                             updatelocation(i);
                         }
-//                        if (agreeDriverDataList.size()!=size){
-//                            Log.d("Serajsize","changed");
-//                            driverAdapter.notifyDataSetChanged();
-//                            loadingIV.setVisibility(View.GONE);
-//                        }else{
-//                            Log.d("Serajsize","same data");
-//                        }
+
                     }else {
                         Log.d("Serajad","accept responce failed");
                     }
@@ -335,9 +327,9 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
         @Override
         public void run() {
             try {
-                progressBar.setProgress(c);
+                progressBar.setProgress(c+3);
                 c=c+1;//this function can change value of mInterval.
-                if (c==100){
+                if (c==30){
                     if (!isAccepted){
                         userCancelBooking(sessionManager.getUserid(),sessionManager.getUserToken(),bookingId,"Cancel by system");
                     }
@@ -380,7 +372,7 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
             JSONObject jsonObject = new JSONObject(data);
             jsonObject.getString("time");
             jsonObject.getInt("value");
-            agreeDriverDataList.add(new AgreeDriverData(tempagreeDriverDataList.get(jsonObject.getInt("value")).getId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getBookibgId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEpToken(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeLat(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeLong(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeName(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeePhone(),jsonObject.getString("time"),tempagreeDriverDataList.get(jsonObject.getInt("value")).getDescription(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getStatus(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmpCashOffered(),jsonObject.getString("distance")));
+            agreeDriverDataList.add(new AgreeDriverData(tempagreeDriverDataList.get(jsonObject.getInt("value")).getId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getBookibgId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeId(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEpToken(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeLat(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeLong(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeeName(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmployeePhone(),jsonObject.getString("time"),tempagreeDriverDataList.get(jsonObject.getInt("value")).getDescription(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getStatus(),tempagreeDriverDataList.get(jsonObject.getInt("value")).getEmpCashOffered(),jsonObject.getString("distance"), tempagreeDriverDataList.get(jsonObject.getInt("value")).getImage(), tempagreeDriverDataList.get(jsonObject.getInt("value")).getRating()));
             driverAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();

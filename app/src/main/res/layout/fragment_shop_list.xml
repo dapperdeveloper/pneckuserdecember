@@ -24,6 +24,8 @@
                 android:id="@+id/orderRv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:reverseLayout="true"
+                app:stackFromEnd="true"
                 tools:listitem="@layout/row_restaurent_order_item"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
