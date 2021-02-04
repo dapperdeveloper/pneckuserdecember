@@ -45,6 +45,7 @@ import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.model.ModelSliderMain;
 import com.callpneck.utils.Constants;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.muddzdev.styleabletoast.StyleableToast;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
@@ -76,7 +77,6 @@ public class ShopHomeActivity extends AppCompatActivity {
 
 
     private AVLoadingIndicatorView  progressDialog;
-    LinearLayout cuisinesLayout;
 
     private SessionManager sessionManager;
 
@@ -92,7 +92,8 @@ public class ShopHomeActivity extends AppCompatActivity {
     private SliderView sliderView;
 
     List<Datum> bannerList;
-    CardView bannerLayout;
+    LinearLayout bannerLayout, fullSliderLayout;
+    private ShimmerFrameLayout shimerPromo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,11 +113,15 @@ public class ShopHomeActivity extends AppCompatActivity {
         addressTv = findViewById(R.id.addressTv);
         progressDialog = findViewById(R.id.progress_bar);
         swipeLayout = findViewById(R.id.swipeLayout);
+
+        shimerPromo = findViewById(R.id.shimmepromo);
+
         shopList = new ArrayList<>();
         productFoods = new ArrayList<>();
 
         sliderView = findViewById(R.id.sliderLayout);
-        bannerLayout = findViewById(R.id.bannerLayout);
+        bannerLayout = findViewById(R.id.rlslider);
+        fullSliderLayout = findViewById(R.id.promoslider);
         categoryList = new ArrayList<>();
 
 
@@ -126,6 +131,8 @@ public class ShopHomeActivity extends AppCompatActivity {
         longitude = sessionManager.getUserLongitude();
 
         addressTv.setText(sessionManager.getUserScreenAddress());
+        shimmershow();
+
         if (AppController.isConnected(ShopHomeActivity.this)){
             if (validation()){
                 loadShopData();
@@ -258,6 +265,15 @@ public class ShopHomeActivity extends AppCompatActivity {
         });
     }
 
+
+    private void shimmershow() {
+        shimerPromo.startShimmerAnimation();
+    }
+
+    private void shimmertutup() {
+        shimerPromo.setVisibility(View.GONE);
+        shimerPromo.stopShimmerAnimation();
+    }
     private void loadCategoryData() {
         bannerList = new ArrayList<>();
         Call<BannerDataResponse> call = APIClient.getInstance().getBanner(latitude, longitude);
@@ -270,15 +286,17 @@ public class ShopHomeActivity extends AppCompatActivity {
                     try {
                         BannerDataResponse responseFoodHome = response.body();
                         Log.e("BannerData", response.body().getData()+"");
-                        if (responseFoodHome!=null){
-                            if (responseFoodHome.getErrorCode()==0 && responseFoodHome.getData().size() > 0){
-                                bannerLayout.setVisibility(View.VISIBLE);
-                                bannerList.clear();
-                                bannerList = responseFoodHome.getData();
-                                adapter= new AdapterAutoSliderExample(ShopHomeActivity.this,bannerList);
-                                sliderView.setSliderAdapter(adapter);
+                            if (responseFoodHome.getErrorCode()==0){
+                                shimmertutup();
+                                if (responseFoodHome.getData().size() > 0){
+                                    bannerLayout.setVisibility(View.VISIBLE);
+                                    bannerList.clear();
+                                    bannerList = responseFoodHome.getData();
+                                    adapter= new AdapterAutoSliderExample(ShopHomeActivity.this,bannerList);
+                                    sliderView.setSliderAdapter(adapter);
+                                }
                             }
-                        }
+
 
                     }catch (Exception e){
                         bannerLayout.setVisibility(View.GONE);
@@ -339,11 +357,12 @@ public class ShopHomeActivity extends AppCompatActivity {
                 if (editable != null && !editable.toString().trim().isEmpty()){
                     if (AppController.isConnected(ShopHomeActivity.this))
                     getProductDetail(editable.toString());
-                    cuisinesLayout.setVisibility(View.GONE);
+
+                    fullSliderLayout.setVisibility(View.GONE);
                 }
 
                 else {
-                    cuisinesLayout.setVisibility(View.VISIBLE);
+                    fullSliderLayout.setVisibility(View.VISIBLE);
                     StyleableToast.makeText(ShopHomeActivity.this, "No Result Found...!", Toast.LENGTH_LONG, R.style.mytoast).show();
 
                 }

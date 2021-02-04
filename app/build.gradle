@@ -150,6 +150,10 @@ dependencies {
     implementation 'com.merhold.extensiblepageindicator:extensiblepageindicator:1.0.1'
     //circleButton
     implementation 'com.github.markushi:circlebutton:1.1'
+    //Shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+    //roundedImageView
+    implementation 'com.makeramen:roundedimageview:2.2.1'
     //taxi 
     implementation 'com.akexorcist:googledirectionlibrary:1.1.1'
 

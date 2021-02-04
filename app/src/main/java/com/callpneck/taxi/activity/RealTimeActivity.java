@@ -34,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -138,7 +139,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
     String otp,vehicleNumber,avatar,mobile,name,vehicleImage;
     Double empLattitude,empLongitude;
     TextView userOtp,mVehicleNumber,mDriverName,mcarName;
-    ImageView driverAvatar,carAvatar;
+    CircleImageView driverAvatar,carAvatar;
     LinearLayout callBtn;
     public static String timeReuired;
 
@@ -180,6 +181,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
     private Runnable mRunnable;
     private static final int LOCATION_UPDATE_INTERVAL = 3000;
     String currentBookingStatus;
+    private RatingBar driverRating;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,6 +195,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
         carAvatar=findViewById(R.id.car_image);
         mcarName=findViewById(R.id.car_name);
         callBtn=findViewById(R.id.call_driver_btn);
+        driverRating = findViewById(R.id.rating_bar);
         cancelOrder = (LinearLayout)findViewById( R.id.cancel_order );
         Intent intent=getIntent();
         dname= intent.getStringExtra("name");
@@ -227,7 +230,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
         cancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cancelOrderReasonDialog(RealTimeActivity.this);
+                //cancelOrderReasonDialog(RealTimeActivity.this);
             }
         });
 
@@ -248,7 +251,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
 
     private void currentTrackingBooking() {
 
-        String ServerURL = getResources().getString(R.string.pneck_app_url) + "/userCurrBookingTracking";
+        String ServerURL = "http://pneck.com/api/userCurrBookingTracking";
         HashMap<String, String> dataParams = new HashMap<String, String>();
 
         dataParams.put("user_id",sessionManager.getUserid());
@@ -276,6 +279,9 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     private boolean isImageSet=false;
+    private boolean isDriverImageSet = false;
+    private boolean isCarNameSet = false;
+    private boolean isRatingSet = false;
     private Response.Listener<JSONObject> getLocationUpdate() {
         return new Response.Listener<JSONObject>() {
             @Override
@@ -289,6 +295,13 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
 
                         String userImage=object.getString("employee_image");
 
+                        String vehicleImage = object.getString("vehicle_image");
+                        String vehicleName = object.getString("vehicle_name");
+
+                        if (vehicleName!=null&&!isCarNameSet){
+                            isCarNameSet = true;
+                            mcarName.setText(vehicleName);
+                        }
 
                         if (userImage!=null&&userImage.length()>3&&!isImageSet){
                             Log.e("kjhsdfkdsf","setting image this is employee image "+userImage);
@@ -300,16 +313,33 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
                             Log.e("kjhsdfkdsf","setting not is employee image "+userImage);
                         }
 
-                        String jobDetail=object.getString("job_detail");
-
-                        if (jobDetail.length()<=0||jobDetail.equals("null")){
-//                            orderInfoLayout.setVisibility(View.GONE);
+                        if (vehicleImage!=null&&vehicleImage.length()>3&&!isDriverImageSet){
+                            Log.e("kjhsdfkdsf","setting image this is vehicleImage image "+vehicleImage);
+                            isDriverImageSet=true;
+                            Glide.with(RealTimeActivity.this)
+                                    .load(vehicleImage)
+                                    .into(carAvatar);
                         }else {
-//                            orderInfoLayout.setVisibility(View.VISIBLE);
-//                            orderInfo.setText(jobDetail);
+                            Log.e("kjhsdfkdsf","setting not is vehicleImage image "+vehicleImage);
                         }
 
+//                        String jobDetail=object.getString("job_detail");
+//
+//                        if (jobDetail.length()<=0||jobDetail.equals("null")){
+////                            orderInfoLayout.setVisibility(View.GONE);
+//                        }else {
+////                            orderInfoLayout.setVisibility(View.VISIBLE);
+////                            orderInfo.setText(jobDetail);
+//                        }
+
                         JSONObject empObj=object.getJSONObject("employee_loc");
+
+                        String ratingDriver = empObj.getString("emp_rating");
+
+                        if (ratingDriver!=null&&!isRatingSet){
+                            isRatingSet = true;
+                            driverRating.setRating(Float.parseFloat(ratingDriver));
+                        }
                         if (object.getString("curr_booking_status").
                                 equalsIgnoreCase("order_request_payment")){
                             //launch payment request screen
@@ -317,7 +347,6 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
                             /* "booking_charge": "50",
                             "order_subtotal": "445.00",
                                     "payable_amount": "495.00",*/
-                            executor.shutdown();
                             Bundle bundle =new Bundle();
                             bundle.putString("billing_amount",bookingCharge);
                             LaunchActivityClass.LaunchPaymentScreen(RealTimeActivity.this,bundle);
@@ -358,6 +387,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
                             currentBookingStatus="Order Payment Request";
                         }
                         //bookingStatus.setText(currentBookingStatus);
+
 
 
                        // VehicleNo.setText("VEHICLE NO. : "+empObj.getString("vehicle_number"));
@@ -754,7 +784,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
                 //       icon(BitmapDescriptorFactory.fromBitmap(
                 //             createCustomMarker(RealTimeActivity.this,R.drawable.ic_scooter,"driver")))).setTitle("I am Driver");
                 mGoogleMap.addMarker(new MarkerOptions().position(destination).icon(PublicMethod.convertToBitmapFromVector(RealTimeActivity.this,
-                        R.drawable.ic_scooter)).title("Driver").snippet("curr_loc_address"));
+                        R.drawable.ic_car)).title("Driver").snippet("curr_loc_address"));
             }
 
 
@@ -880,7 +910,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
 
         SessionManager sessionManager1 = new SessionManager(context);
 
-        String image_url="https://pneck.in/storage/user_img/5f94dc4223d59compress_img.jpg";
+        String image_url="http://pneck.com/storage/user_img/5f94dc4223d59compress_img.jpg";
 
         if (sessionManager1.getUserImage()!=null){
             Glide.with(context).load(image_url).placeholder(R.drawable.userr).into(markerImage);

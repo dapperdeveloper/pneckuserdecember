@@ -503,6 +503,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
 
 
                                 Log.d("Seraj","getting location...");
+
                                 getNearByDriverList();
                                 getCompleteAddressString(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
 
@@ -706,7 +707,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
 
         SessionManager sessionManager1 = new SessionManager(context);
 
-        String image_url="https://pneck.in/storage/user_img/5f94dc4223d59compress_img.jpg";
+        String image_url="http://pneck.com/storage/user_img/5f94dc4223d59compress_img.jpg";
 
         if (sessionManager1.getUserImage()!=null){
             Glide.with(context).load(image_url).placeholder(R.drawable.userr).into(markerImage);

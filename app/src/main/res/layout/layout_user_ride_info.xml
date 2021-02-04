@@ -40,7 +40,6 @@
                 android:textColor="@color/black"
                 android:padding="2dp"
                 android:layout_alignParentEnd="true"
-                android:background="#FFEB3B"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
         </RelativeLayout>
 
@@ -150,33 +149,6 @@
             app:layout_constraintTop_toTopOf="@+id/call_layout" />
 
 
-        <LinearLayout
-            android:id="@+id/Land_markLayout"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@+id/divider6"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/divider6"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:src="@drawable/ic_building" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="@string/LANDMARK"
-                android:textSize="12sp" />
-
-        </LinearLayout>
 
 
         <View

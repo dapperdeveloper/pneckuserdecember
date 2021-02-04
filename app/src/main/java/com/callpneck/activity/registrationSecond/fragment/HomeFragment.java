@@ -58,6 +58,7 @@ import com.callpneck.model.dashboard.SubcategoryList;
 import com.callpneck.taxi.TaxiMainActivity;
 import com.callpneck.utils.AutoScrollViewPager;
 import com.callpneck.utils.InternetConnection;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -79,6 +80,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -112,7 +114,6 @@ HomeFragment extends Fragment {
     MainDashboard mainDashboard;
 
     private ImageView searchIcon, voiceSearch;
-    private AVLoadingIndicatorView progressBar;
     ImageView loc, ll;
     TextView addressTv;
 
@@ -125,6 +126,9 @@ HomeFragment extends Fragment {
     private static final int SPEECH_REQUEST_CODE = 0;
 
     private static final int LOCATION_REQUEST_CODE = 100;
+
+    private ShimmerFrameLayout mShimmerCat, shimerPromo;
+    private LinearLayout bannerSlider;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +141,21 @@ HomeFragment extends Fragment {
         mContext = context;
     }
 
+    private void shimmershow() {
+
+        mShimmerCat.startShimmerAnimation();
+
+        shimerPromo.startShimmerAnimation();
+    }
+    private void shimmertutup() {
+        recyclerView.setVisibility(View.VISIBLE);
+
+        mShimmerCat.setVisibility(View.GONE);
+        mShimmerCat.stopShimmerAnimation();
+
+        shimerPromo.setVisibility(View.GONE);
+        shimerPromo.stopShimmerAnimation();
+    }
     private void init(View view) {
         loc = view.findViewById(R.id.loc);
         addressTv = view.findViewById(R.id.addressTv);
@@ -145,9 +164,12 @@ HomeFragment extends Fragment {
         searchIcon = view.findViewById(R.id.searchIcon);
         voiceSearch = view.findViewById(R.id.voiceSearch);
         recyclerView = view.findViewById(R.id.recycler_view);
-        progressBar = view.findViewById(R.id.progress_bar);
         viewPager = view.findViewById(R.id.viewPager);
         tabview = view.findViewById(R.id.tabview);
+
+        mShimmerCat = view.findViewById(R.id.shimmercat);
+        shimerPromo = view.findViewById(R.id.shimmepromo);
+        bannerSlider = view.findViewById(R.id.rlslider);
         categoryList = new ArrayList<>();
     }
 
@@ -163,6 +185,9 @@ HomeFragment extends Fragment {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         sessionManager = new SessionManager(getContext());
 
+
+
+        shimmershow();
         if (AppController.isConnected(getActivity()))
         getData();
 
@@ -501,33 +526,35 @@ HomeFragment extends Fragment {
     }
 
     private void getData() {
-        progressBar.setVisibility(View.VISIBLE);
         Call<MainDashboard> mainDashboardCall = APIClient.getInstance()
                 .getDashData();
         mainDashboardCall.enqueue(new Callback<MainDashboard>() {
             @Override
             public void onResponse(Call<MainDashboard> call, Response<MainDashboard> response) {
-                try {
-                    mainDashboard = response.body();
-                    if (mainDashboard.getResponse().getData().getSubcategoryList().size()>0 && mainDashboard != null){
-                        loadCategoryView(mainDashboard.getResponse().getData().getSubcategoryList());
+                if (response.isSuccessful()){
+                    if (Objects.requireNonNull(response.body()).getResponse().getSuccess()){
+                        shimmertutup();
+                        mainDashboard = response.body();
+                        if (mainDashboard.getResponse().getData().getSubcategoryList().size()>0 && mainDashboard != null){
+                            loadCategoryView(mainDashboard.getResponse().getData().getSubcategoryList());
+                        }
+
+                        if (mainDashboard.getResponse().getData().getBannerSliderImages().size()>0 && mainDashboard != null){
+
+                            bannerSlider.setVisibility(View.VISIBLE);
+                            loadBanner(mainDashboard.getResponse().getData().getBannerSliderImages());
+
+                        }
                     }
 
-                    if (mainDashboard.getResponse().getData().getBannerSliderImages().size()>0 && mainDashboard != null){
-                        loadBanner(mainDashboard.getResponse().getData().getBannerSliderImages());
-
-                    }
-
-                    progressBar.setVisibility(View.GONE);
-                }catch (Exception e){
-                    progressBar.setVisibility(View.GONE);
                 }
+
 
             }
 
             @Override
             public void onFailure(Call<MainDashboard> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+
             }
         });
     }

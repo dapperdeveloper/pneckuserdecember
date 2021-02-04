@@ -111,4 +111,10 @@
         <item name="stRadius">3dp</item>
     </style>
 
+
+
+    <style name="TextNavigation">
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+    </style>
 </resources>

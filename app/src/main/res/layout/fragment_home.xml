@@ -1,196 +1,270 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:background="@color/white"
-android:orientation="vertical"
-tools:context=".activity.registrationSecond.fragment.HomeFragment">
-
-
-
-
-
-<com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/gg"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
-        android:gravity="center"
-        android:titleTextColor="@color/white"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
-
-        <LinearLayout
-            android:id="@+id/locationBtn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/loc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_location"
-                android:tint="@color/white"
-                android:layout_centerVertical="true"/>
-            <TextView
-                android:id="@+id/addressTv"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_marginLeft="4dp"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/loc"
-                android:layout_centerVertical="true"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:text="Ground Floor, Plot No.170,Block-B,...."
-                android:singleLine="true"
-                />
-            <ImageView
-                android:id="@+id/ll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_search"
-                android:tint="@color/white"
-                android:layout_marginRight="@dimen/denim_20"
-                android:layout_toRightOf="@+id/addressTv"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"/>
-
-        </LinearLayout>
-
-    </androidx.appcompat.widget.Toolbar>
-</com.google.android.material.appbar.AppBarLayout>
-
-<RelativeLayout
-    android:id="@+id/lo"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_below="@+id/gg"
-    android:weightSum="2">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_weight="1"
-        android:text="@string/what_would_you_like_to_do_today"
-        android:layout_toLeftOf="@+id/searchIcon"
-        android:layout_alignParentStart="true"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="16sp"/>
-
-    <ImageView
-        android:id="@+id/voiceSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="16dp"
-        android:layout_toLeftOf="@+id/searchIcon"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_keyboard_voice"/>
-    <ImageView
-        android:id="@+id/searchIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="16dp"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_search"/>
-
-</RelativeLayout>
-
-<RelativeLayout
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@+id/lo">
-    <!-- TODO: Update blank fragment layout -->
-    <androidx.core.widget.NestedScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/light_gray"
+    android:orientation="vertical"
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto"
+    tools:context=".activity.registrationSecond.fragment.HomeFragment">
+
+
+
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/gg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:titleTextColor="@color/white"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <LinearLayout
+                android:id="@+id/locationBtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/loc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_location"
+                    android:tint="@color/white"
+                    android:layout_centerVertical="true"/>
+                <TextView
+                    android:id="@+id/addressTv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="4dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/loc"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:text="Ground Floor, Plot No.170,Block-B,...."
+                    android:singleLine="true"
+                    />
+                <ImageView
+                    android:id="@+id/ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_search"
+                    android:tint="@color/white"
+                    android:layout_marginRight="@dimen/denim_20"
+                    android:layout_toRightOf="@+id/addressTv"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/lo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/gg"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="@string/what_would_you_like_to_do_today"
+            android:layout_toLeftOf="@+id/searchIcon"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/voiceSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@+id/searchIcon"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_keyboard_voice"/>
+        <ImageView
+            android:id="@+id/searchIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_search"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/lo"
         >
-
-
-
-        <LinearLayout
+        <!-- TODO: Update blank fragment layout -->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             >
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
                 >
 
-                <com.callpneck.utils.AutoScrollViewPager
-                    android:id="@+id/viewPager"
+                <LinearLayout
+                    android:id="@+id/promoslider"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <com.merhold.extensiblepageindicator.ExtensiblePageIndicator
-                    android:id="@+id/flexibleIndicator"
-                    android:layout_width="150dp"
-                    android:layout_height="15dp"
-                    app:indicatorActiveColor="@color/colorPrimary"
-                    app:indicatorInactiveColor="@color/grey_90"
-                    app:indicatorPadding="10dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    app:indicatorRadius="6dp" />
-
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabview"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    app:tabIndicatorGravity="center" />
-            </RelativeLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/lookbookRv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
 
-                />
+                    <LinearLayout
+                        android:id="@+id/rlslider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                        <include
+                            layout="@layout/fragment_slider"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp" />
+                    </LinearLayout>
 
-        </LinearLayout>
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmepromo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        shimmer:duration="800">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <include
+                                layout="@layout/shimerpromo"
+                                android:layout_width="20dp"
+                                android:layout_height="220dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp" />
+
+                            <include
+                                layout="@layout/shimerpromo"
+                                android:layout_width="0dp"
+                                android:layout_height="220dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight="1" />
+
+                            <include
+                                layout="@layout/shimerpromo"
+                                android:layout_width="20dp"
+                                android:layout_height="220dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp" />
+                        </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                </LinearLayout>
 
 
 
-    </androidx.core.widget.NestedScrollView>
 
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/progress_bar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:visibility="visible"
-        android:layout_centerInParent="true"
-        app:indicatorName="BallScaleMultipleIndicator"
-        app:indicatorColor="@color/colorPrimaryDark" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    >
 
-</RelativeLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="10dp"
+                        android:background="@color/white"
+                        android:visibility="gone"
+                        />
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmercat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical"
+                        shimmer:duration="800">
+
+                        <!-- Adding 7 rows of placeholders -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="vertical">
+
+                            <include layout="@layout/shimercategory" />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="15dp"/>
+                            <include layout="@layout/shimercategory" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="15dp"/>
+                            <include layout="@layout/shimercategory" />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="15dp"/>
+                            <include layout="@layout/shimercategory" />
+
+                        </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+        </androidx.core.widget.NestedScrollView>
+
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

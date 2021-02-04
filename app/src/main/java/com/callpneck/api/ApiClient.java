@@ -22,7 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    public static final String BASE_URL = "https://pneck.in/";
+    public static final String BASE_URL = "http://pneck.com/";
 
 //    http://MerchanantApi.eblaa.com/
     private static Retrofit retrofit = null;

@@ -40,7 +40,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
         String status = data.getOrderStatus();
         if (status.equalsIgnoreCase("order_completed")){
             holder.timeLayout.setVisibility(View.VISIBLE);
-            holder.viewBtn.setVisibility(View.VISIBLE);
+            holder.viewBtn.setVisibility(View.GONE);
         }else {
             holder.timeLayout.setVisibility(View.GONE);
             holder.viewBtn.setVisibility(View.GONE);

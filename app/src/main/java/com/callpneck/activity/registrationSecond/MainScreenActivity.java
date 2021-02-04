@@ -117,7 +117,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
 
 
-                showDialog();
+               // showDialog();
 
 
             }

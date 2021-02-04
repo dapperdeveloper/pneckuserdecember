@@ -4,7 +4,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static final String Base_URL= "https://pneck.in/"; //"http://192.168.43.226:3000";
+    private static final String Base_URL= "http://pneck.com/"; //"http://192.168.43.226:3000";
     private static RetrofitClient mInstance;
     private Retrofit retrofit;
 

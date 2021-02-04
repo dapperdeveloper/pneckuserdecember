@@ -17,7 +17,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIClient {
-    public static final String BASE_URL = "https://pneck.in/api/";
+    public static final String BASE_URL = "http://pneck.com/api/";
     private static APIRequests apiRequests;
 
     // Singleton Instance of APIRequests

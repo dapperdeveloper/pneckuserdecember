@@ -36,7 +36,7 @@ public class OrderFragment extends Fragment {
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.addTab(tabLayout.newTab().setText("Booking"));
         tabLayout.addTab(tabLayout.newTab().setText("Shop"));
-        tabLayout.addTab(tabLayout.newTab().setText("Res"));
+        tabLayout.addTab(tabLayout.newTab().setText("Food"));
         tabLayout.addTab(tabLayout.newTab().setText("Delivery"));
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 

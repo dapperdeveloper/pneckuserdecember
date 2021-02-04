@@ -135,7 +135,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
             image= item.getImage().get(0).toString();
         }
         catch (Exception e){
-            image = "https://pneck.in/front_theme/images/logo-white.png";
+            image = "http://pneck.com/front_theme/images/logo-white.png";
         }
         bottomSheetDialog.show();
 
