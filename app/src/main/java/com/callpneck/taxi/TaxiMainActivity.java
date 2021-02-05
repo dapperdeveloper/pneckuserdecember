@@ -565,44 +565,49 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
 
     private void cashLayout(Double lattitude, Double longitude) {
         Log.d("Seraj","Setting Layouts");
-
-
         //mainLayout.setVisibility(View.GONE);
         showpathapi(lattitude,longitude);
         cashOfferLinearLayout.setVisibility(View.VISIBLE);
-
-
-
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-
 
         getRideBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                cash=cashOffered.getText().toString();
-                String discriptiontxt=discription.getText().toString();
-                int id = 0;
-                adapter.getCarTypeList();
-
-                for(int i=0; i<adapter.getCarTypeList().size();i++)
+                if(driverArray.length()==0)
                 {
-                    if(adapter.getCarTypeList().get(i).getSelected()==1)
+                    Toast.makeText(TaxiMainActivity.this,"No driver available right now...!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else {
+                    cash=cashOffered.getText().toString();
+                    String discriptiontxt=discription.getText().toString();
+                    int id = 0;
+                    adapter.getCarTypeList();
+
+                    for(int i=0; i<adapter.getCarTypeList().size();i++)
                     {
-                        id = adapter.getCarTypeList().get(i).getId();
+                        if(adapter.getCarTypeList().get(i).getSelected()==1)
+                        {
+                            id = adapter.getCarTypeList().get(i).getId();
+                        }
                     }
-                }
-                if(id==0)
-                {
-                    Toast.makeText(TaxiMainActivity.this,"Please Select Vehicle type",Toast.LENGTH_SHORT).show();
-                }
-                else if (!TextUtils.isEmpty(cash)){
+                    if(id==0)
+                    {
+                        Toast.makeText(TaxiMainActivity.this,"Please Select Vehicle type",Toast.LENGTH_SHORT).show();
+                    }
+                    else if (!TextUtils.isEmpty(cash)){
+                        if (Integer.parseInt(cash)>=40){
+                            getDriverList(cash.toString(),id+"",discriptiontxt.toString(),UserLatitude,UserLongitude,destination_latti,destination_longi);
+                        }
+                        else {
+                            Toast.makeText(TaxiMainActivity.this, "Amount is too low..!", Toast.LENGTH_SHORT).show();
+                        }
 
 
-                    getDriverList(cash.toString(),id+"",discriptiontxt.toString(),UserLatitude,UserLongitude,destination_latti,destination_longi);
-
-                }else{
-                    cashOffered.setError("Please offer your fare...");
+                    }else{
+                        cashOffered.setError("Please offer your fare...");
+                    }
                 }
 
             }
@@ -941,6 +946,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
         Volley.newRequestQueue(TaxiMainActivity.this).add(dataParamsJsonReq);
     }
     double distance;
+    JSONArray driverArray;
     private Response.Listener<JSONObject> NearBySuccessListeners() {
         return new Response.Listener<JSONObject>() {
             @Override
@@ -952,12 +958,12 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                     boolean resp_status = true;
                     if (innerResponse.getBoolean("success")) {
                         JSONArray array = innerResponse.getJSONArray("data");
+                        driverArray = array;
                         if(array.length()==0)
                         {
-                            Toast.makeText(TaxiMainActivity.this,"No Driver Found",Toast.LENGTH_SHORT).show();
+                            Log.e("DriverList","No Driver found");
                             return;
                         }
-
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject object = array.getJSONObject(i);
                             double latitude = Double.parseDouble(object.getString("curr_latitude"));

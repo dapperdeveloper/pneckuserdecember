@@ -452,6 +452,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/nameTv"
                 android:singleLine="true"
+                android:visibility="gone"
                 android:layout_marginTop="2dp"
                 android:layout_toRightOf="@+id/deliveryBoyAvatar"
                 android:text="13 minutes left"

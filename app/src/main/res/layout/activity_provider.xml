@@ -65,6 +65,34 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/nodataLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbarRl"
+        android:background="@color/white"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/noDataImage"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/noDataImage"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/messageTv"
+            />
+
+
+
+    </RelativeLayout>
+
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/progress_bar"
         android:layout_width="80dp"

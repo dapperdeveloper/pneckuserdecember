@@ -134,7 +134,7 @@ public class CustomerOrderDetailActivity extends AppCompatActivity {
 
 
                             orderImage = data.getOrderImage();
-                            if (orderImage!=null){
+                            if (orderImage!=null&&!orderImage.equalsIgnoreCase("")){
                                 imageViewLayout.setVisibility(View.VISIBLE);
                                 try {
                                     RequestOptions requestOptions= new RequestOptions();

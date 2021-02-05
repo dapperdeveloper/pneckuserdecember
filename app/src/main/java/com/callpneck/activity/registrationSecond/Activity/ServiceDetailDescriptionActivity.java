@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ public class ServiceDetailDescriptionActivity extends AppCompatActivity {
     String shopId, shopName, shopAvatar, shopRating, shopAddress, category;
     CircleImageView shopAvatarIv;
     TextView descriptionTv,professionTv, addressTv,working_daysTv, openTimeTv, closingTimeTv, websiteTv, shopNameTv;
+    RatingBar ratingBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,7 @@ public class ServiceDetailDescriptionActivity extends AppCompatActivity {
         closingTimeTv = findViewById(R.id.closingTimeTv);
         websiteTv = findViewById(R.id.websiteTv);
         shopNameTv = findViewById(R.id.shopNameTv);
+        ratingBar = findViewById(R.id.rating_bar);
 
         if (getIntent() != null){
             shopId =getIntent().getStringExtra("shopId");
@@ -53,6 +56,7 @@ public class ServiceDetailDescriptionActivity extends AppCompatActivity {
             getVendorList(shopId);
             Glide.with(this).load(shopAvatar).placeholder(R.drawable.ic_user_replace).into(shopAvatarIv);
             shopNameTv.setText(shopName);
+            ratingBar.setRating(Float.parseFloat(shopRating));
             final ObjectAnimator animation = ObjectAnimator.ofFloat(shopAvatarIv, "rotationY", 0.0f, 360f);  // HERE 360 IS THE ANGLE OF ROTATE, YOU CAN USE 90, 180 IN PLACE OF IT,  ACCORDING TO YOURS REQUIREMENT
             animation.setDuration(1000); // HERE 500 IS THE DURATION OF THE ANIMATION, YOU CAN INCREASE OR DECREASE ACCORDING TO YOURS REQUIREMENT
             animation.setInterpolator(new AccelerateDecelerateInterpolator());

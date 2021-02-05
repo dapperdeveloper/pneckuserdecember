@@ -60,4 +60,11 @@
             android:background="@color/colorGrey00"
             android:layout_below="@+id/notificationStatusTv"/>
     </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/notificationsBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Notification"/>
 </LinearLayout>

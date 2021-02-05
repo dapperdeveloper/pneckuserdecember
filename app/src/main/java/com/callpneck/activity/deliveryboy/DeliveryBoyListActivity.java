@@ -51,6 +51,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import net.bohush.geometricprogressview.GeometricProgressView;
 
+import org.apache.http.util.TextUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +102,8 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                if (dUserList.size()>0)
+                    dUserList.clear();
                 getDeliveryBoyData();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -133,37 +137,40 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
 
                         DriverList model = response.body();
                         if (model!= null && model.getSuccess()){
-                            dUserList.clear();
-                            dUserList = model.getDriverList();
-                            adapter = new BoyListAdapter(dUserList, DeliveryBoyListActivity.this, new BoyListAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(DriverList_ item) {
-                                    String distance = item.getDistance()+"";
-                                    String km = distance.substring(0,3);
+                            if (model.getDriverList().size()>0){
+                                dUserList.clear();
+                                dUserList = model.getDriverList();
+                                adapter = new BoyListAdapter(dUserList, DeliveryBoyListActivity.this, new BoyListAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(DriverList_ item) {
+                                        String distance = item.getDistance()+"";
+                                        String km = distance.substring(0,3);
 
-                                    int rateKm = Integer.parseInt(distance.substring(0,1));
-                                    if (rateKm==0){
-                                        deliveryFee= "30";
+                                        int rateKm = Integer.parseInt(distance.substring(0,1));
+                                        if (rateKm==0){
+                                            deliveryFee= "30";
+                                        }
+                                        else if (rateKm == 1){
+                                            deliveryFee= "30";
+                                        }
+                                        else if (rateKm == 2){
+                                            deliveryFee = "40";
+                                        }
+                                        else if (rateKm == 3){
+                                            deliveryFee = "50";
+                                        }
+                                        else if(rateKm == 4){
+                                            deliveryFee = "60";
+                                        }
+                                        else {
+                                            deliveryFee = "100";
+                                        }
+                                        showMAkeOrderDialog(item.getId()+"", item.getFirstName()+" "+item.getLastName()+"", item.getEmpAddress()+"", deliveryFee);
                                     }
-                                    else if (rateKm == 1){
-                                        deliveryFee= "30";
-                                    }
-                                    else if (rateKm == 2){
-                                        deliveryFee = "40";
-                                    }
-                                    else if (rateKm == 3){
-                                        deliveryFee = "50";
-                                    }
-                                    else if(rateKm == 4){
-                                        deliveryFee = "60";
-                                    }
-                                    else {
-                                        deliveryFee = "100";
-                                    }
-                                    showMAkeOrderDialog(item.getId()+"", item.getFirstName()+" "+item.getLastName()+"", item.getEmpAddress()+"", deliveryFee);
-                                }
-                            });
-                            recyclerView.setAdapter(adapter);
+                                });
+                                recyclerView.setAdapter(adapter);
+                            }
+
                         }
 
                     }catch (Exception e){
@@ -193,7 +200,7 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
 
     ImageView orderIV;
     EditText orderEt;
-    BottomSheetDialog bottomSheet;
+    BottomSheetDialog bottomSheet, bottomSheetDialog;
     private void showMAkeOrderDialog(String emp_id, String emp_name, String emp_address, String deliveryFee) {
         final View view = getLayoutInflater().inflate(R.layout.layout_make_order_screen, null);
          bottomSheet = new BottomSheetDialog(this);
@@ -230,14 +237,24 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (image_uri!=null){
                     final View view = getLayoutInflater().inflate(R.layout.process_order_sheet_layout, null);
-                    final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(DeliveryBoyListActivity.this);
+                    bottomSheetDialog = new BottomSheetDialog(DeliveryBoyListActivity.this);
                     bottomSheetDialog.setContentView(view);
                     bottomSheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     bottomSheetDialog.setCancelable(true);
                     bottomSheetDialog.show();
                     orderWithImage(bottomSheetDialog, emp_id, emp_name, emp_address, deliveryFee);
                 }else {
-                    orderWithoutImage();
+                    if (TextUtils.isEmpty(orderEt.getText().toString())){
+                        Toast.makeText(DeliveryBoyListActivity.this, "Make a order......", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    final View view = getLayoutInflater().inflate(R.layout.process_order_sheet_layout, null);
+                    bottomSheetDialog = new BottomSheetDialog(DeliveryBoyListActivity.this);
+                    bottomSheetDialog.setContentView(view);
+                    bottomSheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    bottomSheetDialog.setCancelable(true);
+                    bottomSheetDialog.show();
+                    orderWithoutImage(bottomSheetDialog, emp_id, emp_name, emp_address, deliveryFee);
                 }
             }
         });
@@ -258,7 +275,6 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
         RequestBody empAddress  = RequestBody.create(MediaType.parse("multipart/form-data"), emp_address);
         RequestBody empFee  = RequestBody.create(MediaType.parse("multipart/form-data"), deliveryFee);
 
-
         MultipartBody.Part requestImage = null;
         if (file == null)
         {
@@ -267,6 +283,10 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
         }
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         requestImage = MultipartBody.Part.createFormData("order_image", file.getName(), requestFile);
+
+        Toast.makeText(this, ""+requestImage, Toast.LENGTH_SHORT).show();
+        Log.e("SendingData", sessionManager.getUserid()+"\n"+sessionManager.getUserName()+"\n"+dropAddress+"\n"+pickupAddress+"\n"+emp_id+"\n"+emp_name+"\n"+deliveryFee);
+
 
         Call<OrderSubmit> call = APIClient.getInstance().createOrderByUser(orde_list, start_address, drop_address, user_id, user_name, user_mobile, empId, empName, empAddress, empFee, requestImage);
 
@@ -304,6 +324,8 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
 
 
 
+
+
     }
 
     private String getRealPathFromURI(Uri contentUri) {
@@ -316,7 +338,39 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
         cursor.close();
         return result;
     }
-    private void orderWithoutImage() {
+    private void orderWithoutImage(BottomSheetDialog bottomSheetDialog, String emp_id, String emp_name, String emp_address, String deliveryFee) {
+
+        Call<OrderSubmit> call = APIClient.getInstance().createOrderByUserWithoutImage(orderEt.getText().toString()+"", pickupAddress, dropAddress, sessionManager.getUserid()+"", sessionManager.getUserName()+"", sessionManager.getUserMobile()+"", emp_id, emp_name, emp_address, deliveryFee, "");
+        call.enqueue(new Callback<OrderSubmit>() {
+            @Override
+            public void onResponse(Call<OrderSubmit> call, Response<OrderSubmit> response) {
+                if (response.isSuccessful()){
+                    try {
+                        OrderSubmit orderSubmit = response.body();
+                        if (orderSubmit.getSuccess()){
+                            bottomSheetDialog.dismiss();
+                            bottomSheet.dismiss();
+                            sessionManager.saveCurrentOrderDeliveryId(orderSubmit.getId()+"");
+                            Log.e("ORDER_ID", orderSubmit.getId()+"");
+                            if (sessionManager.getCurrentDeliveryOrderId()!=null&&
+                                    sessionManager.getCurrentDeliveryOrderId().length()>0){
+                                LaunchActivityClass.LaunchTrackingDeliveryScreen(DeliveryBoyListActivity.this);
+                            }
+
+                        }
+                    }catch (Exception e){
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderSubmit> call, Throwable t) {
+                bottomSheetDialog.dismiss();
+                bottomSheet.dismiss();
+            }
+        });
+
     }
 
 

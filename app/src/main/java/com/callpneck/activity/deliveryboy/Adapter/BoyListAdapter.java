@@ -1,6 +1,8 @@
 package com.callpneck.activity.deliveryboy.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.callpneck.R;
+import com.callpneck.SessionManager;
 import com.callpneck.activity.deliveryboy.model.DUser;
 import com.callpneck.activity.deliveryboy.model.DriverList_;
 import com.callpneck.activity.registrationSecond.Adapter.MyShopAdapter;
@@ -31,12 +34,15 @@ public class BoyListAdapter  extends RecyclerView.Adapter<BoyListAdapter.ViewHol
     }
     List<DriverList_> dUserList;
     Context context;
+
+    SessionManager sessionManager;
     private final OnItemClickListener listener;
 
     public BoyListAdapter(List<DriverList_> dUserList, Context context, OnItemClickListener listener) {
         this.dUserList = dUserList;
         this.context = context;
         this.listener = listener;
+        sessionManager = new SessionManager(context);
     }
 
     @NonNull
@@ -50,8 +56,19 @@ public class BoyListAdapter  extends RecyclerView.Adapter<BoyListAdapter.ViewHol
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         holder.bind(dUserList.get(position), listener);
+
     }
 
+    private void openMap(String sourceLatitude, String sourceLongitude, String destinationLatitude, String destinationLongitude) {
+        String address = "https://maps.google.com/maps?saddr=" +sourceLatitude +","+sourceLongitude
+                + "&daddr=" + destinationLatitude +"," +destinationLongitude;
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(address));
+        context.startActivity(intent);
+    }
+    private void setCallCustomer(String providerNum){
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", providerNum, null));
+        context.startActivity(intent);
+    }
     @Override
     public int getItemCount() {
         return dUserList.size();
@@ -77,6 +94,21 @@ public class BoyListAdapter  extends RecyclerView.Adapter<BoyListAdapter.ViewHol
         }
         public void bind(final DriverList_ item, OnItemClickListener listener){
 
+            String sourceLatitude = sessionManager.getUserLatitude();
+            String sourceLongitude = sessionManager.getUserLongitude();
+            gpsBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (sourceLatitude!= null)
+                        openMap(sourceLatitude, sourceLongitude, item.getCurrLatitude()+"", item.getCurrLongitude()+"");
+                }
+            });
+            callBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setCallCustomer(item.getMobile()+"");
+                }
+            });
             nameTv.setText(item.getFirstName()+" "+item.getLastName());
             String distance = item.getDistance()+"";
 

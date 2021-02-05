@@ -91,7 +91,10 @@ public class DeliveryUserAdapter  extends RecyclerView.Adapter<DeliveryUserAdapt
                 orderStatusTv.setBackgroundColor(context.getResources().getColor(R.color.light_green));
             }
             orderStatusTv.setText(status);
-            totalAmountTv.setText(new StringBuilder("Rs.").append(item.getTotalAmount()));
+            double totalAmount = Integer.parseInt(item.getTotalAmount());
+            double dFee =  Integer.parseInt(item.getDeliveryCharge());
+            double amount = totalAmount+dFee;
+            totalAmountTv.setText(new StringBuilder("Rs.").append(amount));
             Glide.with(context).load(item.getEmpImage()+"").placeholder(R.drawable.ic_account_user).into(productIv);
             trackOrderBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

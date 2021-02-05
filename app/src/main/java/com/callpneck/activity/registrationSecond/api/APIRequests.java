@@ -365,6 +365,23 @@ public interface APIRequests {
     );
 
     @FormUrlEncoded
+    @POST("orderlistuser")
+    Call<OrderSubmit> createOrderByUserWithoutImage(@Field("orde_list") String orde_list,
+                                        @Field("start_address") String start_address,
+                                        @Field("drop_address") String drop_address,
+                                        @Field("user_id") String user_id,
+                                        @Field("user_name") String user_name,
+                                        @Field("user_mobile") String user_mobile,
+                                        @Field("emp_id") String emp_id,
+                                        @Field("emp_name") String emp_name,
+                                        @Field("emp_address") String emp_address,
+                                        @Field("delivery_charge") String empFee,
+                                        @Field("order_image") String order_image
+
+
+    );
+
+    @FormUrlEncoded
     @POST("DeliveryBoyOrderList")
     Call<CustumerOrderDetail> deliveryBoyOrderList(@Field("order_id") String order_id
     );

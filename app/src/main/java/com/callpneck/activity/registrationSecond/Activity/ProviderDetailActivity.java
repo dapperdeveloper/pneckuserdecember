@@ -178,7 +178,8 @@ public class ProviderDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ServiceGalleyResponse> call, Throwable t) {
-                Toast.makeText(ProviderDetailActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                StyleableToast.makeText(ProviderDetailActivity.this, t.getMessage(), Toast.LENGTH_LONG, R.style.mytoast).show();
+
             }
         });
     }
@@ -201,7 +202,7 @@ public class ProviderDetailActivity extends AppCompatActivity {
                         professionTv.setText(category);
                     }
                     else if (model != null && !model.getSuccess()){
-                        Toast.makeText(ProviderDetailActivity.this, ""+model.getMessage(), Toast.LENGTH_SHORT).show();
+                        StyleableToast.makeText(ProviderDetailActivity.this, model.getMessage(), Toast.LENGTH_LONG, R.style.mytoast).show();
                     }
                 }catch (Exception e){
 

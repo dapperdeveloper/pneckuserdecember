@@ -7,11 +7,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
@@ -24,6 +28,7 @@ import com.callpneck.activity.registrationSecond.Model.response.responseCategory
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.google.android.material.snackbar.Snackbar;
+import com.muddzdev.styleabletoast.StyleableToast;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -45,6 +50,9 @@ public class ProviderActivity extends AppCompatActivity {
     private AVLoadingIndicatorView progressBar;
     RoomDB database;
     List<MainData> dataList = new ArrayList<>();
+    private ImageView noDataImage;
+    private RelativeLayout nodataLayout;
+    private  TextView messageTv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +61,9 @@ public class ProviderActivity extends AppCompatActivity {
         providerListRv = findViewById(R.id.providerListRv);
         titleTv = findViewById(R.id.titleTv);
         progressBar = findViewById(R.id.progress_bar);
+        noDataImage = findViewById(R.id.noDataImage);
+        nodataLayout = findViewById(R.id.nodataLayout);
+        messageTv = findViewById(R.id.messageTv);
 
 
         if (getIntent() != null){
@@ -80,6 +91,7 @@ public class ProviderActivity extends AppCompatActivity {
         curr_lat = sessionManager.getUserLatitude();
         curr_long =  sessionManager.getUserLongitude();
 
+        Glide.with(this).load(R.drawable.no_data_found).into(noDataImage);
         if (AppController.isConnected(ProviderActivity.this))
             if (validation())
             getProviderDetail(user_id, ep_token, curr_lat,curr_long);
@@ -115,7 +127,6 @@ public class ProviderActivity extends AppCompatActivity {
         TextView txtv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
         txtv.setGravity(Gravity.CENTER_HORIZONTAL);
     }
-
     private void getProviderDetail(String user_id, String ep_token, String curr_lat, String curr_long) {
         providerList = new ArrayList<>();
         Log.d("TahseenVendorList","user_id-"+ user_id +"ep_token-"+ ep_token +"longitude-"+ curr_long +"latitute-"+ curr_lat +"category-"+category);
@@ -123,63 +134,63 @@ public class ProviderActivity extends AppCompatActivity {
         call.enqueue(new Callback<ModelProvider>() {
             @Override
             public void onResponse(Call<ModelProvider> call, Response<ModelProvider> response) {
+                if (response.isSuccessful()){
+                    try {
+                        ModelProvider modelProvider = response.body();
+                        if (modelProvider.getResponse() != null && modelProvider.getResponse().getSuccess()){
+                            providerList.clear();
+                            providerList = modelProvider.getResponse().getData().getVendors();
+                            if (providerList.size()>0){
+                                adapter = new MyProviderAdapter(ProviderActivity.this, providerList, new MyProviderAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(Vendor item) {
+                                        if (item.getType().equals("dynamic")){
+                                            Intent intent = new Intent(ProviderActivity.this, ServiceDetailActivity.class);
+                                            intent.putExtra("shopId", item.getVendorId()+"");
+                                            intent.putExtra("shopName", item.getShopTitle()+"");
+                                            intent.putExtra("shopAvatar", item.getImage()+"");
+                                            intent.putExtra("shopRating", item.getRating()+"");
+                                            intent.putExtra("shopAddress", item.getCurrLocAddress()+"");
+                                            intent.putExtra("categoryName", category);
+                                            startActivity(intent);
+                                        }
+                                        else {
+                                            Intent intent = new Intent(ProviderActivity.this, ProviderDetailActivity.class);
+                                            intent.putExtra("shopId", item.getVendorId()+"");
+                                            intent.putExtra("shopName", item.getShopTitle()+"");
+                                            intent.putExtra("shopAvatar", item.getImage()+"");
+                                            intent.putExtra("shopRating", item.getRating()+"");
+                                            intent.putExtra("shopAddress", item.getCurrLocAddress()+"");
+                                            intent.putExtra("categoryName", category);
+                                            startActivity(intent);
+                                        }
 
-                try {
-                    ModelProvider modelProvider = response.body();
-                    if (modelProvider.getResponse() != null){
-                        providerList.clear();
-                        providerList = modelProvider.getResponse().getData().getVendors();
-                        if ( modelProvider.getResponse().getData().getVendors().size()>0)
-                            adapter = new MyProviderAdapter(ProviderActivity.this, providerList, new MyProviderAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(Vendor item) {
-                                    if (item.getType().equals("dynamic")){
-                                        Intent intent = new Intent(ProviderActivity.this, ServiceDetailActivity.class);
-                                        intent.putExtra("shopId", item.getVendorId()+"");
-                                        intent.putExtra("shopName", item.getShopTitle()+"");
-                                        intent.putExtra("shopAvatar", item.getImage()+"");
-                                        intent.putExtra("shopRating", item.getRating()+"");
-                                        intent.putExtra("shopAddress", item.getCurrLocAddress()+"");
-                                        intent.putExtra("categoryName", category);
-                                        startActivity(intent);
                                     }
-                                    else {
-                                        Intent intent = new Intent(ProviderActivity.this, ProviderDetailActivity.class);
-                                        intent.putExtra("shopId", item.getVendorId()+"");
-                                        intent.putExtra("shopName", item.getShopTitle()+"");
-                                        intent.putExtra("shopAvatar", item.getImage()+"");
-                                        intent.putExtra("shopRating", item.getRating()+"");
-                                        intent.putExtra("shopAddress", item.getCurrLocAddress()+"");
-                                        intent.putExtra("categoryName", category);
-                                        startActivity(intent);
-                                    }
+                                });
+                                providerListRv.setAdapter(adapter);
+                                progressBar.setVisibility(View.GONE);
+                                nodataLayout.setVisibility(View.GONE);
+                            }else {
+                                progressBar.setVisibility(View.GONE);
+                                nodataLayout.setVisibility(View.VISIBLE);
+                                messageTv.setText(modelProvider.getResponse().getMessage());
+                            }
 
-                                }
-                            });
-                        providerListRv.setAdapter(adapter);
-                        showSnackBar(ProviderActivity.this, modelProvider.getResponse().getMessage());
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        nodataLayout.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                     }
-                    else{
-                        if (modelProvider != null && !modelProvider.getResponse().getSuccess()){
-                            showSnackBar(ProviderActivity.this, modelProvider.getResponse().getMessage());
-                            progressBar.setVisibility(View.GONE);
-                        }
-                        else {
-                            progressBar.setVisibility(View.GONE);
-                            showSnackBar(ProviderActivity.this, "Server Error");
-                        }
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                    progressBar.setVisibility(View.GONE);
                 }
+
 
             }
 
             @Override
             public void onFailure(Call<ModelProvider> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
+                nodataLayout.setVisibility(View.VISIBLE);
                 showSnackBar(ProviderActivity.this, t.getMessage());
             }
         });

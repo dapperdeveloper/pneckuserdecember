@@ -8,19 +8,33 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.callpneck.Const;
 import com.callpneck.R;
+import com.callpneck.SessionManager;
 import com.callpneck.activity.SecurityActivity;
+import com.callpneck.utils.Constants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -39,6 +53,9 @@ public class SettingActivity extends AppCompatActivity {
     private SharedPreferences.Editor spEditor;
     private ProgressDialog progressDialog;
     Activity activity= this;
+
+    SessionManager sessionManager;
+    Button notificationsBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +63,11 @@ public class SettingActivity extends AppCompatActivity {
 
         backBtn = findViewById(R.id.backBtn);
         fcmSwitch = findViewById(R.id.fcmSwitch);
+        notificationsBtn = findViewById(R.id.notificationsBtn);
         notificationStatusTv = findViewById(R.id.notificationStatusTv);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        sessionManager = new SessionManager(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait...");
         progressDialog.setCanceledOnTouchOutside(false);
@@ -79,6 +98,13 @@ public class SettingActivity extends AppCompatActivity {
                 }else {
                     unSubscribeToTopic();
                 }
+            }
+        });
+
+        notificationsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prepareNotificationMessage("12","You Have New Order");
             }
         });
     }
@@ -126,5 +152,69 @@ public class SettingActivity extends AppCompatActivity {
                         //failed
                     }
                 });
+    }
+
+
+
+    //SendNotification
+    private void prepareNotificationMessage(String orderId,String message){
+        String NOTIFICATION_TOPIC = "/topics/" + Constants.FCM_TOPIC;
+        String NOTIFICATION_TITLE = "Your Order" + orderId;
+        String NOTIFICATION_MESSAGE = "You Have"+ message;
+        String NOTIFICATION_TYPE = "OrderStatusChanged";
+
+        JSONObject notificationJo = new JSONObject();
+        JSONObject notificationBodyJo = new JSONObject();
+        try {
+            //what to send
+            notificationBodyJo.put("notificationType",NOTIFICATION_TYPE);
+            notificationBodyJo.put("buyerUid",sessionManager.getUserid());
+            notificationBodyJo.put("sellerUid","609");  //current user is seller so uid is seller id
+            notificationBodyJo.put("orderId","12");
+            notificationBodyJo.put("notificationTitle",NOTIFICATION_TITLE);
+            notificationBodyJo.put("notificationMessage",NOTIFICATION_MESSAGE);
+
+            //where to send
+            notificationJo.put("to",NOTIFICATION_TOPIC);
+            notificationJo.put("data",notificationBodyJo);
+
+        }catch (Exception e){
+
+            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        sendFcmNotification(notificationJo);
+    }
+
+    private void sendFcmNotification(JSONObject notificationJo) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://fcm.googleapis.com/fcm/send", notificationJo,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        Log.d("FCM_RESPONSE","onResponse"+response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization","key="+Constants.FCM_KEY);
+                return headers;
+            }
+        };
+
+        //enqueue the Volley request
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
+
     }
 }
