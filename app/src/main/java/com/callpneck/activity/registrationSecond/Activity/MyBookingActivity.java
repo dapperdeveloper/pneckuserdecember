@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.activity.registrationSecond.fragment.BookingFragment;
+import com.callpneck.activity.registrationSecond.fragment.OrderFragment;
 
 public class MyBookingActivity extends AppCompatActivity {
 
@@ -18,7 +19,7 @@ public class MyBookingActivity extends AppCompatActivity {
         ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_my_booking);
 
-        Fragment fragment = new BookingFragment();
+        Fragment fragment = new OrderFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
     }
