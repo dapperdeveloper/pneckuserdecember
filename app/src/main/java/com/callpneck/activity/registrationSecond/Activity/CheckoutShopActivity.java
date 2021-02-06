@@ -25,6 +25,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
@@ -40,6 +44,7 @@ import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.activity.registrationSecond.helper.Constant;
 import com.callpneck.utils.ApiConfig;
+import com.callpneck.utils.Constants;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,8 +57,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -121,6 +128,7 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
         if (getIntent() != null) {
             res_id = getIntent().getStringExtra("res_id");
             total_amount = getIntent().getStringExtra("total_amount");
+            Log.e("Shop Id", res_id);
         }
         //Initialize database
         database = RoomDB.getInstance(this);
@@ -213,9 +221,7 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
                     try {
                         WalletOrder orderSubmit  = response.body();
                         if (orderSubmit != null && orderSubmit.getSuccess()){
-                            startActivity(new Intent(CheckoutShopActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                            finish();
-                            progressDialog.dismiss();
+                            prepareNotificationMessage(" Wallet");
                         }
                         else if(orderSubmit != null && !orderSubmit.getSuccess()) {
                             progressDialog.dismiss();
@@ -520,8 +526,7 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
             razorPayId = razorpayPaymentID;
             PlaceOrder(res_id, user_id, lati, longi, item_count, total_amount,
                     json, userName, userMobile, usr_address, userMail, paymentMethod, razorPayId,"Success");
-            startActivity(new Intent(CheckoutShopActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-            finish();
+
 
         } catch (Exception e) {
             Log.d(TAG, "onPaymentSuccess  ", e);
@@ -540,7 +545,8 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
                 ResponseOrderSubmit orderSubmit  = response.body();
 
                 if (orderSubmit != null && orderSubmit.getSuccess()){
-                    Toast.makeText(CheckoutShopActivity.this, ""+orderSubmit.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    prepareNotificationMessage(orderSubmit.getItem().getOrderNumber());
                 }
                 else {
                     if (orderSubmit == null && !orderSubmit.getSuccess() ){
@@ -587,8 +593,8 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
 
                 ResponseOrderSubmit orderSubmit  = response.body();
                 if (orderSubmit != null && orderSubmit.getSuccess()){
-                    startActivity(new Intent(CheckoutShopActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                    finish();
+
+                    prepareNotificationMessage(orderSubmit.getItem().getOrderNumber());
                 }
                 else {
                     Toast.makeText(CheckoutShopActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
@@ -676,6 +682,75 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
     public void onBackPressed() {
         finish();
         overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
+    }
+
+
+    private void prepareNotificationMessage(String orderId){
+
+
+        String NOTIFICATION_TOPIC = "/topics/" + Constants.FCM_TOPIC;
+        String NOTIFICATION_TITLE = "New Order" + orderId;
+        String NOTIFICATION_MESSAGE = "Congratulation....! You have new order.";
+        String NOTIFICATION_TYPE = "ShopOrder";
+
+        JSONObject notificationJo = new JSONObject();
+        JSONObject notificationBodyJo = new JSONObject();
+        try {
+            //what to send
+            notificationBodyJo.put("notificationType",NOTIFICATION_TYPE);
+            notificationBodyJo.put("buyerUid",sessionManager.getUserid()); //current user is user so uid is buyer id
+            notificationBodyJo.put("sellerUid",res_id);
+            notificationBodyJo.put("orderId",orderId);
+            notificationBodyJo.put("notificationTitle",NOTIFICATION_TITLE);
+            notificationBodyJo.put("notificationMessage",NOTIFICATION_MESSAGE);
+
+            //where to send
+            notificationJo.put("to",NOTIFICATION_TOPIC);
+            notificationJo.put("data",notificationBodyJo);
+
+        }catch (Exception e){
+
+            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        sendFcmNotification(notificationJo,orderId);
+    }
+
+    private void sendFcmNotification(JSONObject notificationJo, final String orderId) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://fcm.googleapis.com/fcm/send", notificationJo,
+                new com.android.volley.Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        startActivity(new Intent(CheckoutShopActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        finish();
+                        Log.d("FCM_RESPONSE","onResponse"+response.toString() +"\n"+res_id);
+                        progressDialog.dismiss();
+                    }
+                },
+                new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        startActivity(new Intent(CheckoutShopActivity.this, OrderPlacedActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        finish();
+                        progressDialog.dismiss();
+                        //error occur
+                        Log.d("FCM_ERROR", ""+error.getMessage());
+                    }
+                }){
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization","key="+Constants.FCM_KEY);
+                return headers;
+            }
+        };
+
+        //enqueue the Volley request
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
+
     }
 
     }

@@ -226,7 +226,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                 try {
                     WalletOrder orderSubmit  = response.body();
                     if (orderSubmit != null && orderSubmit.getSuccess()){
-                        prepareNotificationMessage("546464564487");
+                        prepareNotificationMessage(" Wallet");
 
                     }
                     else if(orderSubmit != null && !orderSubmit.getSuccess()) {

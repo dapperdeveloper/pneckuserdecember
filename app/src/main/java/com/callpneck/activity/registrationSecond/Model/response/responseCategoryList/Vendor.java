@@ -8,7 +8,7 @@ public class Vendor {
 
     @SerializedName("vendor_id")
     @Expose
-    private Object vendorId;
+    private String vendorId;
     @SerializedName("first_name")
     @Expose
     private Object firstName;
@@ -61,11 +61,11 @@ public class Vendor {
     @Expose
     private Object currLocAddress;
 
-    public Object getVendorId() {
+    public String getVendorId() {
         return vendorId;
     }
 
-    public void setVendorId(Object vendorId) {
+    public void setVendorId(String vendorId) {
         this.vendorId = vendorId;
     }
 
