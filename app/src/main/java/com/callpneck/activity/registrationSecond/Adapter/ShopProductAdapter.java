@@ -59,6 +59,16 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
         holder.txtTitle.setText(item.getName());
         holder.priceoofer.setText(new StringBuilder("M.R.P ₹").append(item.getMrp()));
         holder.price.setText(new StringBuilder("Price ₹").append(item.getSelling_price()));
+
+        float v = Float.parseFloat(item.getMrp()); //500
+        float n = Float.parseFloat(item.getSelling_price()); //250
+
+        float percent = n * 100f / v;
+        float result = 100f - percent;
+        //discount
+        holder.txt_offer.setText(new StringBuilder(String.valueOf(result).substring(0,2)).append("% Off"));
+
+
         database = RoomDB.getInstance(context);
         holder.lvl_click.setOnClickListener(new View.OnClickListener() {
             @Override
