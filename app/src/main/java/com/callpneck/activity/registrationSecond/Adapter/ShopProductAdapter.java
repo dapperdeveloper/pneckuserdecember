@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.callpneck.R;
@@ -22,6 +23,7 @@ import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Activity.ServiceDetailActivity;
 import com.callpneck.activity.registrationSecond.Model.Product;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.tabs.TabLayout;
 
 
 import java.util.ArrayList;
@@ -50,7 +52,11 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         Product item = bannerList.get(position);
-        Glide.with(context).load(bannerList.get(position).getImage().get(0).toString()).placeholder(R.drawable.ic_user_replace).into(holder.img_icon);
+
+        holder.productImagesViewPager.setAdapter(new ProductImagesAdapter(item.getImage()));
+        holder.viewPagerIndicator.setupWithViewPager(holder.productImagesViewPager);
+
+        //Glide.with(context).load(bannerList.get(position).getImage().get(0).toString()).placeholder(R.drawable.ic_user_replace).into(holder.img_icon);
         if (item.getStock().equals("1")){
             holder.lvl_outofstock.setVisibility(View.GONE);
         }else {
@@ -134,6 +140,9 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
 
         Glide.with(context).load(item.getImage().get(0).toString()).placeholder(R.drawable.ic_user_replace).into(productIv);
 
+
+
+
         titleTv.setText(""+title);
         descriptionTv.setText(""+description);
 
@@ -214,12 +223,16 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView img_icon;
+//        ImageView img_icon;
         LinearLayout lvl_cardbg, lvl_offer,lvl_click,  lvl_outofstock;
         TextView txtTitle, price, priceoofer, txt_offer;
+        //////////product image layout
+        ViewPager productImagesViewPager;
+        TabLayout viewPagerIndicator;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            img_icon = itemView.findViewById(R.id.img_icon);
+            productImagesViewPager = itemView.findViewById(R.id.product_images_viewpager);
+            viewPagerIndicator = itemView.findViewById(R.id.viewpager_indicator);
             lvl_cardbg = itemView.findViewById(R.id.lvl_cardbg);
             lvl_offer = itemView.findViewById(R.id.lvl_offer);
             lvl_outofstock = itemView.findViewById(R.id.lvl_outofstock);
@@ -231,4 +244,6 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
 
         }
     }
+
+
 }

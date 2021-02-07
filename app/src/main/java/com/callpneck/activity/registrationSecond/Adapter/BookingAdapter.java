@@ -41,11 +41,13 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
         if (status.equalsIgnoreCase("order_completed")){
             holder.timeLayout.setVisibility(View.VISIBLE);
             holder.viewBtn.setVisibility(View.GONE);
+            holder.statusBookingTv.setText("Ride Completed");
         }else {
             holder.timeLayout.setVisibility(View.GONE);
             holder.viewBtn.setVisibility(View.GONE);
+            holder.statusBookingTv.setText(status);
         }
-        holder.statusBookingTv.setText(data.getOrderStatus()+"");
+
         holder.dateTv.setText(data.getBookingCompleteAt()+"");
         holder.grand_totalTv.setText(data.getGrandTotal()+"");
     }

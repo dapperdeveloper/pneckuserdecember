@@ -22,14 +22,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.callpneck.Const;
+import com.callpneck.LaunchActivityClass;
 import com.callpneck.R;
 import com.callpneck.Requests.CustomRequest;
 import com.callpneck.Requests.JsonUTF8Request;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.SessionManager;
+import com.callpneck.activity.OrderCompleteHappyScreen;
+import com.callpneck.activity.registrationSecond.Activity.TransferMoneyActivity;
 import com.callpneck.taxi.Adapter.DriverAdapter;
 import com.callpneck.taxi.map.WebSocketListener;
 import com.callpneck.taxi.model.AgreeDriverData;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -179,12 +183,11 @@ public class DriverListActivity extends AppCompatActivity implements WebSocketLi
                     Log.d("Serajcpa", "this is complete response " + response);
                     JSONObject innerResponse=response.getJSONObject("response");
                     if (innerResponse.getBoolean("success")) {
-                        Toast.makeText(DriverListActivity.this, "Booking Cancelled", Toast.LENGTH_SHORT).show();
                         sessionManager.setSesBookingId(null);
                         sessionManager.clearOrderSession();
                         executor.shutdownNow();
-
-                        finish();
+                        StyleableToast.makeText(DriverListActivity.this, "Please Book Your Ride Again...!", Toast.LENGTH_LONG, R.style.mytoast).show();
+                        LaunchActivityClass.LaunchMainActivity(DriverListActivity.this);
                     }else {
                         Log.d("Serajad","accept responce failed");
                     }
