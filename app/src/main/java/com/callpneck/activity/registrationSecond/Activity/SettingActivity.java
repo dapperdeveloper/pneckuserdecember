@@ -52,10 +52,6 @@ public class SettingActivity extends AppCompatActivity {
     private SharedPreferences sp;
     private SharedPreferences.Editor spEditor;
     private ProgressDialog progressDialog;
-    Activity activity= this;
-
-    SessionManager sessionManager;
-    Button notificationsBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +59,9 @@ public class SettingActivity extends AppCompatActivity {
 
         backBtn = findViewById(R.id.backBtn);
         fcmSwitch = findViewById(R.id.fcmSwitch);
-        notificationsBtn = findViewById(R.id.notificationsBtn);
         notificationStatusTv = findViewById(R.id.notificationStatusTv);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        sessionManager = new SessionManager(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait...");
         progressDialog.setCanceledOnTouchOutside(false);
@@ -101,12 +95,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        notificationsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prepareNotificationMessage("12","You Have New Order");
-            }
-        });
+
     }
 
     private void subscribeToTopic(){
@@ -154,67 +143,4 @@ public class SettingActivity extends AppCompatActivity {
                 });
     }
 
-
-
-    //SendNotification
-    private void prepareNotificationMessage(String orderId,String message){
-        String NOTIFICATION_TOPIC = "/topics/" + Constants.FCM_TOPIC;
-        String NOTIFICATION_TITLE = "Your Order" + orderId;
-        String NOTIFICATION_MESSAGE = "You Have"+ message;
-        String NOTIFICATION_TYPE = "OrderStatusChanged";
-
-        JSONObject notificationJo = new JSONObject();
-        JSONObject notificationBodyJo = new JSONObject();
-        try {
-            //what to send
-            notificationBodyJo.put("notificationType",NOTIFICATION_TYPE);
-            notificationBodyJo.put("buyerUid",sessionManager.getUserid());
-            notificationBodyJo.put("sellerUid","609");  //current user is seller so uid is seller id
-            notificationBodyJo.put("orderId","12");
-            notificationBodyJo.put("notificationTitle",NOTIFICATION_TITLE);
-            notificationBodyJo.put("notificationMessage",NOTIFICATION_MESSAGE);
-
-            //where to send
-            notificationJo.put("to",NOTIFICATION_TOPIC);
-            notificationJo.put("data",notificationBodyJo);
-
-        }catch (Exception e){
-
-            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-        sendFcmNotification(notificationJo);
-    }
-
-    private void sendFcmNotification(JSONObject notificationJo) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://fcm.googleapis.com/fcm/send", notificationJo,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-
-                        Log.d("FCM_RESPONSE","onResponse"+response.toString());
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }){
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json");
-                headers.put("Authorization","key="+Constants.FCM_KEY);
-                return headers;
-            }
-        };
-
-        //enqueue the Volley request
-        Volley.newRequestQueue(this).add(jsonObjectRequest);
-
-    }
 }

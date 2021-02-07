@@ -2,6 +2,7 @@ package com.callpneck.activity.registrationSecond.Adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,11 @@ import com.callpneck.R;
 import com.callpneck.activity.Database.MainData;
 import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Activity.ServiceDetailActivity;
+import com.callpneck.activity.registrationSecond.Activity.TransferMoneyActivity;
 import com.callpneck.activity.registrationSecond.Model.Product;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 
 import java.util.ArrayList;
@@ -65,7 +68,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
         holder.txtTitle.setText(item.getName());
         holder.priceoofer.setText(new StringBuilder("M.R.P ₹").append(item.getMrp()));
         holder.price.setText(new StringBuilder("Price ₹").append(item.getSelling_price()));
-
+        holder.priceoofer.setPaintFlags(holder.priceoofer.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         float v = Float.parseFloat(item.getMrp()); //500
         float n = Float.parseFloat(item.getSelling_price()); //250
 
@@ -82,6 +85,10 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
                 if (item.getStock().equals("1")){
                     showQuantityDialog(item);
                 }
+                else {
+                    StyleableToast.makeText(context, "currently out of stock...!", Toast.LENGTH_LONG, R.style.mytoast).show();
+
+                }
             }
         });
         holder.lvl_cardbg.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +96,9 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
             public void onClick(View view) {
                 if (item.getStock().equals("1")){
                     showQuantityDialog(item);
+                }
+                else {
+                    StyleableToast.makeText(context, "currently out of stock...!", Toast.LENGTH_LONG, R.style.mytoast).show();
                 }
 
 
