@@ -12,25 +12,29 @@
 
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="2dp">
+        android:layout_height="wrap_content">
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp">
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp">
 
-            <LinearLayout
-                android:id="@+id/lvl_click"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:orientation="vertical">
+                android:layout_margin="5dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp">
+
+                <LinearLayout
+                    android:id="@+id/lvl_click"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:orientation="vertical">
 
 
 
@@ -55,96 +59,122 @@
                         app:tabRippleColor="@null" />
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txtTitle"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:text=""
-                        android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:textSize="16dp"
-                        android:textStyle="bold" />
-
-
-                    <LinearLayout
-                        android:layout_width="250dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/price"
-                            android:layout_weight="1"
+                            android:id="@+id/txtTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:padding="2dp"
-                            android:text="Rs.150"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="14dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/priceoofer"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:padding="2dp"
-                            android:text="Rs.250"
+                            android:padding="5dp"
+                            android:text=""
+                            android:singleLine="true"
                             android:textColor="@color/black"
-                            android:textSize="12dp"
+                            android:textSize="16dp"
                             android:textStyle="bold" />
-                        <View
-                            android:layout_width="50dp"
-                            android:layout_height="1dp"/>
-                    </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
 
                         <LinearLayout
-                            android:id="@+id/lvl_subitem"
+                            android:layout_width="250dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/price"
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dp"
+                                android:padding="2dp"
+                                android:text="Rs.150"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="14dp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/priceoofer"
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dp"
+                                android:padding="2dp"
+                                android:text="Rs.250"
+                                android:textColor="@color/black"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
+                            <View
+                                android:layout_width="50dp"
+                                android:layout_height="1dp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical" />
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <LinearLayout
+                                android:id="@+id/lvl_subitem"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/lvl_cardbg"
+                <LinearLayout
+                    android:id="@+id/lvl_cardbg"
+                    android:layout_width="80dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="bottom|end"
+                    android:elevation="4dp"
+                    android:padding="2dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/add_btn_bg"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/addToCartBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Add"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lvl_outofstock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:elevation="4dp"
-                android:gravity="center">
+                android:layout_gravity="center|right"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="9dp"
+                android:background="@drawable/outofstock_red"
+                android:gravity="center|right"
+                android:padding="5dp"
+                android:text="  Out of Stock  "
+                android:textColor="@color/colorWhite"
+                android:textSize="10dp" />
+        </LinearLayout>
+    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/addToCartBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Add To "
-                    android:drawableRight="@drawable/ic_cart"
-                    android:textSize="16sp"
-                    android:padding="8dp"
-                    android:textColor="@color/colorPrimary"
-                    android:background="@drawable/rectangle_green_button"
-                    />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/lvl_offer"
@@ -163,28 +193,7 @@
             android:textSize="14dp"
             android:textStyle="bold" />
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/lvl_outofstock"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/colorTranfar"
-        android:clickable="true"
-        android:orientation="vertical"
-        android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|right"
-            android:layout_marginRight="4dp"
-            android:layout_marginTop="9dp"
-            android:background="@drawable/outofstock_red"
-            android:gravity="center|right"
-            android:padding="5dp"
-            android:text="  Out of Stock  "
-            android:textColor="@color/colorWhite"
-            android:textSize="10dp" />
-    </LinearLayout>
 
 
 </RelativeLayout>

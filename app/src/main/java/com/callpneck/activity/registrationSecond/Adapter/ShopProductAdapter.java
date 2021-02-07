@@ -91,6 +91,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
                     showQuantityDialog(item);
                 }
 
+
             }
         });
 

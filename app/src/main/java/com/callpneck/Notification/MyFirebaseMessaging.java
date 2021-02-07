@@ -18,6 +18,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.callpneck.R;
 import com.callpneck.SessionManager;
+import com.callpneck.activity.registrationSecond.Activity.MyBookingActivity;
 import com.callpneck.activity.registrationSecond.MainScreenActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -61,7 +62,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         }
         Intent intent = null;
      if(notificationType.equals("OrderStatusChanged")){
-            intent = new Intent(this, MainScreenActivity.class);
+            intent = new Intent(this, MyBookingActivity.class);
             intent.putExtra("orderId",orderId);
             intent.putExtra("orderTo",sellerUid);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

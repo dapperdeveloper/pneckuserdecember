@@ -146,7 +146,7 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
     String userLat;
 
     private float DEFAULT_ZOOM = 15.0f;
-    private ScheduledExecutorService executor,locationExecuter;
+    private ScheduledExecutorService executor,trackingExecuter;
     private Runnable periodicTask,updateRunner;
     private boolean loaded=true;
     boolean okload=true;
@@ -214,17 +214,32 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
         fetchDriverData=new FetchDriverData(this,sessionManager);
         currentBookingStatus = sessionManager.getOrderStatus();
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        executor =
-                Executors.newSingleThreadScheduledExecutor();
+        executor = Executors.newSingleThreadScheduledExecutor();
+
+        trackingExecuter = executor;
+
         Runnable periodicTask = new Runnable() {
             public void run() {
                 // Invoke method(s) to do the work
                 fetchDriverData.start();
+            }
+        };
+
+        executor.scheduleAtFixedRate(periodicTask, 0, 8, TimeUnit.SECONDS);
+
+
+        Runnable trackingTask = new Runnable() {
+            @Override
+            public void run() {
                 currentTrackingBooking();
             }
         };
-        executor.scheduleAtFixedRate(periodicTask, 0, 4, TimeUnit.SECONDS);
+
+        trackingExecuter.scheduleAtFixedRate(trackingTask, 0, 4, TimeUnit.SECONDS);
+
+
         addLocation();
+
 
 
         cancelOrder.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +264,8 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
         }, LOCATION_UPDATE_INTERVAL);
     }
 
+
+    private boolean isBalanceDialogOpen = false;
     private void currentTrackingBooking() {
 
         String ServerURL = "http://pneck.com/api/userCurrBookingTracking";
@@ -341,7 +358,9 @@ public class RealTimeActivity extends AppCompatActivity implements OnMapReadyCal
                             driverRating.setRating(Float.parseFloat(ratingDriver));
                         }
                         if (object.getString("curr_booking_status").
-                                equalsIgnoreCase("order_request_payment")){
+                                equalsIgnoreCase("order_request_payment") &&!isBalanceDialogOpen){
+
+                            isBalanceDialogOpen = true;
                             //launch payment request screen
                             String bookingCharge=object.getString("payable_amount");
                             /* "booking_charge": "50",
