@@ -54,6 +54,9 @@ public class OrderUserList {
     @SerializedName("res_image")
     @Expose
     private String resImage;
+    @SerializedName("type")
+    @Expose
+    private String type;
 
     public Integer getId() {
         return id;
@@ -183,4 +186,11 @@ public class OrderUserList {
         this.resImage = resImage;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

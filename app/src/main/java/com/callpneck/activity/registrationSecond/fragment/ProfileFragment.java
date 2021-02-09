@@ -60,9 +60,8 @@ import retrofit2.Callback;
 public class ProfileFragment extends Fragment {
     ImageButton editProfileBtn;
 
-    RelativeLayout logoutLayout, myBookingRBtn, notificationsBtn,  inviteRBtn, emergencyContactBtn,  changeCurrencyBtn
-            ,changeLanguageBtn,  myWalletBtn, addMoneyBtn, sendMoneyBtn,
-            addHomeBtn, addWorkBtn, personalDetailBtn,
+    RelativeLayout logoutLayout,  notificationsBtn,   emergencyContactBtn,  changeLanguageBtn,
+            addHomeBtn, addWorkBtn,
             aboutUsBtn, privacyPolicyBtn, termNConditionBtn, feedbackBtn, contactUsBtn, settingBtn;
     LinearLayout inviteAndEarnBtn, topUpBtn, walletBtn, bookingBtn;
     View view;
@@ -161,12 +160,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        personalDetailBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEditProfileActivity();
-            }
-        });
+
         feedbackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -213,46 +207,10 @@ public class ProfileFragment extends Fragment {
                 getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
             }
         });
-        addMoneyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openAddMoneyActivity();
-            }
-        });
-        sendMoneyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openTransferMoneyActivity();
-            }
-        });
-        myWalletBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openWalletActivity();
-            }
-        });
 
 
-        changeCurrencyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                View viewLayout = LayoutInflater.from(getContext()).inflate(R.layout.change_currency_layout,null);
-                ImageView close = viewLayout.findViewById(R.id.close);
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setView(viewLayout);
 
-                final AlertDialog dialog = builder.create();
-                dialog.setCancelable(true);
-                dialog.show();
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
 
-            }
-        });
         changeLanguageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -265,12 +223,7 @@ public class ProfileFragment extends Fragment {
                 openEmergencyContactActivity();
             }
         });
-        inviteRBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openInviteFriendActivity();
-            }
-        });
+
 
         notificationsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,14 +232,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        myBookingRBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), MyBookingActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
-            }
-        });
+
         bookingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -478,25 +424,18 @@ public class ProfileFragment extends Fragment {
         topUpBtn = view.findViewById(R.id.topUpBtn);
         walletBtn = view.findViewById(R.id.walletBtn);
         bookingBtn = view.findViewById(R.id.bookingBtn);
-        myBookingRBtn = view.findViewById(R.id.myBookingRBtn);
         notificationsBtn = view.findViewById(R.id.notificationsBtn);
-        inviteRBtn = view.findViewById(R.id.inviteRBtn);
         emergencyContactBtn = view.findViewById(R.id.emergencyContactBtn);
-        changeCurrencyBtn = view.findViewById(R.id.changeCurrencyBtn);
+       // changeCurrencyBtn = view.findViewById(R.id.changeCurrencyBtn);
         changeLanguageBtn = view.findViewById(R.id.changeLanguageBtn);
         settingBtn = view.findViewById(R.id.settingBtn);
-        //
-        //
-        myWalletBtn = view.findViewById(R.id.myWalletBtn);
-        addMoneyBtn = view.findViewById(R.id.addMoneyBtn);
-        sendMoneyBtn = view.findViewById(R.id.sendMoneyBtn);
+
 
         aboutUsBtn = view.findViewById(R.id.aboutUsBtn);
         privacyPolicyBtn = view.findViewById(R.id.privacyPolicyBtn);
         termNConditionBtn = view.findViewById(R.id.termNConditionBtn);
         contactUsBtn = view.findViewById(R.id.contactUsBtn);
         feedbackBtn = view.findViewById(R.id.feedbackBtn);
-        personalDetailBtn = view.findViewById(R.id.personalDetailBtn);
 
         addHomeBtn = view.findViewById(R.id.addHomeBtn);
         addWorkBtn = view.findViewById(R.id.addWorkBtn);

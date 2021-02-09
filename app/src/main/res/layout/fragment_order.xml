@@ -20,7 +20,8 @@
             android:text="@string/my_order"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
-            android:textSize="16sp"
+            android:textSize="18sp"
+            android:fontFamily="@font/montserrat_bold"
             android:textColor="@color/white"
             />
 

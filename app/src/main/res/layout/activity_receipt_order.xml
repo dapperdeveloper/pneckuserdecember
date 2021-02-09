@@ -227,7 +227,7 @@
                                 android:textColor="@color/dark_gray" />
                         </LinearLayout>
 
-
+<!--
                         <LinearLayout
                             android:id="@+id/lytDelivery"
                             android:layout_width="match_parent"
@@ -363,7 +363,7 @@
                                 android:gravity="end"
                                 android:textColor="@color/dark_gray" />
                         </LinearLayout>
-
+-->
                         <LinearLayout
                             android:id="@+id/lytFinalTotal"
                             android:layout_width="match_parent"
@@ -473,12 +473,14 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/order_placed"
                                 android:textAlignment="center"
+                                android:textColor="@color/colorPrimary"
                                 android:textSize="8sp" />
 
                             <ImageView
                                 android:id="@+id/img0"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:tint="@color/colorPrimary"
                                 app:srcCompat="@drawable/ic_tracker_btn" />
 
                             <TextView
@@ -496,7 +498,7 @@
                             android:layout_height="1dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:background="@color/tracking_gray" />
+                            android:background="@color/colorPrimary" />
 
 
                         <LinearLayout
@@ -509,7 +511,8 @@
                                 android:id="@+id/txt1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/processed"
+                                android:text="Order Preparing"
+                                android:textColor="@color/colorPrimary"
                                 android:textAlignment="center"
                                 android:textSize="8sp" />
 
@@ -517,6 +520,7 @@
                                 android:id="@+id/img1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:tint="@color/colorPrimary"
                                 app:srcCompat="@drawable/ic_tracker_btn" />
 
                             <TextView
@@ -534,7 +538,7 @@
                             android:layout_height="1dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:background="@color/tracking_gray" />
+                            android:background="@color/colorPrimary" />
 
 
                         <LinearLayout
@@ -547,7 +551,8 @@
                                 android:id="@+id/txt2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/shipped"
+                                android:text="Order On The Way"
+                                android:textColor="@color/colorPrimary"
                                 android:textAlignment="center"
                                 android:textSize="8sp" />
 
@@ -555,6 +560,7 @@
                                 android:id="@+id/img2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:tint="@color/colorPrimary"
                                 app:srcCompat="@drawable/ic_tracker_btn" />
 
                             <TextView
@@ -573,7 +579,7 @@
                             android:layout_height="1dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:background="@color/tracking_gray" />
+                            android:background="@color/colorPrimary" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -586,6 +592,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/delivered"
+                                android:textColor="@color/colorPrimary"
                                 android:textAlignment="center"
                                 android:textSize="8sp" />
 
@@ -593,6 +600,7 @@
                                 android:id="@+id/img3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:tint="@color/colorPrimary"
                                 app:srcCompat="@drawable/ic_tracker_btn" />
 
                             <TextView

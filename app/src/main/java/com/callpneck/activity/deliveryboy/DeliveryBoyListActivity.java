@@ -284,7 +284,6 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         requestImage = MultipartBody.Part.createFormData("order_image", file.getName(), requestFile);
 
-        Toast.makeText(this, ""+requestImage, Toast.LENGTH_SHORT).show();
         Log.e("SendingData", sessionManager.getUserid()+"\n"+sessionManager.getUserName()+"\n"+dropAddress+"\n"+pickupAddress+"\n"+emp_id+"\n"+emp_name+"\n"+deliveryFee);
 
 

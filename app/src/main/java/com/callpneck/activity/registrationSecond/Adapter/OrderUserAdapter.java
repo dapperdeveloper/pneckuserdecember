@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.callpneck.R;
+import com.callpneck.activity.SideMenuScreens.HelpScreen;
 import com.callpneck.activity.TrackOrder.TrackOrderActivity;
 import com.callpneck.activity.registrationSecond.Activity.ReceiptOrderActivity;
 import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUserList;
@@ -50,14 +51,27 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
         holder.viewDetailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openReceiptActivity(itemList.get(position).getId()+"");
+                openReceiptActivity(itemList.get(position).getId()+"", itemList.get(position).getType());
+            }
+        });
+        holder.helpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openHelpActivity();
             }
         });
     }
 
-    private void openReceiptActivity(String oid) {
+    private void openHelpActivity() {
+        Intent intent = new Intent(context, HelpScreen.class);
+        context.startActivity(intent);
+        context.overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
+    }
+
+    private void openReceiptActivity(String oid, String type) {
         Intent intent = new Intent(context, ReceiptOrderActivity.class);
         intent.putExtra("status", oid);
+        intent.putExtra("type", type);
         context.startActivity(intent);
         context.overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
@@ -74,7 +88,7 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
         TextView shopNameTv, orderStatusTv, orderType, orderIdTv,
                 totalAmountTv, addressTv,  dateOfOrderTv;
         CircleImageView productIv;
-        Button trackOrderBtn, viewDetailBtn;
+        Button trackOrderBtn, viewDetailBtn, helpBtn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -88,7 +102,7 @@ public class OrderUserAdapter extends RecyclerView.Adapter<OrderUserAdapter.View
             addressTv = itemView.findViewById(R.id.addressTv);
             dateOfOrderTv = itemView.findViewById(R.id.textView9);
             viewDetailBtn = itemView.findViewById(R.id.viewDetailBtn);
-
+            helpBtn = itemView.findViewById(R.id.button3);
 
         }
 

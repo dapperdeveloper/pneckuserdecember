@@ -65,7 +65,7 @@ public class ReceiptOrderActivity extends AppCompatActivity {
     View l4;
     LinearLayout returnLyt, lytPromo, lytWallet, lytPriceDetail;
     double totalAfterTax = 0.0;
-    String oid;
+    String oid, type;
     CustPrograssbar custPrograssbar;
     LinearLayout lvlItems;
     List<Item> productinfoArrayList;
@@ -84,17 +84,20 @@ public class ReceiptOrderActivity extends AppCompatActivity {
         lvlItems = findViewById(R.id.lvl_items);
         pBar = findViewById(R.id.pBar);
         lytPriceDetail = findViewById(R.id.lytPriceDetail);
-        lytPromo = findViewById(R.id.lytPromo);
         lytWallet = findViewById(R.id.lytWallet);
         tvItemTotal = findViewById(R.id.tvItemTotal);
         tvTaxPercent = findViewById(R.id.tvTaxPercent);
         tvTaxAmt = findViewById(R.id.tvTaxAmt);
         tvDeliveryCharge = findViewById(R.id.tvDeliveryCharge);
+        tvTotal = findViewById(R.id.tvTotal);
+        /*
         tvDAmount = findViewById(R.id.tvDAmount);
         tvDPercent = findViewById(R.id.tvDPercent);
-        tvTotal = findViewById(R.id.tvTotal);
+        lytPromo = findViewById(R.id.lytPromo);
         tvPromoCode = findViewById(R.id.tvPromoCode);
         tvPCAmount = findViewById(R.id.tvPCAmount);
+
+         */
         tvWallet = findViewById(R.id.tvWallet);
         tvFinalTotal = findViewById(R.id.tvFinalTotal);
         txtorderid = findViewById(R.id.txtorderid);
@@ -135,11 +138,12 @@ public class ReceiptOrderActivity extends AppCompatActivity {
         init();
 
         oid = getIntent().getStringExtra("status");
+        type = getIntent().getStringExtra("type");
         sessionManager = new SessionManager(this);
         custPrograssbar = new CustPrograssbar();
         productinfoArrayList = new ArrayList<>();
         if (oid!=null)
-        getOrderDetails(oid);
+        getOrderDetails(oid, type);
 
         clickListener();
 
@@ -195,10 +199,10 @@ public class ReceiptOrderActivity extends AppCompatActivity {
     }
 
 
-    private void getOrderDetails(String oid) {
+    private void getOrderDetails(String oid, String type) {
 
         custPrograssbar.PrograssCreate(this);
-        Call<TrackOrderModel> call = APIClient.getInstance().UserOrderListDetails(oid);
+        Call<TrackOrderModel> call = APIClient.getInstance().UserOrderListDetails(oid, type);
         call.enqueue(new Callback<TrackOrderModel>() {
             @Override
             public void onResponse(Call<TrackOrderModel> call, Response<TrackOrderModel> response) {
@@ -243,6 +247,8 @@ public class ReceiptOrderActivity extends AppCompatActivity {
     private void setDataToUI(TrackOrder data) {
         res_id = data.getResId()+"";
         order_id = data.getId()+"";
+        tvFinalTotal.setText(data.getTotalAmount()+"");
+        tvItemTotal.setText(data.getTotalAmount()+"");
         txtotherdetails.setText(getString(R.string.name_1) + data.getName() + getString(R.string.mobile_no_1) + data.getMobile() + getString(R.string.address_1) + data.getUsrAddress());
         String[] date = data.getDates().split("\\s+");
         txtorderid.setText(data.getOrderNumber());
@@ -260,6 +266,8 @@ public class ReceiptOrderActivity extends AppCompatActivity {
                 returnLyt.setVisibility(View.VISIBLE);
             }
             lyttracker.setVisibility(View.VISIBLE);
+
+
 
         }
 

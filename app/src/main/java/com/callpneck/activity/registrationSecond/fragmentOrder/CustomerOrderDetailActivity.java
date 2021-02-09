@@ -60,7 +60,7 @@ public class CustomerOrderDetailActivity extends AppCompatActivity {
     RelativeLayout imageViewLayout;
     CustPrograssbar custPrograssbar;
     SessionManager sessionManager;
-    String oid;
+    String oid, type;
 
     ImageView orderImageBtn;
     @Override
@@ -84,13 +84,14 @@ public class CustomerOrderDetailActivity extends AppCompatActivity {
         init();
         if (getIntent()!=null){
             oid = getIntent().getStringExtra("oid");
+            type = getIntent().getStringExtra("type");
             Log.e("OrderId", oid);
         }
         sessionManager = new SessionManager(this);
         custPrograssbar = new CustPrograssbar();
 
         orderImageBtn = findViewById(R.id.orderImageBtn);
-        getCurrentOrder(oid);
+        getCurrentOrder(oid , type);
 
         orderImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,9 +111,9 @@ public class CustomerOrderDetailActivity extends AppCompatActivity {
 
     String orderImage;
 
-    private void getCurrentOrder(String oid) {
+    private void getCurrentOrder(String oid, String type) {
         custPrograssbar.PrograssCreate(CustomerOrderDetailActivity.this);
-        Call<CustumerOrderDetail> call = APIClient.getInstance().deliveryBoyOrderList(oid);
+        Call<CustumerOrderDetail> call = APIClient.getInstance().deliveryBoyOrderList(oid, type);
         call.enqueue(new Callback<CustumerOrderDetail>() {
             @Override
             public void onResponse(Call<CustumerOrderDetail> call, Response<CustumerOrderDetail> response) {

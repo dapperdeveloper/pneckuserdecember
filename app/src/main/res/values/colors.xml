@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1E90FF</color>
-    <color name="colorPrimaryDark">#1E90FF</color>
+    <color name="colorPrimary">#20B2AA</color>
+    <color name="colorPrimaryDark">#20B2AA</color>
     <color name="colorAccent">#0C0FE9</color>
 
     <color name="primary_darker_600">#00ffff</color>
@@ -50,6 +50,8 @@
     <color name="redcolor">#b30000</color>
     <color name="colorRouteLine">#FF4081</color>
 
+
+    <color name="colorgradient">#28BF62</color>
     <color name="overlay_dark_40">#66000000</color>
     <color name="transparentcolor">#0D000000</color>
     <color name="colorTranfar">#7FFBFAFA</color>

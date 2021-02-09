@@ -88,7 +88,7 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
                 android:fontFamily="@font/rubik_bold"
-                android:text="Order nomber"
+                android:text="Order number"
                 android:textAllCaps="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView"
@@ -168,6 +168,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="40dp"
                 android:padding="4dp"
+
                 android:src="@drawable/ic_note_order"
                 app:layout_constraintStart_toEndOf="@+id/view_order_placed"
                 app:layout_constraintTop_toTopOf="parent" />

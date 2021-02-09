@@ -2,25 +2,19 @@ package com.callpneck.activity.registrationSecond.fragmentOrder;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
-import com.callpneck.activity.TrackOrder.TrackOrderActivity;
-import com.callpneck.activity.registrationSecond.Adapter.OrderUserAdapter;
-import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUser;
-import com.callpneck.activity.registrationSecond.Model.response.responseOrder.OrderUserList;
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.fragmentOrder.ModelDelivery.DeliveryData;
 import com.callpneck.activity.registrationSecond.fragmentOrder.ModelDelivery.DeliveryOrder;
@@ -93,6 +87,7 @@ public class DeliveryList extends Fragment {
                                     public void onItemClick(DeliveryData item) {
                                         Intent intent = new Intent(getContext(), CustomerOrderDetailActivity.class);
                                         intent.putExtra("oid",item.getId()+"");
+                                        intent.putExtra("type", item.getType()+"");
                                         startActivity(intent);
                                     }
                                 }));

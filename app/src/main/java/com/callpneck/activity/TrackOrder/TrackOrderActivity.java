@@ -1,271 +1,290 @@
 package com.callpneck.activity.TrackOrder;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Build;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.bumptech.glide.Glide;
 import com.callpneck.R;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.fragmentOrder.ModelDelivery.TrackShopResOrder;
+import com.callpneck.api.ApiClient;
 
-public class TrackOrderActivity extends AppCompatActivity implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+import at.markushi.ui.CircleButton;
+import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    GoogleMap mGoogleMap;
-    SupportMapFragment mapFrag;
-    LocationRequest mLocationRequest;
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-    Marker mCurrLocationMarker;
+public class TrackOrderActivity extends AppCompatActivity {
 
-    String status;
-    ProgressBar receiveid_progress, acceptByDeliveryBoyProgress, picked_up_byDBProgress, delivered_progress;
-    TextView oneTv, twoTv, threeTv, fourTv, fiveTv;
+    View view_order_placed,view_order_confirmed,view_order_processed,view_order_pickup,con_divider,ready_divider,placed_divider;
+    ImageView img_orderconfirmed,orderprocessed,orderpickup;
+    TextView textorderpickup,text_confirmed,textorderprocessed, textorderplaced;
+    ConstraintLayout statusLayout;
+    String orderStatus="";
+    String oid, type;
+    SwipeRefreshLayout swipeLayout;
+    CardView callBtn ;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_order);
+
         if (getSupportActionBar() != null)
         {
             getSupportActionBar().setTitle("");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        oneTv = findViewById(R.id.oneTv);
-        twoTv = findViewById(R.id.twoTv);
-        threeTv = findViewById(R.id.threeTv);
-        fourTv = findViewById(R.id.fourTv);
-        fiveTv = findViewById(R.id.fiveTv);
 
-        receiveid_progress = findViewById(R.id.receiveid_progress);
-        acceptByDeliveryBoyProgress = findViewById(R.id.acceptByDeliveryBoyProgress);
-        picked_up_byDBProgress = findViewById(R.id.picked_up_byDBProgress);
-        delivered_progress = findViewById(R.id.delivered_progress);
+        nameTv = findViewById(R.id.nameTv);
+        deliveryBoyAvatar = findViewById(R.id.deliveryBoyAvatar);
+        call_Btn = findViewById(R.id.call_Btn);
+        swipeLayout = findViewById(R.id.swipeLayout);
+        callBtn = findViewById(R.id.callBtn);
+        view_order_placed=findViewById(R.id.view_order_placed);
+        view_order_confirmed=findViewById(R.id.view_order_confirmed);
+        view_order_processed=findViewById(R.id.view_order_processed);
+        view_order_pickup=findViewById(R.id.view_order_pickup);
+        placed_divider=findViewById(R.id.placed_divider);
+        con_divider=findViewById(R.id.con_divider);
+        ready_divider=findViewById(R.id.ready_divider);
 
-        status = getIntent().getStringExtra("status");
+        textorderplaced = findViewById(R.id.textorderplaced);
+        textorderpickup=findViewById(R.id.textorderpickup);
+        text_confirmed=findViewById(R.id.text_confirmed);
+        textorderprocessed=findViewById(R.id.textorderprocessed);
 
+        img_orderconfirmed=findViewById(R.id.img_orderconfirmed);
+        orderprocessed=findViewById(R.id.orderprocessed);
+        orderpickup=findViewById(R.id.orderpickup);
 
-        mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFrag.getMapAsync(this);
+        statusLayout = findViewById(R.id.statusLayout);
 
-        if (status.equalsIgnoreCase("Processing")){
-            receiveid_progress.setProgress(50);
-            oneTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-        }
-        else if (status.equalsIgnoreCase("Received")){
-            receiveid_progress.setProgress(100);
-            oneTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            twoTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-        }
-        else if (status.equalsIgnoreCase("Preparing")){
-            receiveid_progress.setProgress(100);
-            acceptByDeliveryBoyProgress.setProgress(100);
-            oneTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            twoTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            threeTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-        }
-        else if (status.equalsIgnoreCase("On The Way")){
-            receiveid_progress.setProgress(100);
-            acceptByDeliveryBoyProgress.setProgress(100);
-            picked_up_byDBProgress.setProgress(100);
-            oneTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            twoTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            threeTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            fourTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-             }
-        else {
-            receiveid_progress.setProgress(100);
-            acceptByDeliveryBoyProgress.setProgress(100);
-            picked_up_byDBProgress.setProgress(100);
-            delivered_progress.setProgress(100);
-            oneTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            twoTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            threeTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            fourTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            fiveTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-
+        if (getIntent()!=null) {
+            oid = getIntent().getStringExtra("oid");
+            type = getIntent().getStringExtra("type");
         }
 
-
-
-    }
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return super.onSupportNavigateUp();
-    }
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
-    }
-
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mGoogleMap=googleMap;
-        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-
-        //Initialize Google Play Services
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                //Location Permission already granted
-                buildGoogleApiClient();
-                mGoogleMap.setMyLocationEnabled(true);
-            } else {
-                //Request Location Permission
-                checkLocationPermission();
-            }
-        }
-        else {
-            buildGoogleApiClient();
-            mGoogleMap.setMyLocationEnabled(true);
-        }
-    }
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
-    }
-
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(this)
-                        .setTitle("Location Permission Needed")
-                        .setMessage("This app needs the Location permission, please accept to use location functionality")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(TrackOrderActivity.this,
-                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_LOCATION );
-                            }
-                        })
-                        .create()
-                        .show();
-
-
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION );
-            }
-        }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        mLastLocation = location;
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker.remove();
-        }
-
-        //Place current location marker
-        LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude() );
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-        mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
-
-        //move map camera
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,16.0f));
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-
-                        if (mGoogleApiClient == null) {
-                            buildGoogleApiClient();
-                        }
-                        mGoogleMap.setMyLocationEnabled(true);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getOrderData(oid, type);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeLayout.setRefreshing(false);
                     }
+                }, 1000);
+            }
+        });
+        getOrderData(oid, type);
 
+        call_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (dNumber!= null)
+                    callToNumber(dNumber);
+            }
+        });
+
+    }
+    private void callToNumber(String number) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", number, null));
+        startActivity(intent);
+    }
+    String dNumber, dName, dImage;
+    TextView nameTv;
+    CircleImageView deliveryBoyAvatar;
+    CircleButton call_Btn;
+    private void getOrderData(String oid, String type) {
+        Call<TrackShopResOrder> call = APIClient.getInstance().resShopTrack(oid, type);
+        call.enqueue(new Callback<TrackShopResOrder>() {
+            @Override
+            public void onResponse(Call<TrackShopResOrder> call, Response<TrackShopResOrder> response) {
+                if (response.isSuccessful()){
+                    try {
+                        TrackShopResOrder order = response.body();
+                        if (order.getSuccess()){
+                            statusLayout.setVisibility(View.VISIBLE);
+                            String status = order.getStatus();
+                            if (status.equalsIgnoreCase("Processing")){
+                                orderStatus = "4";
+                                getOrderStatus(orderStatus);
+                                callBtn.setVisibility(View.GONE);
+                            }
+                            if (status.equalsIgnoreCase("Received")){
+                                orderStatus = "0";
+                                getOrderStatus(orderStatus);
+                                callBtn.setVisibility(View.GONE);
+                            }
+                            else if (status.equalsIgnoreCase("Preparing")){
+                                orderStatus="1";
+                                getOrderStatus(orderStatus);
+                                callBtn.setVisibility(View.GONE);
+                            }
+                            else if (status.equalsIgnoreCase("On The Way")){
+                                orderStatus = "2";
+                                callBtn.setVisibility(View.VISIBLE);
+                                dName = order.getName();
+                                dNumber = order.getMobile();
+                                dImage = order.getProfile();
+                                nameTv.setText(dName);
+                                Glide.with(TrackOrderActivity.this).load(dImage).into(deliveryBoyAvatar);
+                                getOrderStatus(orderStatus);
+                            }
+                            else if (status.equalsIgnoreCase("Delivered")){
+                                orderStatus= "3";
+                                callBtn.setVisibility(View.GONE);
+                                getOrderStatus(orderStatus);
+                            }
+
+                        }
+                    }catch (Exception e){
+
+                    }
                 }
-                else {
+            }
 
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+            @Override
+            public void onFailure(Call<TrackShopResOrder> call, Throwable t) {
 
-                }
-                break;
+            }
+        });
+    }
 
-            // other 'case' lines to check for other
-            // permissions this app might request
+
+    private void getOrderStatus(String orderStatus) {
+        if (orderStatus.equals("4")){
+            float alfa= (float) 0.5;
+            setStatus0(alfa);
         }
+        else if (orderStatus.equals("0")){
+            float alfa= (float) 0.5;
+            setStatus(alfa);
+
+        }else if (orderStatus.equals("1")){
+            float alfa= (float) 1;
+            setStatus1(alfa);
+        }else if (orderStatus.equals("2")){
+            float alfa= (float) 1;
+            setStatus2(alfa);
+        }else if (orderStatus.equals("3")){
+            float alfa= (float) 1;
+            setStatus3(alfa);
+        }
+    }
+
+    private void setStatus0(float alfa) {
+        float myf= (float) 0.5;
+        view_order_placed.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        view_order_confirmed.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        orderprocessed.setAlpha(alfa);
+        view_order_processed.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        con_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        placed_divider.setAlpha(alfa);
+        img_orderconfirmed.setAlpha(alfa);
+        placed_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        text_confirmed.setAlpha(alfa);
+        textorderprocessed.setAlpha(alfa);
+        textorderplaced.setAlpha(alfa);
+        view_order_pickup.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        ready_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        orderpickup.setAlpha(alfa);
+        textorderpickup.setAlpha(myf);
+
+    }
+    private void setStatus(float alfa) {
+        float myf= (float) 0.5;
+        view_order_placed.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        view_order_confirmed.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        orderprocessed.setAlpha(alfa);
+        view_order_processed.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        con_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        placed_divider.setAlpha(alfa);
+        img_orderconfirmed.setAlpha(alfa);
+        placed_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        text_confirmed.setAlpha(alfa);
+        textorderprocessed.setAlpha(alfa);
+        view_order_pickup.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        ready_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        orderpickup.setAlpha(alfa);
+        textorderpickup.setAlpha(myf);
+
+    }
+    private void setStatus1(float alfa) {
+        float myf= (float) 0.5;
+        view_order_placed.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        view_order_confirmed.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        orderprocessed.setAlpha(myf);
+        view_order_processed.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        con_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        placed_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        img_orderconfirmed.setAlpha(alfa);
+        text_confirmed.setAlpha(alfa);
+        textorderprocessed.setAlpha(myf);
+        view_order_pickup.setAlpha(myf);
+        ready_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        orderpickup.setAlpha(myf);
+        view_order_pickup.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        textorderpickup.setAlpha(myf);
+    }
+
+    private void setStatus2(float alfa) {
+        float myf= (float) 0.5;
+        view_order_placed.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        view_order_confirmed.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        orderprocessed.setAlpha(alfa);
+        view_order_processed.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        con_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        placed_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        img_orderconfirmed.setAlpha(alfa);
+
+        text_confirmed.setAlpha(alfa);
+        textorderprocessed.setAlpha(alfa);
+        view_order_pickup.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        ready_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_current));
+        textorderpickup.setAlpha(myf);
+        orderpickup.setAlpha(myf);
+
+    }
+
+    private void setStatus3(float alfa) {
+        view_order_placed.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        view_order_confirmed.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        orderprocessed.setAlpha(alfa);
+        view_order_processed.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        con_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+
+        img_orderconfirmed.setAlpha(alfa);
+        placed_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        text_confirmed.setAlpha(alfa);
+        textorderprocessed.setAlpha(alfa);
+        view_order_pickup.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        ready_divider.setBackground(getResources().getDrawable(R.drawable.shape_status_completed));
+        textorderpickup.setAlpha(alfa);
+        orderpickup.setAlpha(alfa);
     }
 
 }

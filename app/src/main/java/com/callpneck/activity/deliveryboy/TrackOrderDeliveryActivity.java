@@ -208,7 +208,6 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
                                 getOrderStatus(orderStatus);
                                 statusLayout.setVisibility(View.VISIBLE);
                                 callBtnLayout.setVisibility(View.VISIBLE);
-
                             }
                             else if (status.equalsIgnoreCase("Delivered")){
                                 orderStatus= "3";
@@ -222,9 +221,10 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
                                     public void run() {
                                         sessionManager.clearDeliveryOrderSession();
                                         sessionManager.setBooleanData(isopen, false);
-                                        Intent intent=new Intent(TrackOrderDeliveryActivity.this, MainScreenActivity.class);
+                                        Intent intent = new Intent(TrackOrderDeliveryActivity.this, MainScreenActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
+                                        overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                                     }
                                 }, 2000);
                             }

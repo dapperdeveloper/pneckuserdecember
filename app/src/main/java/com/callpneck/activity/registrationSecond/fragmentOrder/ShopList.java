@@ -92,7 +92,8 @@ public class ShopList extends Fragment {
                                     @Override
                                     public void onItemClick(OrderUserList item) {
                                         Intent intent = new Intent(getActivity(), TrackOrderActivity.class);
-                                        intent.putExtra("status",item.getStatus()+"");
+                                        intent.putExtra("oid",item.getId()+"");
+                                        intent.putExtra("type",item.getType()+"");
                                         startActivity(intent);
                                         getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
                                     }

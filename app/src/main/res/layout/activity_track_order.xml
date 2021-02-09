@@ -6,429 +6,355 @@
     android:layout_height="match_parent"
     tools:context=".activity.TrackOrder.TrackOrderActivity">
 
-<androidx.core.widget.NestedScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:id="@+id/swipeLayout">
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            />
+            android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="20dp">
-            <LinearLayout
-                android:layout_width="wrap_content"
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/statusLayout"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="24dp"
-                android:orientation="vertical">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="550dp">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/ordered_indicator"
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="16dp"
-                        app:civ_border_width="1dp"
-                        app:civ_border_color="@color/white"
-                        app:civ_circle_background_color="@color/white"
-                        android:src="@drawable/ic_wall_clock"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-
-                    <TextView
-                        android:id="@+id/timeof"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="15dp"
-                        android:text="15:15"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/ordered_indicator"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/ordered_indicator"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ProgressBar
-                        android:id="@+id/receiveid_progress"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="90dp"
-                        android:layout_height="3dp"
-                        android:progress="50"
-                        android:layout_marginStart="@dimen/denim_20"
-                        android:layout_marginLeft="9dp"
-                        android:layout_marginTop="34dp"
-                        android:progressBackgroundTint="@color/black"
-                        android:progressTint="@color/colorPrimary"
-                        android:rotation="90"
-                        android:transformPivotX="0dp"
-                        app:layout_constraintStart_toStartOf="@+id/ordered_indicator"
-                        app:layout_constraintTop_toTopOf="@+id/ordered_indicator" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/acceptResIV"
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="80dp"
-                        app:civ_border_width="1dp"
-                        app:civ_border_color="@color/white"
-                        app:civ_circle_background_color="@color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ordered_indicator"
-                        android:src="@drawable/ic_shop"
-                        />
-
-                    <ProgressBar
-                        android:id="@+id/acceptByDeliveryBoyProgress"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="90dp"
-                        android:layout_height="3dp"
-                        android:progress="0"
-                        android:layout_marginStart="@dimen/denim_20"
-                        android:layout_marginLeft="9dp"
-                        android:layout_marginTop="34dp"
-                        android:progressBackgroundTint="@color/black"
-                        android:progressTint="@color/colorPrimary"
-                        android:rotation="90"
-                        android:transformPivotX="0dp"
-                        app:layout_constraintStart_toStartOf="@+id/acceptResIV"
-                        app:layout_constraintTop_toTopOf="@+id/acceptResIV"
-                        />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/accecpDelivery"
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:tint="@color/black"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="80dp"
-                        app:civ_border_width="1dp"
-                        app:civ_border_color="@color/white"
-                        app:civ_circle_background_color="@color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/acceptByDeliveryBoyProgress"
-                        android:src="@drawable/ic_delivery_boy" />
-
-                    <ProgressBar
-                        android:id="@+id/picked_up_byDBProgress"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="90dp"
-                        android:layout_height="3dp"
-                        android:progress="0"
-                        android:layout_marginStart="@dimen/denim_20"
-                        android:layout_marginLeft="9dp"
-                        android:layout_marginTop="34dp"
-                        android:progressBackgroundTint="@color/black"
-                        android:progressTint="@color/colorPrimary"
-                        android:rotation="90"
-                        android:transformPivotX="0dp"
-                        app:layout_constraintStart_toStartOf="@+id/accecpDelivery"
-                        app:layout_constraintTop_toTopOf="@+id/accecpDelivery"
-                        />
-
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/pickUpDelivery"
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:tint="@color/black"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="80dp"
-                        app:civ_border_width="1dp"
-                        app:civ_border_color="@color/white"
-                        app:civ_circle_background_color="@color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/picked_up_byDBProgress"
-                        android:src="@drawable/ic_shipping" />
-
-                    <ProgressBar
-                        android:id="@+id/delivered_progress"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="90dp"
-                        android:layout_height="3dp"
-                        android:progress="0"
-                        android:layout_marginStart="@dimen/denim_20"
-                        android:layout_marginLeft="9dp"
-                        android:layout_marginTop="34dp"
-                        android:progressBackgroundTint="@color/black"
-                        android:progressTint="@color/colorPrimary"
-                        android:rotation="90"
-                        android:transformPivotX="0dp"
-                        app:layout_constraintStart_toStartOf="@+id/pickUpDelivery"
-                        app:layout_constraintTop_toTopOf="@+id/pickUpDelivery"
-                        />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/delivered"
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:tint="@color/black"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="80dp"
-                        app:civ_border_width="1dp"
-                        app:civ_border_color="@color/white"
-                        app:civ_circle_background_color="@color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/delivered_progress"
-                        android:src="@drawable/ic_done" />
-
-
-
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-
-         <LinearLayout
-             android:layout_width="match_parent"
-             android:layout_height="550dp"
-             android:orientation="vertical"
-             android:layout_marginTop="@dimen/margin_10dp"
-             android:layout_marginLeft="@dimen/denim_20"
-             android:layout_marginRight="@dimen/denim_20"
-             >
-
-             <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:orientation="horizontal"
-                 >
-
-                 <View
-                     android:layout_width="1dp"
-                     android:layout_height="60dp"
-                     android:background="@color/colorGrey1"/>
-
-                 <LinearLayout
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:orientation="vertical"
-                     android:layout_marginLeft="@dimen/margin_10dp"
-                     >
-                     <TextView
-                         android:id="@+id/oneTv"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:text="Order Placed"
-                         android:textStyle="bold"
-                         android:textSize="16sp"
-
-                         />
-                     <TextView
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:text="Order received. Awaiting Restaurant Confirmation"
-                         android:textSize="13dp"
-                         android:textColor="@color/colorGrey1"
-
-
-                         />
-                 </LinearLayout>
-
-
-             </LinearLayout>
-             <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:orientation="horizontal"
-                 android:layout_marginTop="40dp"
-                 >
-
-                 <View
-                     android:layout_width="1dp"
-                     android:layout_height="60dp"
-                     android:background="@color/colorGrey1"/>
-
-                 <LinearLayout
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:orientation="vertical"
-                     android:layout_marginLeft="@dimen/margin_10dp"
-                     >
-
-                     <TextView
-                         android:id="@+id/twoTv"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:text="Accepted by Owner"
-                         android:textSize="16sp"
-                         android:textStyle="bold"
-
-                         />
-
-                     <TextView
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:text="Order has been confirmed by the owner. Delivery boy assigned shortly."
-                         android:textSize="13dp"
-                         android:textColor="@color/colorGrey1"
-
-
-                         />
-                 </LinearLayout>
-
-
-             </LinearLayout>
-             <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:orientation="horizontal"
-                 android:layout_marginTop="40dp"
-                 >
-
-                 <View
-                     android:layout_width="1dp"
-                     android:layout_height="60dp"
-                     android:background="@color/colorGrey1"/>
-
-                 <LinearLayout
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:orientation="vertical"
-                     android:layout_marginLeft="@dimen/margin_10dp"
-                     >
-
-                     <TextView
-                         android:id="@+id/threeTv"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:text="Accepted by Delivery Boy"
-                         android:textSize="16sp"
-                         android:textStyle="bold"
-
-                         />
-
-                     <TextView
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:text="Delivery Boy is on a way to pick the order."
-                         android:textSize="13dp"
-                         android:textColor="@color/colorGrey1"
-
-
-                         />
-                 </LinearLayout>
-
-
-             </LinearLayout>
-             <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:orientation="horizontal"
-                 android:layout_marginTop="40dp"
-                 >
-
-                 <View
-                     android:layout_width="1dp"
-                     android:layout_height="60dp"
-                     android:background="@color/colorGrey1"/>
-
-                 <LinearLayout
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:orientation="vertical"
-                     android:layout_marginLeft="@dimen/margin_10dp"
-                     >
-
-                     <TextView
-                         android:id="@+id/fourTv"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:text="Picked up by Delivery Boy"
-                         android:textSize="16sp"
-                         android:textStyle="bold"
-
-                         />
-
-                     <TextView
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:text="Delivery Boy has picked up the order. Order is on the way to delivery."
-                         android:textSize="13dp"
-                         android:textColor="@color/colorGrey1"
-
-
-                         />
-                 </LinearLayout>
-
-
-             </LinearLayout>
-             <LinearLayout
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:orientation="horizontal"
-             android:layout_marginTop="40dp"
-             >
-
-             <View
-                 android:layout_width="1dp"
-                 android:layout_height="40dp"
-                 android:background="@color/colorGrey1"/>
-
-             <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:orientation="vertical"
-                 android:layout_marginLeft="@dimen/margin_10dp"
-                 >
-
-                 <TextView
-                     android:id="@+id/fiveTv"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:text="Delivered"
-                     android:textSize="16sp"
-                     android:textStyle="bold"
-
-                     />
-
-                 <TextView
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:text="Your order has been delivererd"
-                     android:textSize="13dp"
-                     android:textColor="@color/colorGrey1"
-
-                     />
-             </LinearLayout>
-
-
-         </LinearLayout>
-
-
-         </LinearLayout>
-
-        </LinearLayout>
-
-
-
-    </LinearLayout>
-
-</androidx.core.widget.NestedScrollView>
+                android:visibility="visible"
+                >
+
+                <View
+                    android:id="@+id/view_order_placed"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="@drawable/shape_status_completed"
+                    app:layout_constraintBottom_toBottomOf="@+id/orderplaced"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/orderplaced" />
+
+                <ImageView
+                    android:id="@+id/orderplaced"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="40dp"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_note_order"
+                    app:layout_constraintStart_toEndOf="@+id/view_order_placed"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/supporter_placed"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/orderplaced"
+                    app:layout_constraintEnd_toEndOf="@+id/orderplaced"
+                    app:layout_constraintStart_toStartOf="@+id/orderplaced"
+                    app:layout_constraintTop_toTopOf="@+id/orderplaced" />
+
+                <TextView
+                    android:id="@+id/textorderplaced"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Order Accepted"
+                    android:textColor="@color/colorText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/supporter_placed"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/orderplaced" />
+
+                <TextView
+                    android:id="@+id/placed_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Order Accepted by Owner!"
+                    app:layout_constraintEnd_toEndOf="@id/textorderplaced"
+                    app:layout_constraintStart_toStartOf="@+id/textorderplaced"
+                    app:layout_constraintTop_toBottomOf="@+id/textorderplaced" />
+
+                <View
+                    android:id="@+id/view_order_confirmed"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="@drawable/shape_status_completed"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_orderconfirmed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/img_orderconfirmed" />
+
+                <ImageView
+                    android:id="@+id/img_orderconfirmed"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/ic_shipped"
+                    android:padding="4dp"
+                    app:layout_constraintStart_toEndOf="@+id/view_order_confirmed"
+                    app:layout_constraintTop_toBottomOf="@+id/orderplaced" />
+
+                <View
+                    android:id="@+id/supporter_confirmed"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_orderconfirmed"
+                    app:layout_constraintEnd_toEndOf="@+id/img_orderconfirmed"
+                    app:layout_constraintStart_toStartOf="@+id/img_orderconfirmed"
+                    app:layout_constraintTop_toTopOf="@+id/img_orderconfirmed" />
+
+                <TextView
+                    android:id="@+id/text_confirmed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Preparing"
+                    android:textColor="@color/colorText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/supporter_confirmed"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/img_orderconfirmed" />
+
+                <TextView
+                    android:id="@+id/confirmed_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Order has been shipped."
+                    app:layout_constraintEnd_toEndOf="@id/text_confirmed"
+                    app:layout_constraintStart_toStartOf="@+id/text_confirmed"
+                    app:layout_constraintTop_toBottomOf="@+id/text_confirmed" />
+
+                <View
+                    android:id="@+id/placed_divider"
+                    android:layout_width="2dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/colorPrimaryDark"
+                    app:layout_constraintBottom_toTopOf="@+id/view_order_confirmed"
+                    app:layout_constraintEnd_toEndOf="@+id/view_order_placed"
+                    app:layout_constraintStart_toStartOf="@+id/view_order_placed"
+                    app:layout_constraintTop_toBottomOf="@id/view_order_placed" />
+
+                <View
+                    android:id="@+id/view_order_processed"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="@drawable/shape_status_completed"
+                    app:layout_constraintBottom_toBottomOf="@+id/orderprocessed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/orderprocessed" />
+
+                <ImageView
+                    android:id="@+id/orderprocessed"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="40dp"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_packed"
+                    app:layout_constraintStart_toEndOf="@+id/view_order_processed"
+                    app:layout_constraintTop_toBottomOf="@+id/img_orderconfirmed" />
+
+                <View
+                    android:id="@+id/supporter_processed"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/orderprocessed"
+                    app:layout_constraintEnd_toEndOf="@+id/orderprocessed"
+                    app:layout_constraintStart_toStartOf="@+id/orderprocessed"
+                    app:layout_constraintTop_toTopOf="@+id/orderprocessed" />
+
+                <TextView
+                    android:id="@+id/textorderprocessed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="On The Way"
+                    android:textColor="@color/colorText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/supporter_processed"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/orderprocessed" />
+
+                <TextView
+                    android:id="@+id/processed_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Order has been packed."
+                    app:layout_constraintEnd_toEndOf="@id/textorderprocessed"
+                    app:layout_constraintStart_toStartOf="@+id/textorderprocessed"
+                    app:layout_constraintTop_toBottomOf="@+id/textorderprocessed" />
+
+                <View
+                    android:id="@+id/con_divider"
+                    android:layout_width="2dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/colorPrimaryDark"
+                    app:layout_constraintBottom_toTopOf="@+id/view_order_processed"
+                    app:layout_constraintEnd_toEndOf="@+id/view_order_confirmed"
+                    app:layout_constraintStart_toStartOf="@+id/view_order_confirmed"
+                    app:layout_constraintTop_toBottomOf="@id/view_order_confirmed" />
+
+                <View
+                    android:id="@+id/view_order_pickup"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="@drawable/shape_status_current"
+                    app:layout_constraintBottom_toBottomOf="@+id/orderpickup"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/orderpickup" />
+
+                <ImageView
+
+                    android:id="@+id/orderpickup"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="40dp"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_delivery_man"
+                    app:layout_constraintStart_toEndOf="@+id/view_order_pickup"
+                    app:layout_constraintTop_toBottomOf="@+id/orderprocessed" />
+
+                <View
+
+                    android:id="@+id/supporter_pickup"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/orderpickup"
+                    app:layout_constraintEnd_toEndOf="@+id/orderpickup"
+                    app:layout_constraintStart_toStartOf="@+id/orderpickup"
+                    app:layout_constraintTop_toTopOf="@+id/orderpickup" />
+
+                <TextView
+                    android:id="@+id/textorderpickup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Delivered"
+                    android:textColor="@color/colorText"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/supporter_pickup"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/orderpickup" />
+
+                <TextView
+                    android:id="@+id/pickup_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.5"
+                    android:text="Order has been delivered!"
+                    app:layout_constraintEnd_toEndOf="@id/textorderpickup"
+                    app:layout_constraintStart_toStartOf="@+id/textorderpickup"
+                    app:layout_constraintTop_toBottomOf="@+id/textorderpickup" />
+
+                <View
+                    android:id="@+id/ready_divider"
+                    android:layout_width="2dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:alpha="0.5"
+                    android:background="@color/colorPrimaryDark"
+                    app:layout_constraintBottom_toTopOf="@+id/view_order_pickup"
+                    app:layout_constraintEnd_toEndOf="@+id/view_order_processed"
+                    app:layout_constraintStart_toStartOf="@+id/view_order_processed"
+                    app:layout_constraintTop_toBottomOf="@id/view_order_processed" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/callBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        android:visibility="visible"
+
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/deliveryBoyAvatar"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="1dp"
+                android:layout_margin="2dp"
+                android:src="@drawable/pneck_user"
+                />
+
+            <TextView
+                android:id="@+id/nameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mohammad Azam"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/black"
+                android:singleLine="true"
+                android:textSize="18sp"
+                android:layout_marginLeft="8dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/call_Btn"
+                android:layout_toRightOf="@+id/deliveryBoyAvatar"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nameTv"
+                android:singleLine="true"
+                android:visibility="gone"
+                android:layout_marginTop="2dp"
+                android:layout_toRightOf="@+id/deliveryBoyAvatar"
+                android:text="13 minutes left"
+                android:layout_toLeftOf="@+id/call_Btn"
+                />
+            <at.markushi.ui.CircleButton
+                android:id="@+id/call_Btn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_call_"
+                app:cb_color="@color/colorPrimary"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                app:cb_pressedRingWidth="8dip" />
+
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 
 
 

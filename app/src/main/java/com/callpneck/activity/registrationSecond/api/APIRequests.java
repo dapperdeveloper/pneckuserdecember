@@ -31,6 +31,7 @@ import com.callpneck.activity.registrationSecond.Model.userList.PneckUserList;
 import com.callpneck.activity.registrationSecond.Model.walletOrder.WalletOrder;
 import com.callpneck.activity.registrationSecond.fragmentOrder.ModelDelivery.CustumerOrderDetail;
 import com.callpneck.activity.registrationSecond.fragmentOrder.ModelDelivery.DeliveryOrder;
+import com.callpneck.activity.registrationSecond.fragmentOrder.ModelDelivery.TrackShopResOrder;
 import com.callpneck.model.dashboard.MainDashboard;
 import com.squareup.okhttp.ResponseBody;
 
@@ -315,7 +316,7 @@ public interface APIRequests {
 
     @FormUrlEncoded
     @POST("UserOrderListDetails")
-    Call<TrackOrderModel> UserOrderListDetails(@Field("order_id") String vendor_id);
+    Call<TrackOrderModel> UserOrderListDetails(@Field("order_id") String vendor_id, @Field("type") String type);
 
 
     @FormUrlEncoded
@@ -383,12 +384,15 @@ public interface APIRequests {
 
     @FormUrlEncoded
     @POST("DeliveryBoyOrderList")
-    Call<CustumerOrderDetail> deliveryBoyOrderList(@Field("order_id") String order_id
-    );
+    Call<CustumerOrderDetail> deliveryBoyOrderList(@Field("order_id") String order_id, @Field("type") String type);
 
     @FormUrlEncoded
     @POST("ShopRating")
     Call<ShopReviewRes> reviewData(@Field("res_id") String order_id
     );
+
+    @FormUrlEncoded
+    @POST("ResStatus")
+    Call<TrackShopResOrder> resShopTrack(@Field("order_id") String order_id, @Field("type") String type);
 
 }

@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.callpneck.LaunchActivityClass;
@@ -48,9 +50,12 @@ import com.callpneck.activity.registrationSecond.Activity.ProviderDetailActivity
 import com.callpneck.activity.registrationSecond.Activity.SearchActivity;
 import com.callpneck.activity.registrationSecond.Activity.SearchLocationActivity;
 import com.callpneck.activity.registrationSecond.Activity.ShopHomeActivity;
+import com.callpneck.activity.registrationSecond.Adapter.CatRestaurantNearItem;
 import com.callpneck.activity.registrationSecond.Adapter.MyCategoryAdapter;
 import com.callpneck.activity.registrationSecond.Adapter.MyCustomPagerAdapter;
+import com.callpneck.activity.registrationSecond.DemoModel.CatResModel;
 import com.callpneck.activity.registrationSecond.Model.Category;
+import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.model.dashboard.BannerSliderImage;
 import com.callpneck.model.dashboard.MainDashboard;
@@ -78,6 +83,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -117,7 +123,7 @@ HomeFragment extends Fragment {
     ImageView loc, ll;
     TextView addressTv;
 
-    private LinearLayout locationBtn;
+    private RelativeLayout locationBtn;
     private SessionManager sessionManager;
     AutoScrollViewPager viewPager;
     TabLayout tabview;
@@ -127,8 +133,11 @@ HomeFragment extends Fragment {
 
     private static final int LOCATION_REQUEST_CODE = 100;
 
-    private ShimmerFrameLayout mShimmerCat, shimerPromo;
-    private LinearLayout bannerSlider;
+    private ShimmerFrameLayout mShimmerCat, shimerPromo, getShimmerchantnear;
+
+    private LinearLayout bannerSlider, shimlistnear,shimlistcatnear;
+    private TextView walletBlncTv, user_name;
+    String myName;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +155,7 @@ HomeFragment extends Fragment {
         mShimmerCat.startShimmerAnimation();
 
         shimerPromo.startShimmerAnimation();
+        getShimmerchantnear.startShimmerAnimation();
     }
     private void shimmertutup() {
         recyclerView.setVisibility(View.VISIBLE);
@@ -155,6 +165,9 @@ HomeFragment extends Fragment {
 
         shimerPromo.setVisibility(View.GONE);
         shimerPromo.stopShimmerAnimation();
+
+        getShimmerchantnear.stopShimmerAnimation();
+        getShimmerchantnear.setVisibility(View.GONE);
     }
     private void init(View view) {
         loc = view.findViewById(R.id.loc);
@@ -170,6 +183,11 @@ HomeFragment extends Fragment {
         mShimmerCat = view.findViewById(R.id.shimmercat);
         shimerPromo = view.findViewById(R.id.shimmepromo);
         bannerSlider = view.findViewById(R.id.rlslider);
+        walletBlncTv = view.findViewById(R.id.balance);
+        getShimmerchantnear = view.findViewById(R.id.shimmerchantnear);
+        shimlistnear = view.findViewById(R.id.shimlistnear);
+        shimlistcatnear = view.findViewById(R.id.shimlistcatnear);
+        user_name = view.findViewById(R.id.namapengguna);
         categoryList = new ArrayList<>();
     }
 
@@ -180,16 +198,59 @@ HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
         init(view);
+
+        TextView nighttext = view.findViewById(R.id.nighttext);
+        ImageView timeStatusIv = view.findViewById(R.id.timeStatusIv);
         initView();
         //init permission
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         sessionManager = new SessionManager(getContext());
 
+        String[] parsedpagi = "04:00".split(":");
+        String[] parsedsiang = "11:00".split(":");
+        String[] parsedsore = "13:00".split(":");
+        String[] parsedmalam = "18:00".split(":");
+
+        int pagi = Integer.parseInt(parsedpagi[0]), menitPagi = Integer.parseInt(parsedpagi[1]);
+        int siang = Integer.parseInt(parsedsiang[0]), menitSiang = Integer.parseInt(parsedsiang[1]);
+        int sore = Integer.parseInt(parsedsore[0]), menitSore = Integer.parseInt(parsedsore[1]);
+        int malam = Integer.parseInt(parsedmalam[0]), menitMalam = Integer.parseInt(parsedmalam[1]);
+        int totalpagi = (pagi * 60) + menitPagi;
+        int totalsiang = (siang * 60) + menitSiang;
+        int totalsore = (sore * 60) + menitSore;
+        int totalmalam = (malam * 60) + menitMalam;
+
+        Calendar now = Calendar.getInstance();
+        int totalMenitNow = (now.get(Calendar.HOUR_OF_DAY) * 60) + now.get(Calendar.MINUTE);
+
+        if (totalMenitNow >= totalpagi && totalMenitNow <= totalsiang && totalMenitNow <= totalsore && totalMenitNow <= totalmalam ) {
+            nighttext.setText("Good Morning");
+            timeStatusIv.setImageResource(R.drawable.ic_sunrise);
+        } else if (totalMenitNow >= totalpagi && totalMenitNow >= totalsiang && totalMenitNow <= totalsore && totalMenitNow <= totalmalam ) {
+            nighttext.setText("Good Afternoon");
+            timeStatusIv.setImageResource(R.drawable.ic_noon);
+        } else if (totalMenitNow >= totalpagi && totalMenitNow >= totalsiang && totalMenitNow >= totalsore && totalMenitNow <= totalmalam ) {
+            nighttext.setText("Good Afternoon");
+            timeStatusIv.setImageResource(R.drawable.ic_evening);
+        } else {
+            nighttext.setText("Good Night");
+            timeStatusIv.setImageResource(R.drawable.ic_night);
+        }
 
 
         shimmershow();
-        if (AppController.isConnected(getActivity()))
-        getData();
+        if (AppController.isConnected(getActivity())){
+            getWalletBalance();
+            getData();
+        }
+
+        myName = sessionManager.getUserName();
+        if (myName!=null){
+            user_name.setText(myName);
+        }else {
+            user_name.setText("Pneck User");
+        }
+
 
 //        sessionManager.clearDeliveryOrderSession();
 //        sessionManager.setBooleanData(isopen, false);
@@ -209,12 +270,57 @@ HomeFragment extends Fragment {
             detectLocation();
         }
 
+
+        //Static Demo
+
+       RecyclerView rvcatmerchantnear = view.findViewById(R.id.catmerchantnear);
+        rvcatmerchantnear.setHasFixedSize(true);
+        rvcatmerchantnear.setNestedScrollingEnabled(false);
+        rvcatmerchantnear.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
+        List<CatResModel> dataList = new ArrayList<>();
+        dataList.add(new CatResModel("All"));
+        dataList.add(new CatResModel("Food"));
+        dataList.add(new CatResModel("Veg"));
+        dataList.add(new CatResModel("Non-veg"));
+        dataList.add(new CatResModel("Snacks"));
+
+        if (dataList.size()>0){
+            shimlistcatnear.setVisibility(View.GONE);
+            rvcatmerchantnear.setVisibility(View.VISIBLE);
+            CatRestaurantNearItem restaurantNearItem =  new CatRestaurantNearItem(dataList, getContext(), R.layout.item_cat_restaurant, new CatRestaurantNearItem.OnItemClickListener() {
+                @Override
+                public void onItemClick(CatResModel item) {
+
+                }
+            });
+            rvcatmerchantnear.setAdapter(restaurantNearItem);
+        }
+
+        //static Demo
         clickListener();
 
         return view;
 
     }
 
+    private void getWalletBalance() {
+        Call<GetWallet> call = APIClient.getInstance().getWallet(sessionManager.getUserid());
+        call.enqueue(new Callback<GetWallet>() {
+            @Override
+            public void onResponse(Call<GetWallet> call, retrofit2.Response<GetWallet> response) {
+                GetWallet getWallet = response.body();
+                if (getWallet != null && getWallet.getStatus()){
+                    walletBlncTv.setText("₹"+getWallet.getAmount()+"");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetWallet> call, Throwable t) {
+                Log.d("WalletBalance", t.getMessage());
+            }
+        });
+    }
     private void clickListener() {
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
