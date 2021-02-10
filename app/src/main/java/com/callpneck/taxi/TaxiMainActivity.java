@@ -95,6 +95,7 @@ import com.callpneck.activity.PneckMapLocation;
 import com.callpneck.activity.Registration.LoginActivity;
 import com.callpneck.activity.SplashActivity;
 import com.callpneck.activity.registrationSecond.Adapter.MyShopAdapter;
+import com.callpneck.activity.registrationSecond.helper.Constant;
 import com.callpneck.commonutility.AllUrl;
 import com.callpneck.model.MapPointerModel;
 import com.callpneck.taxi.Adapter.DriverAdapter;
@@ -109,6 +110,7 @@ import com.callpneck.taxi.model.CarType;
 import com.callpneck.taxi.model.driver.Datum;
 import com.callpneck.taxi.model.driver.DriverModel;
 import com.callpneck.taxi.retrofit.RetrofitClient;
+import com.callpneck.utils.Constants;
 import com.callpneck.utils.PublicMethod;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -598,7 +600,9 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                     else if (!TextUtils.isEmpty(cash)){
                         if (Integer.parseInt(cash)>=40){
+
                             getDriverList(cash.toString(),id+"",discriptiontxt.toString(),UserLatitude,UserLongitude,destination_latti,destination_longi);
+                            carType = id+"";
                         }
                         else {
                             Toast.makeText(TaxiMainActivity.this, "Amount is too low..!", Toast.LENGTH_SHORT).show();
@@ -622,6 +626,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
 
+    String carType;
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -877,13 +882,10 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                         Toast.makeText(TaxiMainActivity.this, msg, Toast.LENGTH_LONG).show();
                         cashOfferLinearLayout.setVisibility(View.INVISIBLE);
                         Log.d("TahseenKhan"," calling getAvailableAtOfferDriverList()");
-                        Intent intent=new Intent(TaxiMainActivity.this, DriverListActivity.class);
-                        intent.putExtra("cash", cash+"");
-                        intent.putExtra("bookin_id",bookingId);
-                        intent.putExtra("desLat",destination_latti+"");
-                        intent.putExtra("desLong",destination_longi+"");
 
-                        startActivity(intent);
+                        String message = "Congratulation...! You have new Booking!";
+                        prepareNotificationMessage(message);
+
                     }else {
                         Toast.makeText(TaxiMainActivity.this, msg, Toast.LENGTH_LONG).show();
                         Log.d("TahseenKhan"," error");
@@ -925,6 +927,72 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
         };
     }
 
+
+    private void prepareNotificationMessage(String message){
+        String NOTIFICATION_TOPIC = "/topics/" + Constants.FCM_TOPIC;
+        String NOTIFICATION_TITLE = "New Booking...." ;
+        String NOTIFICATION_MESSAGE = ""+ message;
+        String NOTIFICATION_TYPE = "NewBooking";
+        JSONObject notificationJo = new JSONObject();
+        JSONObject notificationBodyJo = new JSONObject();
+        try {
+            //what to send
+            notificationBodyJo.put("notificationType",NOTIFICATION_TYPE);
+            notificationBodyJo.put("carType",carType);
+            notificationBodyJo.put("notificationTitle",NOTIFICATION_TITLE);
+            notificationBodyJo.put("notificationMessage",NOTIFICATION_MESSAGE);
+
+            //where to send
+            notificationJo.put("to",NOTIFICATION_TOPIC);
+            notificationJo.put("data",notificationBodyJo);
+
+        }catch (Exception e){
+
+            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        sendFcmNotification(notificationJo);
+    }
+
+    private void sendFcmNotification(JSONObject notificationJo) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://fcm.googleapis.com/fcm/send", notificationJo,
+                new com.android.volley.Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Intent intent=new Intent(TaxiMainActivity.this, DriverListActivity.class);
+                        intent.putExtra("cash", cash+"");
+                        intent.putExtra("bookin_id",bookingId);
+                        intent.putExtra("desLat",destination_latti+"");
+                        intent.putExtra("desLong",destination_longi+"");
+                        startActivity(intent);
+                        Log.e("FCM_RESPONCe", response.toString());
+                    }
+                },
+                new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Intent intent=new Intent(TaxiMainActivity.this, DriverListActivity.class);
+                        intent.putExtra("cash", cash+"");
+                        intent.putExtra("bookin_id",bookingId);
+                        intent.putExtra("desLat",destination_latti+"");
+                        intent.putExtra("desLong",destination_longi+"");
+                        startActivity(intent);
+                    }
+                }){
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization","key="+Constants.FCM_KEY);
+                return headers;
+            }
+        };
+
+        //enqueue the Volley request
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
+
+    }
 
 
 

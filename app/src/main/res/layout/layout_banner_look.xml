@@ -11,15 +11,16 @@
     <androidx.cardview.widget.CardView
         app:cardCornerRadius="8dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/slider_rlt">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
             <ImageView
                 android:id="@+id/image_look_book"
                 android:scaleType="fitXY"
-                android:clickable="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

@@ -36,6 +36,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.callpneck.LaunchActivityClass;
 import com.callpneck.R;
@@ -43,6 +44,7 @@ import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
 import com.callpneck.activity.deliveryboy.DeliveryBoyListActivity;
 import com.callpneck.activity.deliveryboy.DeliveryMainActivity;
+import com.callpneck.activity.deliveryboy.TrackOrderDeliveryActivity;
 import com.callpneck.activity.registrationSecond.Activity.MoreActivity;
 import com.callpneck.activity.registrationSecond.Activity.MyWalletActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderActivity;
@@ -54,6 +56,7 @@ import com.callpneck.activity.registrationSecond.Adapter.CatRestaurantNearItem;
 import com.callpneck.activity.registrationSecond.Adapter.MyCategoryAdapter;
 import com.callpneck.activity.registrationSecond.Adapter.MyCustomPagerAdapter;
 import com.callpneck.activity.registrationSecond.DemoModel.CatResModel;
+import com.callpneck.activity.registrationSecond.InterFace.Adapter_Click_Listener;
 import com.callpneck.activity.registrationSecond.Model.Category;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.api.APIClient;
@@ -79,6 +82,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.rd.PageIndicatorView;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.IOException;
@@ -125,8 +129,8 @@ HomeFragment extends Fragment {
 
     private RelativeLayout locationBtn;
     private SessionManager sessionManager;
-    AutoScrollViewPager viewPager;
-    TabLayout tabview;
+    ViewPager viewPager;
+    PageIndicatorView pageIndicatorView;
     private Context mContext;
     MyCustomPagerAdapter myCustomPagerAdapter;
     private static final int SPEECH_REQUEST_CODE = 0;
@@ -178,7 +182,7 @@ HomeFragment extends Fragment {
         voiceSearch = view.findViewById(R.id.voiceSearch);
         recyclerView = view.findViewById(R.id.recycler_view);
         viewPager = view.findViewById(R.id.viewPager);
-        tabview = view.findViewById(R.id.tabview);
+        pageIndicatorView = view.findViewById(R.id.pageIndicatorView);
 
         mShimmerCat = view.findViewById(R.id.shimmercat);
         shimerPromo = view.findViewById(R.id.shimmepromo);
@@ -737,13 +741,78 @@ HomeFragment extends Fragment {
     }
 
     private void loadBanner(List<BannerSliderImage> bannerSliderImages) {
-        myCustomPagerAdapter = new MyCustomPagerAdapter(mContext, bannerSliderImages);
+
+        pageIndicatorView.setCount(bannerSliderImages.size());
+        pageIndicatorView.setSelection(0);
+        myCustomPagerAdapter = new MyCustomPagerAdapter(mContext, bannerSliderImages, new Adapter_Click_Listener() {
+            @Override
+            public void onItemClick(View view, int pos, Object object) {
+
+                String type = bannerSliderImages.get(pos).getCate_type();
+                String title = bannerSliderImages.get(pos).getTitle();
+                if (type.equalsIgnoreCase("restaurant")) {
+                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null){
+                        Intent intent = new Intent(getContext(), ShopHomeActivity.class);
+                        intent.putExtra("categoryName", title);
+                        startActivity(intent);
+                    }
+
+
+                } else if(type.equalsIgnoreCase("cab")){
+                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+                        Intent intent = new Intent(getContext(), TaxiMainActivity.class);
+                        intent.putExtra("categoryName", title);
+                        startActivity(intent);
+                    }
+                }
+                else if(type.equalsIgnoreCase("provider")){
+                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+                        Intent intent = new Intent(getContext(), ProviderDetailActivity.class);
+                        intent.putExtra("categoryName", title);
+                        startActivity(intent);
+                    }
+                }
+                else if(type.equalsIgnoreCase("shop")){
+                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+                        Intent intent = new Intent(getContext(), ProviderActivity.class);
+                        intent.putExtra("categoryName", title);
+                        startActivity(intent);
+                    }
+                }
+                else if(type.equalsIgnoreCase("delivery")){
+                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+
+                        if (sessionManager.getCurrentDeliveryOrderId()!=null&&
+                                sessionManager.getCurrentDeliveryOrderId().length()>0){
+                            Intent intent=new Intent(getContext(), TrackOrderDeliveryActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                        else {
+                            Intent intent = new Intent(getContext(), DeliveryMainActivity.class);
+                            intent.putExtra("categoryName", title);
+                            startActivity(intent);
+                        }
+
+                    }
+                }
+                else if(type.equalsIgnoreCase("wallet")){
+                    Intent intent = new Intent(getContext(), MyWalletActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getContext(), "Location not set", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
         viewPager.setAdapter(myCustomPagerAdapter);
-        viewPager.startAutoScroll();
-        viewPager.setInterval(3000);
-        viewPager.setCycle(true);
-        viewPager.setStopScrollWhenTouch(true);
-        tabview.setupWithViewPager(viewPager, true);
+//        viewPager.startAutoScroll();
+//        viewPager.setInterval(3000);
+//        viewPager.setCycle(true);
+//        viewPager.setStopScrollWhenTouch(true);
+//        tabview.setupWithViewPager(viewPager, true);
 
     }
 

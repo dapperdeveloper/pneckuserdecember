@@ -3,6 +3,7 @@ package com.callpneck.activity.registrationSecond.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +33,7 @@ import com.callpneck.activity.registrationSecond.Activity.MyWalletActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderActivity;
 import com.callpneck.activity.registrationSecond.Activity.ProviderDetailActivity;
 import com.callpneck.activity.registrationSecond.Activity.ShopHomeActivity;
+import com.callpneck.activity.registrationSecond.InterFace.Adapter_Click_Listener;
 import com.callpneck.model.dashboard.BannerSliderImage;
 import com.callpneck.taxi.TaxiMainActivity;
 
@@ -42,12 +45,16 @@ public class MyCustomPagerAdapter extends PagerAdapter {
     LayoutInflater layoutInflater;
 
     SessionManager sessionManager;
-    public MyCustomPagerAdapter(Context context, List<BannerSliderImage> bannerDatumList) {
+
+    Adapter_Click_Listener adapter_click_listener;
+
+    public MyCustomPagerAdapter(Context context, List<BannerSliderImage> bannerDatumList, Adapter_Click_Listener adapter_click_listener) {
         this.context = context;
         this.bannerDatumList = bannerDatumList;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.adapter_click_listener = adapter_click_listener;
         sessionManager = new SessionManager(context);
     }
+
     @Override
     public int getCount() {
         return bannerDatumList.size();
@@ -58,9 +65,18 @@ public class MyCustomPagerAdapter extends PagerAdapter {
     }
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
+
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         View itemView = layoutInflater.inflate(R.layout.layout_banner_look, container, false);
+
+
         ImageView imageView = (ImageView) itemView.findViewById(R.id.image_look_book);
         ProgressBar progressBar = (ProgressBar) itemView.findViewById(R.id.progress_bar);
+        final CardView slider_rlt = itemView.findViewById(R.id.slider_rlt);
+
+
+
         try {
 
             RequestOptions requestOptions= new RequestOptions();
@@ -87,74 +103,27 @@ public class MyCustomPagerAdapter extends PagerAdapter {
 
         }
 
-        container.addView(itemView);
+        slider_rlt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter_click_listener.onItemClick(v,position,bannerDatumList.get(position));
+            }
+        });
+        container.addView(itemView, 0);
 
-        BannerSliderImage item = bannerDatumList.get(position);
-        if (bannerDatumList.get(position).getImage()!=null)
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if (item.getCate_type().equalsIgnoreCase("restaurant")) {
-                        if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null){
-                            Intent intent = new Intent(context, ShopHomeActivity.class);
-                            intent.putExtra("categoryName", item.getTitle());
-                            context.startActivity(intent);
-                        }
-
-
-                    } else if(item.getCate_type().equalsIgnoreCase("cab")){
-                        if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
-                            Intent intent = new Intent(context, TaxiMainActivity.class);
-                            intent.putExtra("categoryName", item.getTitle());
-                            context.startActivity(intent);
-                        }
-                    }
-                    else if(item.getCate_type().equalsIgnoreCase("provider")){
-                        if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
-                            Intent intent = new Intent(context, ProviderDetailActivity.class);
-                            intent.putExtra("categoryName", item.getTitle());
-                            context.startActivity(intent);
-                        }
-                    }
-                    else if(item.getCate_type().equalsIgnoreCase("shop")){
-                        if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
-                            Intent intent = new Intent(context, ProviderActivity.class);
-                            intent.putExtra("categoryName", item.getTitle());
-                            context.startActivity(intent);
-                        }
-                    }
-                    else if(item.getCate_type().equalsIgnoreCase("delivery")){
-                        if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
-
-                            if (sessionManager.getCurrentDeliveryOrderId()!=null&&
-                                    sessionManager.getCurrentDeliveryOrderId().length()>0){
-                                Intent intent=new Intent(context, TrackOrderDeliveryActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                                context.startActivity(intent);
-                            }
-                            else {
-                                Intent intent = new Intent(context, DeliveryMainActivity.class);
-                                intent.putExtra("categoryName", item.getTitle());
-                                context.startActivity(intent);
-                            }
-
-                        }
-                    }
-                    else if(item.getCate_type().equalsIgnoreCase("wallet")){
-                        Intent intent = new Intent(context, MyWalletActivity.class);
-                        context.startActivity(intent);
-                    }
-                    else {
-                        Toast.makeText(context, "Location not set", Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            });
         return itemView;
     }
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((RelativeLayout) object);
+        container.removeView((View) object);
+    }
+
+    @Override
+    public void restoreState(Parcelable state, ClassLoader loader) {
+    }
+
+    @Override
+    public Parcelable saveState() {
+        return null;
     }
 }
