@@ -271,6 +271,7 @@ HomeFragment extends Fragment {
 
  */
         if(checkLocationPermission()){
+            if (!isLocationSet)
             detectLocation();
         }
 
@@ -488,7 +489,7 @@ HomeFragment extends Fragment {
                 if(grantResults.length >0){
                     boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if(locationAccepted){
-
+                        if (!isLocationSet)
                         detectLocation();
                     }else {
                         Toast.makeText(getContext(), "Location permission is necessary.", Toast.LENGTH_SHORT).show();
@@ -498,7 +499,7 @@ HomeFragment extends Fragment {
             break;
         }
     }
-
+    private boolean isLocationSet=false;
 
     @SuppressLint("MissingPermission")
     private void detectLocation() {
@@ -511,7 +512,6 @@ HomeFragment extends Fragment {
 
                 Location location = task.getResult();
                 if(location != null){
-
                     Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
                     try {
                         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
@@ -525,6 +525,7 @@ HomeFragment extends Fragment {
                         sessionManager.setUserScreenAddress(address);
                         sessionManager.setUserLocation( latitude+"", ""+longitude);
                         addressTv.setText(sessionManager.getUserScreenAddress());
+                        isLocationSet = true;
 
                     } catch (IOException e) {
                         e.printStackTrace();

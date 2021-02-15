@@ -357,6 +357,11 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         return valid;
     }
     private void setPaymentMethod() {
+        if (Constants.isRazor)
+            lytRazorPay.setVisibility(View.VISIBLE);
+        else
+            lytRazorPay.setVisibility(View.GONE);
+
         chHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -491,7 +496,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
          * Instantiate Checkout
          */
         Checkout checkout = new Checkout();
-        checkout.setKeyID("rzp_test_xbt5pRoHOuHjZl");
+        checkout.setKeyID(Constants.razorKeyId);
         /**
          * Set your logo here
          */

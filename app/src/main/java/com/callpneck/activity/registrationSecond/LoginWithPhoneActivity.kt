@@ -28,6 +28,7 @@ import com.google.firebase.iid.InstanceIdResult
 import dmax.dialog.SpotsDialog
 import org.json.JSONObject
 import java.util.*
+import kotlin.jvm.Throws
 
 class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.OnCountDownListener{
     var login_with_phoneLayout: RelativeLayout? = null
@@ -191,7 +192,7 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
         progressDialog!!.show()
         //Utility.showProgressDialog(this);
         val requestQueue = Volley.newRequestQueue(this@LoginWithPhoneActivity)
-        val stringRequest: JsonObjectRequest = object : JsonObjectRequest(Method.POST, AllUrl.userOtpSend, JSONObject(params), com.android.volley.Response.Listener { jsonObject ->
+        val stringRequest: JsonObjectRequest = object : JsonObjectRequest(Method.POST, AllUrl.userOtpSend, JSONObject(params as Map<*, *>), com.android.volley.Response.Listener { jsonObject ->
             // Utility.dismissProgressDialog();
             Log.e("CHECKDATA", "ondata response is called....." + jsonObject.toString())
 
@@ -243,7 +244,7 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
                 OnSuccessListener<InstanceIdResult> { instanceIdResult ->
                     val newToken = instanceIdResult.token
                     deviceToken = newToken
-                    Log.e("newToken", deviceToken)
+                    Log.e("newToken", deviceToken!!)
                     val params: MutableMap<String?, String?> = HashMap()
 
                     if (sessionManager!!.loginType.toString() == "1")
@@ -265,7 +266,7 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
                     progressDialog!!.show()
                     //Utility.showProgressDialog(this);
                     val requestQueue = Volley.newRequestQueue(this@LoginWithPhoneActivity)
-                    val stringRequest: JsonObjectRequest = object : JsonObjectRequest(Method.POST, AllUrl.userMobileVerifyOtpSend, JSONObject(params), com.android.volley.Response.Listener { jsonObject ->
+                    val stringRequest: JsonObjectRequest = object : JsonObjectRequest(Method.POST, AllUrl.userMobileVerifyOtpSend, JSONObject(params as Map<*, *>), com.android.volley.Response.Listener { jsonObject ->
                         //    Log.d("booking_pending_status", jsonObject.toString())
 
                         // Utility.dismissProgressDialog();
@@ -367,7 +368,7 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
         progressDialog!!.show()
         //Utility.showProgressDialog(this);
         val requestQueue = Volley.newRequestQueue(this@LoginWithPhoneActivity)
-        val stringRequest: JsonObjectRequest = object : JsonObjectRequest(Method.POST, AllUrl.userRegister, JSONObject(params), com.android.volley.Response.Listener { jsonObject ->
+        val stringRequest: JsonObjectRequest = object : JsonObjectRequest(Method.POST, AllUrl.userRegister, JSONObject(params as Map<*, *>), com.android.volley.Response.Listener { jsonObject ->
 
             // Utility.dismissProgressDialog();
             progressDialog!!.dismiss()

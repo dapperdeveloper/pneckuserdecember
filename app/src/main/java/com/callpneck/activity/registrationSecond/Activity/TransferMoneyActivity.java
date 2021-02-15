@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
@@ -22,6 +24,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
 import com.callpneck.SessionManager;
@@ -32,12 +38,20 @@ import com.callpneck.activity.registrationSecond.Model.userList.PneckList;
 import com.callpneck.activity.registrationSecond.Model.userList.PneckUserList;
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
+import com.callpneck.taxi.TaxiMainActivity;
+import com.callpneck.taxi.activity.DriverListActivity;
+import com.callpneck.utils.Constants;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.muddzdev.styleabletoast.StyleableToast;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -199,9 +213,11 @@ public class TransferMoneyActivity extends AppCompatActivity {
                 try {
                     SendMoneyResponse model = response.body();
                     if (model != null && model.getStatus()){
-                        StyleableToast.makeText(TransferMoneyActivity.this, model.getMessage(), Toast.LENGTH_LONG, R.style.mytoast).show();
-                        progressDialog.dismiss();
-                        onBackPressed();
+
+
+                        //noti
+                        String message = "You have received money!";
+                        prepareNotificationMessage(message);
                     }
                     else if(model != null && !model.getStatus()){
                         StyleableToast.makeText(TransferMoneyActivity.this, model.getMessage(), Toast.LENGTH_LONG, R.style.mytoast).show();
@@ -209,7 +225,6 @@ public class TransferMoneyActivity extends AppCompatActivity {
                     }
                     else {
                         StyleableToast.makeText(TransferMoneyActivity.this, "Server Error", Toast.LENGTH_LONG, R.style.mytoast).show();
-
                         progressDialog.dismiss();
                     }
                 }catch (Exception e){
@@ -225,6 +240,75 @@ public class TransferMoneyActivity extends AppCompatActivity {
         });
     }
 
+
+    private void prepareNotificationMessage(String message){
+
+
+        String NOTIFICATION_TOPIC = "/topics/" + Constants.FCM_TOPIC;
+        String NOTIFICATION_TITLE = "Money Received....!";
+        String NOTIFICATION_MESSAGE = ""+ message;
+        String NOTIFICATION_TYPE = "MoneyReceived";
+
+        JSONObject notificationJo = new JSONObject();
+        JSONObject notificationBodyJo = new JSONObject();
+        try {
+            //what to send
+            notificationBodyJo.put("notificationType",NOTIFICATION_TYPE);
+            notificationBodyJo.put("buyerUid",sessionManager.getUserid()); //current user is user so uid is buyer id
+            notificationBodyJo.put("sellerUid",receiverId);
+            notificationBodyJo.put("orderId","878878");
+            notificationBodyJo.put("notificationTitle",NOTIFICATION_TITLE);
+            notificationBodyJo.put("notificationMessage",NOTIFICATION_MESSAGE);
+
+            //where to send
+            notificationJo.put("to",NOTIFICATION_TOPIC);
+            notificationJo.put("data",notificationBodyJo);
+
+        }catch (Exception e){
+
+            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        sendFcmNotification(notificationJo);
+    }
+
+    private void sendFcmNotification(JSONObject notificationJo) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://fcm.googleapis.com/fcm/send", notificationJo,
+                new com.android.volley.Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.e("NOTIFICATION", response.toString());
+                        progressDialog.dismiss();
+                        sessionManager.setReceiverId("");
+                        onBackPressed();
+                    }
+                },
+                new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        progressDialog.dismiss();
+                        sessionManager.setReceiverId("");
+                        onBackPressed();
+                    }
+                }){
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization","key="+Constants.FCM_KEY);
+                return headers;
+            }
+        };
+
+        //enqueue the Volley request
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
+
+    }
+
+
     private void getResult(String input) {
         Call<CheckUserForMoney> call = APIClient.getInstance().checkUserForMoney(input);
         call.enqueue(new Callback<CheckUserForMoney>() {
@@ -235,6 +319,7 @@ public class TransferMoneyActivity extends AppCompatActivity {
                     if (model != null && model.getStatus()){
                        mailEt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_checkmark, 0);
                         sessionManager.setReceiverId(model.getUserData().getId()+"");
+                        Log.e("RECEIVER_ID", sessionManager.getReceiverId());
                         nextBtn.setEnabled(true);
                     }
                     else if(model != null && !model.getStatus()){

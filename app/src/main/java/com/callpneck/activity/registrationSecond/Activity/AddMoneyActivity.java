@@ -22,6 +22,7 @@ import com.callpneck.activity.registrationSecond.Model.responseAddMoney.AddMoney
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.activity.registrationSecond.helper.Constant;
+import com.callpneck.utils.Constants;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -125,7 +126,11 @@ public class AddMoneyActivity extends AppCompatActivity implements PaymentResult
             @Override
             public void onClick(View view) {
                 if (validation()){
+                    if (Constants.isRazor)
                     startAmount();
+                    else
+                        Toast.makeText(AddMoneyActivity.this, "Payment mode is disable...Please try again later.", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -161,7 +166,7 @@ public class AddMoneyActivity extends AppCompatActivity implements PaymentResult
          * Instantiate Checkout
          */
         Checkout checkout = new Checkout();
-        checkout.setKeyID("rzp_test_xbt5pRoHOuHjZl");
+        checkout.setKeyID(Constants.razorKeyId);
         /**
          * Set your logo here
          */

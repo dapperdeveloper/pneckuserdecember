@@ -47,6 +47,7 @@ import com.callpneck.activity.registrationSecond.Activity.WorkMapActivity;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
+import com.callpneck.utils.Constants;
 
 import org.json.JSONObject;
 
@@ -184,7 +185,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle=new Bundle();
-                bundle.putString("url","http://pneck.in/termsandconditions");
+                bundle.putString("url", Constants.tremAndCondition);
                 bundle.putBoolean("is_privacy",false);
                 LaunchActivityClass.LaunchWebScreen(getActivity(),bundle);
                 getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
@@ -194,7 +195,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle=new Bundle();
-                bundle.putString("url","http://pneck.in/termsandconditions");
+                bundle.putString("url",Constants.privacyPolicy);
                 bundle.putBoolean("is_privacy",true);
                 LaunchActivityClass.LaunchWebScreen(getActivity(),bundle);
                 getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
@@ -309,12 +310,6 @@ public class ProfileFragment extends Fragment {
         getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
-    private void openTransferMoneyActivity() {
-        Intent intent = new Intent(getActivity(), TransferMoneyActivity.class);
-        startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
-    }
-
     private void openWalletActivity() {
         Intent intent = new Intent(getActivity(), MyWalletActivity.class);
         startActivity(intent);
@@ -324,13 +319,6 @@ public class ProfileFragment extends Fragment {
     private void openEmergencyContactActivity() {
 
         Intent intent = new Intent(getActivity(), EmergencyContactActivity.class);
-        startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
-    }
-
-    private void openFavouriteActivity() {
-
-        Intent intent = new Intent(getActivity(), FavouriteProviderActivity.class);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }

@@ -12,9 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.ActivityOptions;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -40,6 +44,7 @@ import com.callpneck.activity.MainActivity;
 import com.callpneck.activity.registrationSecond.Adapter.MyCategoryAdapter;
 import com.callpneck.activity.registrationSecond.Adapter.MyCustomPagerAdapter;
 import com.callpneck.activity.registrationSecond.Model.Category;
+import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.fragment.BookingFragment;
 import com.callpneck.activity.registrationSecond.fragment.HomeFragment;
 import com.callpneck.activity.registrationSecond.fragment.OrderFragment;
@@ -47,6 +52,7 @@ import com.callpneck.activity.registrationSecond.fragment.ProfileFragment;
 import com.callpneck.activity.registrationSecond.fragment.WalletFragment;
 import com.callpneck.model.dashboard.MainDashboard;
 import com.callpneck.utils.AutoScrollViewPager;
+import com.callpneck.utils.Constants;
 import com.facebook.CallbackManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -60,6 +66,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -67,11 +75,17 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executor;
 
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainScreenActivity extends AppCompatActivity {
 
@@ -117,8 +131,11 @@ public class MainScreenActivity extends AppCompatActivity {
 
 
 
+                if (AppController.isConnected(MainScreenActivity.this)){
+                    getRezarPayId();
+                    getWebsiteUrl();
+                }
                // showDialog();
-
 
             }
 
@@ -131,6 +148,67 @@ public class MainScreenActivity extends AppCompatActivity {
 
     }
 
+    private void getWebsiteUrl() {
+        Call<JsonObject> call = APIClient.getInstance().getWebsiteUrl();
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    if(jsonObject.has("data")){
+
+                        JSONObject c = jsonObject.getJSONObject("data");
+                        Constants.tremAndCondition = c.getString("term_condition");
+                        Constants.privacyPolicy = c.getString("privacy");
+
+                    }
+
+                }catch (Exception e){
+                    e.toString();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getRezarPayId() {
+
+        Call<JsonObject> call = APIClient.getInstance().paymentKey();
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    if(jsonObject.has("data")){
+
+                        JSONObject c = jsonObject.getJSONObject("data");
+                        Constants.razorKeyId = c.getString("key_id");
+                        Constants.isRazor = Boolean.parseBoolean(c.getString("status"));
+
+                    }
+
+                }catch (Exception e){
+                    e.toString();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     private boolean loadFragment(Fragment fragment) {
 
@@ -140,6 +218,37 @@ public class MainScreenActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+
+    // this will show the sticky notification during uploading video
+    private void showNotification() {
+        Intent notificationIntent = new Intent(this, MainScreenActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, 0);
+
+        //id for notification, random
+        int notificationID = new Random().nextInt(3000);
+        final String CHANNEL_ID = "default";
+        final String CHANNEL_NAME = "Default";
+
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(this.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel defaultChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(defaultChannel);
+        }
+
+        androidx.core.app.NotificationCompat.Builder builder = (androidx.core.app.NotificationCompat.Builder) new androidx.core.app.NotificationCompat.Builder(this,CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.stat_sys_upload)
+                .setContentTitle("Uploading Video")
+                .setContentText("Please wait! Video is uploading....")
+                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(),
+                        android.R.drawable.stat_sys_upload))
+                .setContentIntent(pendingIntent);
+
+        //show notification
+        notificationManager.notify(notificationID, builder.build());
     }
     public void showDialog(){
         final Dialog dialog = new Dialog(this);

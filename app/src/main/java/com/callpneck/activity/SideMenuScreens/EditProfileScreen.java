@@ -376,7 +376,7 @@ public class EditProfileScreen extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getApplicationContext(), R.string.SOMETHING_WENT_WRONG+error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Slow network connection try again..", Toast.LENGTH_LONG).show();
                 Log.v("user_showProfile", "inside error block  " + error.getMessage());
             }
         };
@@ -443,7 +443,7 @@ public class EditProfileScreen extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(EditProfileScreen.this, getResources().getString(R.string.SOMETHING_WENT_WRONG)+error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Slow network connection try again..", Toast.LENGTH_LONG).show();
                 Log.v("user_showProfile", "inside error block  " + error.getMessage());
             }
         };

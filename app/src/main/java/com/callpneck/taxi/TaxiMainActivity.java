@@ -4,6 +4,10 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -95,6 +99,7 @@ import com.callpneck.activity.PneckMapLocation;
 import com.callpneck.activity.Registration.LoginActivity;
 import com.callpneck.activity.SplashActivity;
 import com.callpneck.activity.registrationSecond.Adapter.MyShopAdapter;
+import com.callpneck.activity.registrationSecond.MainScreenActivity;
 import com.callpneck.activity.registrationSecond.helper.Constant;
 import com.callpneck.commonutility.AllUrl;
 import com.callpneck.model.MapPointerModel;
@@ -161,6 +166,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -884,7 +890,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
                         Log.d("TahseenKhan"," calling getAvailableAtOfferDriverList()");
 
                         String message = "Congratulation...! You have new Booking!";
-                        prepareNotificationMessage(message);
+                        prepareNotificationMessage(ses_booking_id, your_booking_number, distance, UserLatitude, UserLongitude,desinationAddress, cash, discription.getText().toString(), sessionManager.getUserImage(), sessionManager.getUserName(), message);
 
                     }else {
                         Toast.makeText(TaxiMainActivity.this, msg, Toast.LENGTH_LONG).show();
@@ -928,7 +934,7 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
 
-    private void prepareNotificationMessage(String message){
+    private void prepareNotificationMessage(String ses_booking_id, String your_booking_number, double distance, String userLatitude, String userLongitude, String desinationAddress, String cash, String s, String userImage, String userName, String message){
         String NOTIFICATION_TOPIC = "/topics/" + Constants.FCM_TOPIC;
         String NOTIFICATION_TITLE = "New Booking...." ;
         String NOTIFICATION_MESSAGE = ""+ message;
@@ -941,6 +947,17 @@ public class TaxiMainActivity extends AppCompatActivity implements OnMapReadyCal
             notificationBodyJo.put("carType",carType);
             notificationBodyJo.put("notificationTitle",NOTIFICATION_TITLE);
             notificationBodyJo.put("notificationMessage",NOTIFICATION_MESSAGE);
+
+            notificationBodyJo.put("booking_order_number",your_booking_number);
+            notificationBodyJo.put("booking_order_id",ses_booking_id);
+            notificationBodyJo.put("distance_km",distance);
+            notificationBodyJo.put("customer_lat",userLatitude);
+            notificationBodyJo.put("customer_long",userLongitude);
+            notificationBodyJo.put("user_drop_address",desinationAddress);
+            notificationBodyJo.put("cash_offer",cash);
+            notificationBodyJo.put("description",s);
+            notificationBodyJo.put("profile_image",userImage);
+            notificationBodyJo.put("name",userName);
 
             //where to send
             notificationJo.put("to",NOTIFICATION_TOPIC);

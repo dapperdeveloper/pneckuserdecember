@@ -33,6 +33,7 @@ import com.callpneck.activity.registrationSecond.fragmentOrder.ModelDelivery.Cus
 import com.callpneck.activity.registrationSecond.fragmentOrder.ModelDelivery.DeliveryOrder;
 import com.callpneck.activity.registrationSecond.fragmentOrder.ModelDelivery.TrackShopResOrder;
 import com.callpneck.model.dashboard.MainDashboard;
+import com.google.gson.JsonObject;
 import com.squareup.okhttp.ResponseBody;
 
 import okhttp3.MultipartBody;
@@ -394,5 +395,12 @@ public interface APIRequests {
     @FormUrlEncoded
     @POST("ResStatus")
     Call<TrackShopResOrder> resShopTrack(@Field("order_id") String order_id, @Field("type") String type);
+
+    @GET("paymentkey")
+    Call<JsonObject> paymentKey();
+
+    @GET("website_url")
+    Call<JsonObject> getWebsiteUrl();
+
 
 }
