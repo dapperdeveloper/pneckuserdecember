@@ -307,7 +307,24 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
                     try {
                         OrderSubmit orderSubmit = response.body();
                         if (orderSubmit.getSuccess()){
-                            prepareNotificationMessage(emp_id, orderSubmit.getId()+"");
+
+
+                            if (emp_id !=null && !emp_id.equals(""))
+                            {
+                                prepareNotificationMessage(emp_id, orderSubmit.getId()+"", bottomSheetDialog);
+                            }
+                            else {
+                                bottomSheetDialog.dismiss();
+                                bottomSheet.dismiss();
+                                sessionManager.saveCurrentOrderDeliveryId(orderSubmit.getId()+"");
+
+                                if (sessionManager.getCurrentDeliveryOrderId()!=null&&
+                                        sessionManager.getCurrentDeliveryOrderId().length()>0){
+                                    LaunchActivityClass.LaunchTrackingDeliveryScreen(DeliveryBoyListActivity.this);
+                                }
+                            }
+                           // prepareNotificationMessage(emp_id, orderSubmit.getId()+"");
+
 
                         }
                     }catch (Exception e){
@@ -330,7 +347,7 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
     }
 
 
-    private void prepareNotificationMessage(String emp_id, String orderId){
+    private void prepareNotificationMessage(String emp_id, String orderId, BottomSheetDialog bottomSheetDialog){
         String NOTIFICATION_TOPIC = "/topics/" + Constants.FCM_TOPIC;
         String NOTIFICATION_TITLE = "New Order" + orderId;
         String NOTIFICATION_MESSAGE = "Congratulation....! You have new order From Customer";
@@ -356,10 +373,10 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
             Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
-        sendFcmNotification(notificationJo, orderId);
+        sendFcmNotification(notificationJo, orderId, bottomSheetDialog);
     }
 
-    private void sendFcmNotification(JSONObject notificationJo, final String orderId) {
+    private void sendFcmNotification(JSONObject notificationJo, final String orderId, BottomSheetDialog bottomSheetDialog) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://fcm.googleapis.com/fcm/send", notificationJo,
                 new com.android.volley.Response.Listener<JSONObject>() {
                     @Override
@@ -429,7 +446,22 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
                     try {
                         OrderSubmit orderSubmit = response.body();
                         if (orderSubmit.getSuccess()){
-                            prepareNotificationMessage(emp_id, orderSubmit.getId()+"");
+
+                            if (emp_id!=null && !emp_id.equals(""))
+                            {
+                                prepareNotificationMessage(emp_id, orderSubmit.getId()+"", bottomSheetDialog);
+                            }
+                            else {
+                                bottomSheetDialog.dismiss();
+                                bottomSheet.dismiss();
+                                sessionManager.saveCurrentOrderDeliveryId(orderSubmit.getId()+"");
+
+                                if (sessionManager.getCurrentDeliveryOrderId()!=null&&
+                                        sessionManager.getCurrentDeliveryOrderId().length()>0){
+                                    LaunchActivityClass.LaunchTrackingDeliveryScreen(DeliveryBoyListActivity.this);
+                                }
+                            }
+
 
 
                         }

@@ -8,9 +8,10 @@ android {
         applicationId "com.callpneck"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 11
-        versionName "1.2.0"
+        versionCode 12
+        versionName "1.2.01"
         multiDexEnabled true
+
 
         manifestPlaceholders = [onesignal_app_id:            '5ce7de9f-17df-4360-8612-80be102ca3ae',
                                 // Project number pulled from dashboard, local value is ignored.

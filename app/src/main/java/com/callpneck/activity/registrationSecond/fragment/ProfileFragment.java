@@ -65,7 +65,6 @@ public class ProfileFragment extends Fragment {
             addHomeBtn, addWorkBtn,
             aboutUsBtn, privacyPolicyBtn, termNConditionBtn, feedbackBtn, contactUsBtn, settingBtn;
     LinearLayout inviteAndEarnBtn, topUpBtn, walletBtn, bookingBtn;
-    View view;
     private SessionManager sessionManager;
 
     String myMobile, myName;
@@ -76,8 +75,6 @@ public class ProfileFragment extends Fragment {
     public ProfileFragment() {
         // Required empty public constructor
     }
-    Activity activity;
-    Context context;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,11 +84,8 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        activity= getActivity();
-        view=inflater.inflate(R.layout.fragment_profile, container, false);
-
+        View view=inflater.inflate(R.layout.fragment_profile, container, false);
         initView(view);
-
         sessionManager = new SessionManager(getContext());
         myMobile = sessionManager.getUserMobile();
         myName = sessionManager.getUserName();
@@ -103,7 +97,7 @@ public class ProfileFragment extends Fragment {
         getWalletBalance();
 
         try {
-            Glide.with(activity).load(sessionManager.getUserImage()).placeholder(R.drawable.ic_profile).into(circleImageView);
+            Glide.with(getContext()).load(sessionManager.getUserImage()).placeholder(R.drawable.ic_profile).into(circleImageView);
         }catch (Exception e){
             e.printStackTrace();
         }

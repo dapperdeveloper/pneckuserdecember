@@ -88,6 +88,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -210,35 +211,29 @@ HomeFragment extends Fragment {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         sessionManager = new SessionManager(getContext());
 
-        String[] parsedpagi = "04:00".split(":");
-        String[] parsedsiang = "11:00".split(":");
-        String[] parsedsore = "13:00".split(":");
-        String[] parsedmalam = "18:00".split(":");
 
-        int pagi = Integer.parseInt(parsedpagi[0]), menitPagi = Integer.parseInt(parsedpagi[1]);
-        int siang = Integer.parseInt(parsedsiang[0]), menitSiang = Integer.parseInt(parsedsiang[1]);
-        int sore = Integer.parseInt(parsedsore[0]), menitSore = Integer.parseInt(parsedsore[1]);
-        int malam = Integer.parseInt(parsedmalam[0]), menitMalam = Integer.parseInt(parsedmalam[1]);
-        int totalpagi = (pagi * 60) + menitPagi;
-        int totalsiang = (siang * 60) + menitSiang;
-        int totalsore = (sore * 60) + menitSore;
-        int totalmalam = (malam * 60) + menitMalam;
-
-        Calendar now = Calendar.getInstance();
-        int totalMenitNow = (now.get(Calendar.HOUR_OF_DAY) * 60) + now.get(Calendar.MINUTE);
-
-        if (totalMenitNow >= totalpagi && totalMenitNow <= totalsiang && totalMenitNow <= totalsore && totalMenitNow <= totalmalam ) {
-            nighttext.setText("Good Morning");
-            timeStatusIv.setImageResource(R.drawable.ic_sunrise);
-        } else if (totalMenitNow >= totalpagi && totalMenitNow >= totalsiang && totalMenitNow <= totalsore && totalMenitNow <= totalmalam ) {
-            nighttext.setText("Good Afternoon");
+        //Get the time of day
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        String greeting = null;
+        if(hour>= 12 && hour < 17){
+            greeting = "Good Afternoon";
+            nighttext.setText(greeting);
             timeStatusIv.setImageResource(R.drawable.ic_noon);
-        } else if (totalMenitNow >= totalpagi && totalMenitNow >= totalsiang && totalMenitNow >= totalsore && totalMenitNow <= totalmalam ) {
-            nighttext.setText("Good Afternoon");
+        } else if(hour >= 17 && hour < 21){
+            greeting = "Good Evening";
+            nighttext.setText(greeting);
             timeStatusIv.setImageResource(R.drawable.ic_evening);
-        } else {
-            nighttext.setText("Good Night");
+        } else if(hour >= 21 && hour < 24){
+            greeting = "Good Night";
+            nighttext.setText(greeting);
             timeStatusIv.setImageResource(R.drawable.ic_night);
+        } else {
+            greeting = "Good Morning";
+            nighttext.setText(greeting);
+            timeStatusIv.setImageResource(R.drawable.ic_sunrise);
         }
 
 
@@ -512,10 +507,9 @@ HomeFragment extends Fragment {
 
                 Location location = task.getResult();
                 if(location != null){
-                    Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                    Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
                     try {
                         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
-
                         latitude = addresses.get(0).getLatitude();
                         longitude = addresses.get(0).getLongitude();
                         String city = addresses.get(0).getLocality();
