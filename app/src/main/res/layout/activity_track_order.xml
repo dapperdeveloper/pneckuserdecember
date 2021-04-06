@@ -64,6 +64,8 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="Order Accepted"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textColor="@color/colorText"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -75,6 +77,8 @@
                     android:id="@+id/placed_desc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+
+                    android:fontFamily="@font/raleway"
                     android:text="Order Accepted by Owner!"
                     app:layout_constraintEnd_toEndOf="@id/textorderplaced"
                     app:layout_constraintStart_toStartOf="@+id/textorderplaced"
@@ -119,6 +123,8 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="Preparing"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textColor="@color/colorText"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -131,6 +137,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="Order has been shipped."
+
+                    android:fontFamily="@font/raleway"
                     app:layout_constraintEnd_toEndOf="@id/text_confirmed"
                     app:layout_constraintStart_toStartOf="@+id/text_confirmed"
                     app:layout_constraintTop_toBottomOf="@+id/text_confirmed" />
@@ -186,6 +194,8 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="On The Way"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textColor="@color/colorText"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -198,6 +208,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="Order has been packed."
+
+                    android:fontFamily="@font/raleway"
                     app:layout_constraintEnd_toEndOf="@id/textorderprocessed"
                     app:layout_constraintStart_toStartOf="@+id/textorderprocessed"
                     app:layout_constraintTop_toBottomOf="@+id/textorderprocessed" />
@@ -255,6 +267,8 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="Delivered"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textColor="@color/colorText"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -267,6 +281,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:alpha="0.5"
+
+                    android:fontFamily="@font/raleway"
                     android:text="Order has been delivered!"
                     app:layout_constraintEnd_toEndOf="@id/textorderpickup"
                     app:layout_constraintStart_toStartOf="@+id/textorderpickup"
@@ -322,6 +338,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mohammad Azam"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/black"
                 android:singleLine="true"

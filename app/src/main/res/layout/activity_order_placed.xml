@@ -16,7 +16,8 @@
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="@string/orderplaced" />
+        app:title="@string/orderplaced"
+        android:fontFamily="@font/raleway_semibold"/>
 
 
     <LinearLayout
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_10dp"
             android:text="@string/order_placed1"
+            android:fontFamily="@font/raleway_semibold"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/black" />
 
@@ -38,6 +40,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+
+            android:fontFamily="@font/raleway"
             android:text="@string/success_order"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textStyle="bold" />
@@ -57,6 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:onClick="OnBtnClick"
+
+            android:fontFamily="@font/raleway_semibold"
             android:text="@string/continue_shopping"
             android:textColor="@color/white" />
 

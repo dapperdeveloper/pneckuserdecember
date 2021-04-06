@@ -97,7 +97,7 @@
                 android:layout_gravity="top"
                 android:layout_margin="@dimen/editpad5dp"
                 android:gravity="top"
-                android:fontFamily="@font/raleway_semibold"
+                android:fontFamily="@font/raleway"
                 android:textColor="@color/grey_700"
                 android:background="@drawable/rectangle_back"
                 android:scrollbars="vertical"

@@ -40,6 +40,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:visibility="visible"
+
+            android:fontFamily="@font/raleway"
             android:text="No Orders Available"
             android:textColor="@color/black"/>
     </RelativeLayout>

@@ -10,6 +10,10 @@ import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
 import com.callpneck.activity.registrationSecond.helper.Constant;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
@@ -77,26 +81,24 @@ public class ApiConfig {
 
 
     public static double getWalletBalance(final Activity activity, SessionManager session) {
-
-        Call<GetWallet> call = APIClient.getInstance().getWallet(session.getUserid());
-        call.enqueue(new Callback<GetWallet>() {
+        Call<JsonObject> call = APIClient.getInstance().getWallet(session.getUserid());
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<GetWallet> call, Response<GetWallet> response) {
-               try {
-                   GetWallet getWallet = response.body();
-                   if (getWallet != null && getWallet.getStatus()){
-                       Constant.WALLET_BALANCE = Double.parseDouble(getWallet.getAmount()+"");
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
 
-//                       tvWltBalance.setText(getString(R.string.total_balance) + Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
-                   }
-               }catch (Exception e){
-                   e.printStackTrace();
-               }
+                    Constant.WALLET_BALANCE = jsonObject.getDouble("amount");
+
+                }catch (Exception e){
+                    e.toString();
+                }
 
             }
 
             @Override
-            public void onFailure(Call<GetWallet> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.d("WalletBalance", t.getMessage());
             }
         });

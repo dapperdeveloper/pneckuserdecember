@@ -41,6 +41,7 @@
             android:text="10"
             android:textSize="8sp"
             android:gravity="center"
+
             android:background="@drawable/shape_circle03"
             android:layout_alignParentEnd="true"
             android:layout_width="20dp"
@@ -60,6 +61,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/service_detail"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:textSize="16sp"
                 android:textColor="@color/white"
                 />
@@ -97,6 +100,7 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="Shoop #1"
+                    android:fontFamily="@font/raleway_semibold"
                     android:textSize="16sp"
                     android:layout_marginLeft="@dimen/editpad5dp"
                     android:textColor="@color/white"
@@ -120,6 +124,8 @@
                     android:textColor="@color/white"
                     android:text="@string/about_us"
                     android:padding="5dp"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textSize="14sp"
                     android:layout_marginLeft="@dimen/editpad5dp"
                     android:layout_marginTop="@dimen/editpad5dp"
@@ -152,6 +158,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/products"
+
+            android:fontFamily="@font/raleway_semibold"
             android:background="@drawable/shape_rect04"
             android:textColor="@color/black"/>
         <TextView
@@ -161,6 +169,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/gallery"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/black"/>
         <TextView
             android:id="@+id/tabReviewsTv"
@@ -169,6 +179,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/reviews"
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/black"/>
     </LinearLayout>
 
@@ -195,6 +206,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="service"
+
+            android:fontFamily="@font/raleway"
             android:visibility="gone"
             android:layout_centerInParent="true"
             android:textColor="@color/black"/>
@@ -225,6 +238,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="gallery"
+
+            android:fontFamily="@font/raleway"
             android:layout_centerInParent="true"
             android:textColor="@color/black"/>
     </RelativeLayout>

@@ -75,6 +75,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Cash offer"
+
+                                android:fontFamily="@font/raleway"
                                 android:inputType="number"
                                 android:drawablePadding="10dp"
                                 android:padding="10dp"
@@ -99,6 +101,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Enter comments"
+
+                                android:fontFamily="@font/raleway"
                                 android:textSize="14sp"
                                 android:paddingLeft="5dp"
                                 android:keyboardNavigationCluster="false"
@@ -114,6 +118,8 @@
                             android:gravity="center"
                             android:layout_height="50dp"
                             android:text="@string/offer_now"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="#FFFFFF"
                             android:background="@color/colorPrimary"
                             android:textStyle="bold"
@@ -145,6 +151,8 @@
                 android:layout_height="3dp"
                 android:background="#FFFFFF"
                 android:layout_gravity="center"
+
+                android:fontFamily="@font/raleway_semibold"
                 />
 
             <TextView
@@ -155,6 +163,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:text="Where to ?"
+                android:fontFamily="@font/raleway_semibold"
                 android:gravity="center"/>
 
         </LinearLayout>
@@ -180,6 +189,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="#00FFFFFF"
                     android:hint="Enter Source"
+                    android:fontFamily="@font/raleway_semibold"
                     android:drawableLeft="@drawable/ic_location"
                     android:maxLines="2"
                     android:ellipsize="end"
@@ -188,6 +198,7 @@
                     android:drawableLeft="@drawable/ic_dots"
                     android:layout_width="match_parent"
                     android:layout_marginTop="5dp"
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_marginBottom="5dp"
                     android:layout_height="wrap_content"/>
                 <EditText
@@ -195,6 +206,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="#00FFFFFF"
                     android:hint="Enter destination"
+                    android:fontFamily="@font/raleway_semibold"
                     android:maxLines="2"
                     android:ellipsize="end"
                     android:drawableLeft="@drawable/ic_location_red"

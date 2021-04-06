@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="@string/edit_cart"
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerInParent="true"
             android:textSize="16sp"
             android:textColor="@color/white"
@@ -74,6 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total"
+                    android:fontFamily="@font/raleway_semibold"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"/>
@@ -81,6 +83,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/raleway_semibold"
                     android:text="@string/price_are_inclusive_of_vat"
                     />
             </LinearLayout>
@@ -91,6 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:text="Rs.00.00"
+                android:fontFamily="@font/raleway_semibold"
                 android:textSize="16sp"
                 android:padding="4dp"/>
 
@@ -101,6 +105,8 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:text="@string/checkout"
+
+            android:fontFamily="@font/raleway_semibold"
             android:enabled="true"
             android:textSize="18sp"
             android:background="@color/colorPrimary"
@@ -125,6 +131,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/noitem_incart"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/black"
             android:textStyle="bold" />
@@ -134,6 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center"
+            android:fontFamily="@font/raleway"
             android:text="@string/noitem_incart_msg" />
 
         <Button
@@ -148,6 +157,7 @@
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
             android:text="@string/shop_now"
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/white" />
     </LinearLayout>
 

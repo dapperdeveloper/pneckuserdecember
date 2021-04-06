@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.deliveryboy.CreateOrderActivity">
+
+    <include layout="@layout/toolbar_layout" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:padding="10dp">
+
+        <com.hendraanggrian.appcompat.widget.SocialEditText
+            android:id="@+id/description_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/transparent"
+            android:gravity="start"
+            android:fontFamily="@font/raleway_semibold"
+            android:hint="Create your order..."
+            android:paddingStart="15dp"
+            android:textColor="@color/black" />
+
+
+        <TextView
+            android:id="@+id/aditional_details_text_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/gray"
+            android:textSize="14dp"
+            android:fontFamily="@font/raleway_semibold"
+            android:textStyle="normal" />
+
+    </RelativeLayout>
+
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/post_bg"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:fontFamily="@font/raleway_semibold"
+        android:layout_margin="@dimen/margin_10dp"
+        />
+
+    <ImageView
+        android:id="@+id/pImageIv"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="@dimen/margin_10dp"
+        android:background="@drawable/ic_frame"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        />
+
+    <Button
+        android:id="@+id/submitBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Make Your Order"
+        android:background="@color/colorAccent"
+        android:padding="5dp"
+        android:fontFamily="@font/raleway_semibold"
+       android:layout_margin="16dp"
+        android:textColor="@color/colorWhite"
+        android:textAllCaps="false"
+        />
+
+
+</LinearLayout>

@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textStyle="bold"
+            android:fontFamily="@font/raleway_semibold"
             android:text="@string/CURRENT_ORDER"
             android:textSize="18sp"
             android:layout_centerInParent="true"/>

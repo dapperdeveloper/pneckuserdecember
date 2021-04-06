@@ -27,6 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/favourite_provider"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:textSize="16sp"
@@ -55,6 +57,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/all"
+            android:fontFamily="@font/raleway_semibold"
             android:background="@drawable/shape_rect04"
             android:textColor="@color/black"/>
         <TextView
@@ -64,6 +67,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/favorites"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/black"/>
     </LinearLayout>
 
@@ -88,6 +93,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:fontFamily="@font/raleway"
             android:text="No All Available"
             android:textColor="@color/black"/>
     </RelativeLayout>
@@ -114,6 +120,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:fontFamily="@font/raleway"
             android:text="No Favourite Available"
             android:textColor="@color/black"/>
     </RelativeLayout>

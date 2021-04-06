@@ -64,7 +64,7 @@
     <string name="NO_ORDER_YET">अभी तक कोई ऑर्डर नहीं</string>
     <string name="NOTIFICATION">अधिसूचना</string>
     <string name="founder_name">बादल हाशमी</string>
-    <string name="company">Pneck Pvt ltd</string>
+    <string name="company">Callpneck private limited</string>
     <string name="ABOUT_US">Pneck pvt ltd की स्थापना एक समय के लिए Manpower और Temporary Employee के लिए की गई है। जो उपभोक्ताओं के लिए सर्वोत्तम सेवा प्रदान करते हैं। Pneck का मकसद है कि किसी को भी, कहीं भी और किसी भी समय बेहतर और सर्वोत्तम सेवा प्रदान करें। यह केवल एक कंपनी नहीं है। यह उन समस्याओं की सवारी करने के लिए एक विचार है जिसका सामना हम अपने दैनिक व्यस्त जीवन में करते हैं।</string>
     <string name="SUPPORT_MESSAGE">कृपया अपनी चिंता को support@pneck.in पर छोड़ दें, हम इसे जल्द से जल्द हल करेंगे क्योंकि हम आपकी मदद करना पसंद करते हैं।</string>
     <string name="ADDRESS_TEXT">पता</string>
@@ -470,4 +470,5 @@
     <string name="wait">Kindly wait...</string>
     <string name="including_delivery_charges">Including Delivery Charges.</string>
     <string name="category">Category</string>
+    <string name="waiting_for_delivery_boy_response">Waiting for Delivery Boy Response</string>
 </resources>

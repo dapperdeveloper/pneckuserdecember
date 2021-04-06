@@ -79,6 +79,8 @@
             android:text="Make Your Order"
             android:background="@color/colorAccent"
             android:padding="5dp"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textColor="@color/colorWhite"

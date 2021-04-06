@@ -49,6 +49,7 @@
             android:text="Supermarket"
             android:textSize="16sp"
             android:textStyle="normal"
+            android:fontFamily="@font/raleway_semibold"
             android:layout_marginTop="@dimen/editpad5dp"
             android:textColor="@color/black"
             android:gravity="center"

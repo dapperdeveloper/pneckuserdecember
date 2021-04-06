@@ -31,6 +31,7 @@
                 android:id="@+id/tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_semibold"
                 android:text="Enter Phone number for verification"
                 android:textSize="26sp"
                 android:textAlignment="center"
@@ -50,6 +51,8 @@
                 android:textAlignment="center"
                 android:padding="@dimen/editpad5dp"
                 android:layout_margin="10dp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="This number will be used for all Pneck-related communication. You shall receive an SMS with code for verification."/>
             <LinearLayout
                 android:layout_below="@+id/detail"
@@ -75,6 +78,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="+91"
+                        android:fontFamily="@font/raleway_semibold"
                         android:layout_gravity="center"
                         android:textSize="16dp"
                         android:textStyle="bold"/>
@@ -86,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/phone_number"
                     android:inputType="number"
+                    android:fontFamily="@font/raleway_semibold"
                     android:theme="@style/EditText.Grey"
                     android:paddingLeft="10dp"
                     android:singleLine="true"
@@ -103,6 +108,7 @@
             android:textColor="@color/white"
             android:layout_marginLeft="10dp"
             android:text="Next"
+            android:fontFamily="@font/raleway_semibold"
             android:enabled="true"
             android:layout_alignParentBottom="true"
             android:background="@drawable/button_corner_background"
@@ -120,6 +126,7 @@
             android:id="@+id/verityTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_semibold"
             android:text="Please wait We will send you the otp to +91"
             android:textSize="26sp"
             android:textAlignment="center"
@@ -153,6 +160,7 @@
                 android:theme="@style/EditText.Grey"
                 android:hint="Enter Your OTP"
                 android:inputType="number"
+                android:fontFamily="@font/raleway_semibold"
                 android:paddingLeft="10dp"
                 android:maxLength="6"
                 android:textColorHint="@color/hint_color"
@@ -174,6 +182,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="22sp"
+                android:fontFamily="@font/raleway"
                 android:layout_gravity="center"
                 android:text="" />
 
@@ -183,6 +192,7 @@
                 android:layout_height="wrap_content"
                 android:text="Resend Otp"
                 android:textSize="16sp"
+                android:fontFamily="@font/raleway_semibold"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textStyle="bold"
@@ -202,6 +212,8 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:text="Verify"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -237,6 +249,7 @@
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:padding="5dp"
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     />
@@ -248,6 +261,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
                     android:hint="Full Name"
+
+                    android:fontFamily="@font/raleway"
                     android:paddingLeft="10dp"
                     android:theme="@style/EditText.Grey"
                     android:layout_marginRight="10dp"
@@ -264,6 +279,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
                     android:hint="Email"
+                    android:fontFamily="@font/raleway"
                     android:paddingLeft="10dp"
                     android:theme="@style/EditText.Grey"
                     android:singleLine="true"
@@ -287,6 +303,8 @@
             android:textColor="@color/white"
             android:layout_marginLeft="10dp"
             android:text="Register"
+
+            android:fontFamily="@font/raleway_semibold"
             android:enabled="true"
             android:layout_alignParentBottom="true"
             android:background="@drawable/button_corner_background"

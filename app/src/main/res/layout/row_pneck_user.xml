@@ -25,6 +25,8 @@
         android:layout_marginTop="6dp"
         android:layout_marginRight="8dp"
         android:text="UserName"
+
+        android:fontFamily="@font/raleway_semibold"
         android:singleLine="true"
         android:textSize="14sp"
         android:textColor="@color/black"
@@ -38,6 +40,8 @@
         android:layout_height="wrap_content"
         android:text="+919089897990"
         android:singleLine="true"
+
+        android:fontFamily="@font/raleway_semibold"
         android:layout_marginTop="6dp"
         android:textSize="12sp"
         android:layout_marginRight="8dp"

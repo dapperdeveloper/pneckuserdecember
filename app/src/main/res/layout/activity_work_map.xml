@@ -50,6 +50,8 @@
             android:textSize="16sp"
             android:text="Add Work"
 
+            android:fontFamily="@font/raleway_semibold"
+
             />
 
         <TextView
@@ -58,6 +60,8 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:hint="Click to add new address"
+
+            android:fontFamily="@font/raleway"
             android:textColor="@color/colorPrimaryDark" />
 
         <Button
@@ -65,6 +69,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/up_location"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textAllCaps="false"
             android:layout_marginTop="10dp"
             style="@style/Widget.AppCompat.Button.Colored"

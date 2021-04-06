@@ -50,6 +50,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -268,9 +269,9 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
             tvDeliveryCharge.setText(getResources().getString(R.string.free));
             deliveryCharge = "0";
         }
-        taxAmt = ((Constant.SETTING_TAX * total) / 100);
+        taxAmt = ((Constant.SETTING_TAX_SHOP * total) / 100);
         subtotal = (subtotal + taxAmt);
-        tvTaxPercent.setText("Tax(" + Constant.SETTING_TAX + "%)");
+        tvTaxPercent.setText("Tax(" + Constant.SETTING_TAX_SHOP + "%)");
         tvTaxAmt.setText("+ " + Constant.SETTING_CURRENCY_SYMBOL + Constant.decimalformatData.format(taxAmt));
         tvSubTotal.setText(Constant.SETTING_CURRENCY_SYMBOL + Constant.decimalformatData.format(subtotal));
     }
@@ -285,22 +286,24 @@ public class CheckoutShopActivity extends AppCompatActivity implements PaymentRe
         SetDataTotal();
     }
     private void getWalletBalance() {
-        Call<GetWallet> call = APIClient.getInstance().getWallet(user_id);
-        call.enqueue(new Callback<GetWallet>() {
+        Call<JsonObject> call = APIClient.getInstance().getWallet(user_id);
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<GetWallet> call, Response<GetWallet> response) {
-                GetWallet getWallet = response.body();
-                if (getWallet != null && getWallet.getStatus()){
-                    Constant.WALLET_BALANCE = Double.parseDouble(getWallet.getAmount()+"");
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    Constant.WALLET_BALANCE = jsonObject.getDouble("amount");
                     tvWltBalance.setText(getString(R.string.total_balance) + Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
-                }
-                else {
 
+                }catch (Exception e){
+                    e.toString();
                 }
+
             }
 
             @Override
-            public void onFailure(Call<GetWallet> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.d("WalletBalance", t.getMessage());
             }
         });

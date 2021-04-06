@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 
 public class CancelOrderScreenActivity extends AppCompatActivity {
@@ -19,6 +20,7 @@ public class CancelOrderScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_cancel_order_screen);
 
         if (getIntent()!=null){

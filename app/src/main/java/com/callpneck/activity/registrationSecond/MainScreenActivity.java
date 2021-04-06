@@ -1,71 +1,38 @@
 package com.callpneck.activity.registrationSecond;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricPrompt;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
-import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
-import com.callpneck.R;
 import com.callpneck.Language.ThemeUtils;
+import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
-import com.callpneck.activity.MainActivity;
-import com.callpneck.activity.registrationSecond.Adapter.MyCategoryAdapter;
-import com.callpneck.activity.registrationSecond.Adapter.MyCustomPagerAdapter;
-import com.callpneck.activity.registrationSecond.Model.Category;
+import com.callpneck.activity.registrationSecond.Activity.SettingActivity;
 import com.callpneck.activity.registrationSecond.api.APIClient;
-import com.callpneck.activity.registrationSecond.fragment.BookingFragment;
 import com.callpneck.activity.registrationSecond.fragment.HomeFragment;
 import com.callpneck.activity.registrationSecond.fragment.OrderFragment;
 import com.callpneck.activity.registrationSecond.fragment.ProfileFragment;
 import com.callpneck.activity.registrationSecond.fragment.WalletFragment;
-import com.callpneck.model.dashboard.MainDashboard;
-import com.callpneck.utils.AutoScrollViewPager;
 import com.callpneck.utils.Constants;
-import com.facebook.CallbackManager;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.karumi.dexter.Dexter;
@@ -73,24 +40,26 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.luseen.spacenavigation.SpaceItem;
+import com.luseen.spacenavigation.SpaceNavigationView;
+import com.luseen.spacenavigation.SpaceOnClickListener;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Executor;
 
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.callpneck.SessionManager.isFetchLocation;
+
 public class MainScreenActivity extends AppCompatActivity {
 
-    BottomNavigationView bottom_navigation;
+    SpaceNavigationView spaceNavigationView;
 
+    SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,8 +75,72 @@ public class MainScreenActivity extends AppCompatActivity {
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
                 setContentView(R.layout.activity_main_screen);
+                spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
+
+                sessionManager = new SessionManager(MainScreenActivity.this);
+                spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
+                spaceNavigationView.addSpaceItem(new SpaceItem("Home", R.drawable.ic_home_menu));
+                spaceNavigationView.addSpaceItem(new SpaceItem("Booking", R.drawable.ic_booking_menu));
+                spaceNavigationView.addSpaceItem(new SpaceItem("Wallet", R.drawable.ic_wallet_menu));
+                spaceNavigationView.addSpaceItem(new SpaceItem("Profile", R.drawable.ic_user_profile_menu));
+
+                spaceNavigationView.setCentreButtonColor(ContextCompat.getColor(MainScreenActivity.this, R.color.colorPrimary));
+                spaceNavigationView.setActiveSpaceItemColor(ContextCompat.getColor(MainScreenActivity.this, R.color.colorPrimary));
+                spaceNavigationView.setInActiveSpaceItemColor(ContextCompat.getColor(MainScreenActivity.this, R.color.black));
+                spaceNavigationView.setSpaceItemIconSize((int) getResources().getDimension(R.dimen.space_item_icon_only_size));
+                spaceNavigationView.setSpaceItemTextSize((int) getResources().getDimension(R.dimen.txt_size));
+
+                spaceNavigationView.setCentreButtonRippleColor(ContextCompat.getColor(MainScreenActivity.this, R.color.white));
+                spaceNavigationView.showIconOnly();
+
+                //spaceNavigationView.setFont(Typeface.createFromAsset(getAssets(), "your_cutom_font.ttf"));
+                spaceNavigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
+                    @Override
+                    public void onCentreButtonClick() {
+
+                        startActivity(new Intent(MainScreenActivity.this, SettingActivity.class));
+
+                    }
+
+                    @Override
+                    public void onItemClick(int itemIndex, String itemName) {
+
+                        //Toast.makeText(HomeActivity.this, itemIndex + " " + itemName, Toast.LENGTH_SHORT).show();
+
+                        Fragment fragment = null;
+                        switch (itemIndex) {
+
+                            case 0:
+                                fragment = new HomeFragment();
+                                break;
+                            case 1:
+                                fragment =new OrderFragment();
+                                break;
+                            case 2:
+                                fragment =  new WalletFragment();
+                                break;
+                            case 3:
+                                fragment =new ProfileFragment();
+                                break;
+                        }
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+                    }
+
+                    @Override
+                    public void onItemReselected(int itemIndex, String itemName) {
+
+                        //Toast.makeText(HomeActivity.this, itemIndex + " " + itemName, Toast.LENGTH_SHORT).show();
+
+                    }
+                });
 
 
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+
+
+
+                /*
                 bottom_navigation = findViewById(R.id.bottom_navigation);
                 bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                     Fragment fragment = null;
@@ -129,6 +162,8 @@ public class MainScreenActivity extends AppCompatActivity {
                 });
                 bottom_navigation.setSelectedItemId(R.id.action_home);
 
+
+                 */
 
 
                 if (AppController.isConnected(MainScreenActivity.this)){
@@ -162,6 +197,7 @@ public class MainScreenActivity extends AppCompatActivity {
                         JSONObject c = jsonObject.getJSONObject("data");
                         Constants.tremAndCondition = c.getString("term_condition");
                         Constants.privacyPolicy = c.getString("privacy");
+                        Constants.aboutUs = c.getString("about");
 
                     }
 
@@ -270,5 +306,29 @@ public class MainScreenActivity extends AppCompatActivity {
 
             }
         }, 1000);
+    }
+
+    boolean doubleBackToExitPressedOnce = false;
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        sessionManager.setBooleanFetchData(isFetchLocation, false);
+        super.onDestroy();
     }
 }

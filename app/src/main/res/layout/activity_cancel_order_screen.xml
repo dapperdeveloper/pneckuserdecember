@@ -19,6 +19,7 @@
             android:id="@+id/oneRb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_semibold"
             android:text="Order Created by Mistake"
 
             />
@@ -26,24 +27,32 @@
             android:id="@+id/twoRb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:fontFamily="@font/raleway_semibold"
             android:text="Item(s) Would Not Arrive on Time"
             />
         <RadioButton
             android:id="@+id/threeRb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:fontFamily="@font/raleway_semibold"
             android:text="Shipping Cost Too High"
             />
         <RadioButton
             android:id="@+id/fourRb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:fontFamily="@font/raleway_semibold"
             android:text="Item Price Too High"
             />
         <RadioButton
             android:id="@+id/fiveRb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:fontFamily="@font/raleway_semibold"
             android:text="Found Cheaper Somewhere Else"
             />
     </RadioGroup>
@@ -55,6 +64,8 @@
         android:layout_height="wrap_content"
         android:text="@string/CANCEL_ORDER"
         android:textColor="@color/white"
+
+        android:fontFamily="@font/raleway_semibold"
         android:layout_margin="16dp"
         android:background="@drawable/button_corner_background"
         />

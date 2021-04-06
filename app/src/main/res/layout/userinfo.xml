@@ -17,6 +17,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/user_otp"
             android:text="OTP : 123456"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerVertical="true"
             android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
@@ -25,6 +27,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/vehicle_number"
             android:text="UP 32 H 1234"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:textStyle="bold"
@@ -44,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Driver Name"
+            android:fontFamily="@font/raleway_semibold"
             android:id="@+id/driver_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:layout_toRightOf="@id/driver_image"/>
@@ -68,6 +73,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Car Name"
+
+            android:fontFamily="@font/raleway_semibold"
             android:id="@+id/car_name"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/car_image"
@@ -88,6 +95,7 @@
             android:id="@+id/call_driver_btn"
             android:text="Call 9123456789"
             android:paddingStart="20dp"
+            android:fontFamily="@font/raleway_semibold"
             android:background="#0000B8D4"
             android:paddingEnd="20dp"
             android:drawableLeft="@drawable/ic_phone_white"
@@ -101,7 +109,6 @@
         android:weightSum="2"
         android:padding="10dp"
         android:layout_gravity="center_vertical"
-
         android:gravity="center">
 
 
@@ -123,6 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
+                android:fontFamily="@font/raleway_semibold"
                 android:text="@string/CANCEL_ORDER"/>
         </LinearLayout>
 

@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Car Name"
+                android:fontFamily="@font/raleway_semibold"
                 android:id="@+id/car_name"
                 android:textColor="@color/black"
                 android:layout_toLeftOf="@+id/user_otp"
@@ -37,6 +38,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/user_otp"
                 android:text="OTP : 123456"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:textColor="@color/black"
                 android:padding="2dp"
                 android:layout_alignParentEnd="true"
@@ -59,6 +62,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Driver Name"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:id="@+id/driver_name"
                 android:textSize="14sp"
                 android:textColor="@color/grey_90"
@@ -86,6 +91,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/vehicle_number"
                 android:text="UP32H  1234"
+                android:fontFamily="@font/raleway_semibold"
                 android:layout_marginLeft="2dp"
                 android:textColor="@color/black"
                 android:textSize="14sp"
@@ -126,12 +132,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
+
                 android:src="@drawable/ic_phone_white_black" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="Call Driver" />
 
         </LinearLayout>
@@ -187,6 +196,8 @@
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:text="Cancel Ride"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:textSize="12sp" />
 
 
@@ -229,6 +240,8 @@
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:text="More"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:textSize="12sp" />
 
 

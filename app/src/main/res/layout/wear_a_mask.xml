@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:text="Please wear a mask,save lives."
             android:textSize="16sp"
+            android:fontFamily="@font/raleway_semibold"
             android:layout_below="@+id/jj"
             android:textColor="@color/black"
             android:textAlignment="center"

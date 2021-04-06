@@ -32,6 +32,8 @@
                 android:paddingLeft="8dp"
                 android:hint="@string/search_here"
                 android:textSize="14sp"
+
+                android:fontFamily="@font/raleway"
                 android:singleLine="true"
                 android:theme="@style/EditText.Transparent"
                 android:layout_marginRight="4dp"
@@ -74,6 +76,7 @@
             android:layout_alignParentEnd="true"
             android:textSize="18sp"
             android:gravity="center"
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/white"
             android:layout_marginRight="8dp"
             android:layout_centerVertical="true"
@@ -96,6 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Home Address"
+            android:fontFamily="@font/raleway_semibold"
             android:padding="8dp"
             android:visibility="gone"
             android:drawableTint="@color/black"
@@ -113,6 +117,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Work Address"
+
+            android:fontFamily="@font/raleway_semibold"
             android:padding="8dp"
             android:visibility="gone"
             android:drawableTint="@color/black"

@@ -27,19 +27,25 @@
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/bottom_navigation"/>
+            android:layout_above="@+id/space"/>
 
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+        <com.luseen.spacenavigation.SpaceNavigationView
+            android:id="@+id/space"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:theme="@style/TextNavigation"
-            app:itemBackground="@color/white"
-            app:itemTextColor="@color/selector"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/home_menu" />
+            android:layout_gravity="bottom"
+            app:active_item_color="@color/colorPrimary"
+            app:centre_button_color="@color/centre_button_color"
+            app:inactive_item_color="@color/black"
+            app:space_background_color="@color/white"
+            app:centre_button_icon="@drawable/ic_settings__2_"
+            app:active_centre_button_background_color="#f44336"
+            app:inactive_centre_button_icon_color="@color/white"
+            app:space_item_icon_only_size="@dimen/space_item_icon_only_size"
+            app:space_item_text_size="@dimen/space_item_text_default_size" />
+
     </RelativeLayout>
 
 

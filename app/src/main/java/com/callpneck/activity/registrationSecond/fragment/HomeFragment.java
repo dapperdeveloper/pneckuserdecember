@@ -60,11 +60,13 @@ import com.callpneck.activity.registrationSecond.InterFace.Adapter_Click_Listene
 import com.callpneck.activity.registrationSecond.Model.Category;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.helper.Constant;
 import com.callpneck.model.dashboard.BannerSliderImage;
 import com.callpneck.model.dashboard.MainDashboard;
 import com.callpneck.model.dashboard.SubcategoryList;
 import com.callpneck.taxi.TaxiMainActivity;
 import com.callpneck.utils.AutoScrollViewPager;
+import com.callpneck.utils.EnchantedViewPager;
 import com.callpneck.utils.InternetConnection;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.common.api.ApiException;
@@ -82,8 +84,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.rd.PageIndicatorView;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -93,12 +99,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import me.relex.circleindicator.CircleIndicator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static com.callpneck.SessionManager.isFetchLocation;
 import static com.callpneck.SessionManager.isopen;
 import static com.callpneck.activity.registrationSecond.helper.Constant.LAUNCH_ADDRESS_SET_SCREEN;
 import static com.callpneck.activity.registrationSecond.helper.Constant.REQUEST_CHECK_SETTINGS;
@@ -130,8 +138,7 @@ HomeFragment extends Fragment {
 
     private RelativeLayout locationBtn;
     private SessionManager sessionManager;
-    ViewPager viewPager;
-    PageIndicatorView pageIndicatorView;
+
     private Context mContext;
     MyCustomPagerAdapter myCustomPagerAdapter;
     private static final int SPEECH_REQUEST_CODE = 0;
@@ -143,6 +150,9 @@ HomeFragment extends Fragment {
     private LinearLayout bannerSlider, shimlistnear,shimlistcatnear;
     private TextView walletBlncTv, user_name;
     String myName;
+
+    CircleIndicator circleIndicator;
+    EnchantedViewPager mViewPager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,8 +192,10 @@ HomeFragment extends Fragment {
         searchIcon = view.findViewById(R.id.searchIcon);
         voiceSearch = view.findViewById(R.id.voiceSearch);
         recyclerView = view.findViewById(R.id.recycler_view);
-        viewPager = view.findViewById(R.id.viewPager);
-        pageIndicatorView = view.findViewById(R.id.pageIndicatorView);
+
+
+        circleIndicator = view.findViewById(R.id.indicator_unselected_background);
+        mViewPager = view.findViewById(R.id.viewPager);
 
         mShimmerCat = view.findViewById(R.id.shimmercat);
         shimerPromo = view.findViewById(R.id.shimmepromo);
@@ -266,8 +278,15 @@ HomeFragment extends Fragment {
 
  */
         if(checkLocationPermission()){
-            if (!isLocationSet)
-            detectLocation();
+            if (!sessionManager.getBooleanFetchData(SessionManager.isFetchLocation)){
+
+                detectLocation();
+            }
+            else {
+                addressTv.setText(sessionManager.getUserScreenAddress());
+            }
+
+
         }
 
 
@@ -300,27 +319,39 @@ HomeFragment extends Fragment {
         //static Demo
         clickListener();
 
+        mViewPager.useScale();
+        mViewPager.removeAlpha();
+
         return view;
 
     }
 
     private void getWalletBalance() {
-        Call<GetWallet> call = APIClient.getInstance().getWallet(sessionManager.getUserid());
-        call.enqueue(new Callback<GetWallet>() {
+        Call<JsonObject> call = APIClient.getInstance().getWallet(sessionManager.getUserid());
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<GetWallet> call, retrofit2.Response<GetWallet> response) {
-                GetWallet getWallet = response.body();
-                if (getWallet != null && getWallet.getStatus()){
-                    walletBlncTv.setText("₹"+getWallet.getAmount()+"");
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    Constant.WALLET_BALANCE = jsonObject.getDouble("amount");
+                    walletBlncTv.setText("₹"+Constant.WALLET_BALANCE+"");
+
+                }catch (Exception e){
+                    e.toString();
                 }
+
             }
 
             @Override
-            public void onFailure(Call<GetWallet> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.d("WalletBalance", t.getMessage());
             }
         });
     }
+
+
+
     private void clickListener() {
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -484,8 +515,9 @@ HomeFragment extends Fragment {
                 if(grantResults.length >0){
                     boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if(locationAccepted){
-                        if (!isLocationSet)
-                        detectLocation();
+                        if (!sessionManager.getBooleanFetchData(SessionManager.isFetchLocation)){
+                            detectLocation();
+                        }
                     }else {
                         Toast.makeText(getContext(), "Location permission is necessary.", Toast.LENGTH_SHORT).show();
                     }
@@ -519,7 +551,7 @@ HomeFragment extends Fragment {
                         sessionManager.setUserScreenAddress(address);
                         sessionManager.setUserLocation( latitude+"", ""+longitude);
                         addressTv.setText(sessionManager.getUserScreenAddress());
-                        isLocationSet = true;
+                        sessionManager.setBooleanFetchData(isFetchLocation, true);
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -737,72 +769,73 @@ HomeFragment extends Fragment {
 
     private void loadBanner(List<BannerSliderImage> bannerSliderImages) {
 
-        pageIndicatorView.setCount(bannerSliderImages.size());
-        pageIndicatorView.setSelection(0);
-        myCustomPagerAdapter = new MyCustomPagerAdapter(mContext, bannerSliderImages, new Adapter_Click_Listener() {
-            @Override
-            public void onItemClick(View view, int pos, Object object) {
+        if (!bannerSliderImages.isEmpty()){
+            myCustomPagerAdapter = new MyCustomPagerAdapter(mContext, bannerSliderImages, new Adapter_Click_Listener() {
+                @Override
+                public void onItemClick(View view, int pos, Object object) {
 
-                String type = bannerSliderImages.get(pos).getCate_type();
-                String title = bannerSliderImages.get(pos).getTitle();
-                if (type.equalsIgnoreCase("restaurant")) {
-                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null){
-                        Intent intent = new Intent(getContext(), ShopHomeActivity.class);
-                        intent.putExtra("categoryName", title);
-                        startActivity(intent);
-                    }
-
-
-                } else if(type.equalsIgnoreCase("cab")){
-                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
-                        Intent intent = new Intent(getContext(), TaxiMainActivity.class);
-                        intent.putExtra("categoryName", title);
-                        startActivity(intent);
-                    }
-                }
-                else if(type.equalsIgnoreCase("provider")){
-                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
-                        Intent intent = new Intent(getContext(), ProviderDetailActivity.class);
-                        intent.putExtra("categoryName", title);
-                        startActivity(intent);
-                    }
-                }
-                else if(type.equalsIgnoreCase("shop")){
-                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
-                        Intent intent = new Intent(getContext(), ProviderActivity.class);
-                        intent.putExtra("categoryName", title);
-                        startActivity(intent);
-                    }
-                }
-                else if(type.equalsIgnoreCase("delivery")){
-                    if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
-
-                        if (sessionManager.getCurrentDeliveryOrderId()!=null&&
-                                sessionManager.getCurrentDeliveryOrderId().length()>0){
-                            Intent intent=new Intent(getContext(), TrackOrderDeliveryActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-                        else {
-                            Intent intent = new Intent(getContext(), DeliveryMainActivity.class);
+                    String type = bannerSliderImages.get(pos).getCate_type();
+                    String title = bannerSliderImages.get(pos).getTitle();
+                    if (type.equalsIgnoreCase("restaurant")) {
+                        if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null){
+                            Intent intent = new Intent(getContext(), ShopHomeActivity.class);
                             intent.putExtra("categoryName", title);
                             startActivity(intent);
                         }
 
+
+                    } else if(type.equalsIgnoreCase("cab")){
+                        if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+                            Intent intent = new Intent(getContext(), TaxiMainActivity.class);
+                            intent.putExtra("categoryName", title);
+                            startActivity(intent);
+                        }
+                    }
+                    else if(type.equalsIgnoreCase("provider")){
+                        if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+                            Intent intent = new Intent(getContext(), ProviderDetailActivity.class);
+                            intent.putExtra("categoryName", title);
+                            startActivity(intent);
+                        }
+                    }
+                    else if(type.equalsIgnoreCase("shop")){
+                        if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+                            Intent intent = new Intent(getContext(), ProviderActivity.class);
+                            intent.putExtra("categoryName", title);
+                            startActivity(intent);
+                        }
+                    }
+                    else if(type.equalsIgnoreCase("delivery")){
+                        if (sessionManager.getUserLatitude()!= null && sessionManager.getUserLongitude()!=null) {
+
+                            if (sessionManager.getCurrentDeliveryOrderId()!=null&&
+                                    sessionManager.getCurrentDeliveryOrderId().length()>0){
+                                Intent intent=new Intent(getContext(), TrackOrderDeliveryActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                            else {
+                                Intent intent = new Intent(getContext(), DeliveryMainActivity.class);
+                                intent.putExtra("categoryName", title);
+                                startActivity(intent);
+                            }
+
+                        }
+                    }
+                    else if(type.equalsIgnoreCase("wallet")){
+                        Intent intent = new Intent(getContext(), MyWalletActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Location not set", Toast.LENGTH_SHORT).show();
                     }
                 }
-                else if(type.equalsIgnoreCase("wallet")){
-                    Intent intent = new Intent(getContext(), MyWalletActivity.class);
-                    startActivity(intent);
-                }
-                else {
-                    Toast.makeText(getContext(), "Location not set", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+            });
+            mViewPager.setAdapter(myCustomPagerAdapter);
+            circleIndicator.setViewPager(mViewPager);
+            autoPlay(mViewPager);
+        }
 
-
-        viewPager.setAdapter(myCustomPagerAdapter);
 //        viewPager.startAutoScroll();
 //        viewPager.setInterval(3000);
 //        viewPager.setCycle(true);
@@ -810,7 +843,25 @@ HomeFragment extends Fragment {
 //        tabview.setupWithViewPager(viewPager, true);
 
     }
+    int currentCount = 0;
+    private void autoPlay(final ViewPager viewPager) {
 
+        viewPager.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (myCustomPagerAdapter != null && viewPager.getAdapter().getCount() > 0) {
+                        int position = currentCount % myCustomPagerAdapter.getCount();
+                        currentCount++;
+                        viewPager.setCurrentItem(position);
+                        autoPlay(viewPager);
+                    }
+                } catch (Exception e) {
+                    Log.e("TAG", "auto scroll pager error.", e);
+                }
+            }
+        }, 2500);
+    }
 
     private void initView() {
 

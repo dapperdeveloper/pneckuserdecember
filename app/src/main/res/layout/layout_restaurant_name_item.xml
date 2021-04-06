@@ -27,6 +27,8 @@
                 android:paddingLeft="8dp"
                 android:paddingTop="2dp"
                 android:singleLine="true"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="open close or order accept or timing status"
                 android:textColor="@color/black"
                 android:textSize="14sp"
@@ -63,6 +65,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:paddingLeft="4dp"
                         android:singleLine="true"
                         android:textColor="@color/black"
@@ -74,6 +78,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="4dp"
+
+                        android:fontFamily="@font/raleway"
                         android:text="shop hdkjshdkjhsajkhdkjsahdkjsahdjh"
                         android:layout_marginTop="8dp"
                         android:maxLines="3"
@@ -93,6 +99,8 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/dTimeTv"
                             android:paddingLeft="4dp"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:layout_centerInParent="true"
                             android:text="Delivery Time: " />
 
@@ -102,6 +110,8 @@
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:text="40 mins"
+
+                            android:fontFamily="@font/raleway"
                             android:paddingLeft="4dp"
                             android:textColor="@color/black"
                             android:textSize="18sp" />
@@ -138,6 +148,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="4dp"
                     android:textColor="@color/black"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:text="Get 8.00% off on order above Rs.125.00"/>
 
 

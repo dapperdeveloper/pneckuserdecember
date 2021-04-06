@@ -28,6 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_booking"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:textSize="16sp"
@@ -58,6 +60,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/bookings"
+
+            android:fontFamily="@font/raleway_semibold"
             android:background="@drawable/shape_rect04"
             android:textColor="@color/black"/>
         <TextView
@@ -67,6 +71,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/ORDERS"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/black"/>
     </LinearLayout>
 
@@ -102,6 +108,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="No Booking Available"
+
+            android:fontFamily="@font/raleway"
             android:textColor="@color/black"/>
     </RelativeLayout>
 
@@ -138,6 +146,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:visibility="visible"
+
+            android:fontFamily="@font/raleway"
             android:text="No Orders Available"
             android:textColor="@color/black"/>
     </RelativeLayout>

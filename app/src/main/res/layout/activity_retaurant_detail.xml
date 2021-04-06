@@ -143,6 +143,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="8dp"
+                android:fontFamily="@font/raleway"
                 android:text="Android Studio provides the fastest tools for building apps on every type of Android device. Download Not Available. Your current device is not supported." />
 
             <LinearLayout
@@ -183,6 +184,7 @@
                     android:layout_height="wrap_content"
                     android:text="Phone: +91 9058191818"
                     android:textSize="14sp"
+                    android:fontFamily="@font/raleway"
                     android:layout_centerVertical="true"
                     />
 
@@ -211,6 +213,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mobile: +91 8755555780"
+                    android:fontFamily="@font/raleway"
                     android:textSize="14sp"
                     android:layout_centerVertical="true"
                     />

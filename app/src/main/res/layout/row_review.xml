@@ -40,6 +40,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/colorPrimary"
             android:textSize="20dp"/>
 
@@ -61,6 +63,8 @@
         android:layout_below="@+id/profileLl"
         android:layout_toEndOf="@id/ratingBar"
         android:text="dd/mm/yyyy"
+
+        android:fontFamily="@font/raleway"
         android:textSize="12sp"/>
 
     <TextView
@@ -69,6 +73,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/dateTv"
         android:layout_marginTop="5dp"
+
+        android:fontFamily="@font/raleway_semibold"
         android:textColor="@color/colorBlack"
         android:text="review of the user"/>
         

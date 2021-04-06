@@ -17,6 +17,8 @@
             android:layout_centerInParent="true"
             android:textSize="16dp"
             android:textColor="@color/black"
+
+            android:fontFamily="@font/raleway_semibold"
             android:text="@string/TELL_YOUR_REASON_TO_CANCEL_ORDER"/>
 
         <RadioGroup
@@ -32,6 +34,8 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:paddingLeft="8dp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="Late response"/>
 
             <RadioButton
@@ -41,6 +45,8 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:paddingLeft="8dp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="I have other option"/>
 
             <RadioButton
@@ -50,6 +56,8 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:paddingLeft="8dp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="No service required"/>
 
             <RadioButton
@@ -59,6 +67,8 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:paddingLeft="8dp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="Order by mistake"/>
             <RadioButton
                 android:id="@+id/fiveRb"
@@ -67,6 +77,8 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:paddingLeft="8dp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="Late delivery time"/>
 
             <RadioButton
@@ -76,6 +88,8 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:paddingLeft="8dp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="Other"/>
 
         </RadioGroup>
@@ -90,6 +104,8 @@
             android:layout_gravity="top"
             android:visibility="gone"
             android:gravity="top"
+
+            android:fontFamily="@font/raleway"
             android:hint="Type cancel reason here..."
             android:id="@+id/cancel_reason"/>
 
@@ -108,6 +124,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
                 android:padding="8dp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:textColor="@color/grey_800"
                 android:id="@+id/stay_on_order"
                 android:textStyle="bold"
@@ -125,6 +143,8 @@
                 android:layout_gravity="right"
                 android:gravity="right"
                 android:textStyle="bold"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="@string/CANCEL_ORDER"/>
 
         </LinearLayout>

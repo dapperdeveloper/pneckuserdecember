@@ -55,6 +55,7 @@
                     android:maxLength="28"
                     android:singleLine="true"
                     android:padding="4dp"
+                    android:fontFamily="@font/raleway_semibold"
                     android:text="Ground Floor, Plot No.170,Block-B,...."
                     android:textColor="@color/white"
                     android:textSize="14sp"
@@ -113,6 +114,7 @@
                         android:background="@null"
                         android:drawablePadding="10dp"
                         android:ems="10"
+                        android:fontFamily="@font/raleway_semibold"
                         android:gravity="left|center"
                         android:hint="Search.."
                         android:imeOptions="actionSearch"
@@ -242,6 +244,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Title"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:textAllCaps="true"
                         android:layout_toLeftOf="@+id/filterTv"
                         android:textSize="18sp"
@@ -252,6 +256,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/filter"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:layout_alignParentEnd="true"
                         android:textAllCaps="true"
                         android:textSize="18sp"

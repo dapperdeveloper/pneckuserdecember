@@ -28,6 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/provider"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:textSize="16sp"
@@ -59,6 +61,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:visibility="gone"
+            android:fontFamily="@font/raleway_semibold"
             android:text="Provider List"
             android:layout_centerInParent="true"
             android:textColor="@color/black"/>
@@ -86,6 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/noDataImage"
             android:layout_centerHorizontal="true"
+            android:fontFamily="@font/raleway_semibold"
             android:id="@+id/messageTv"
             />
 

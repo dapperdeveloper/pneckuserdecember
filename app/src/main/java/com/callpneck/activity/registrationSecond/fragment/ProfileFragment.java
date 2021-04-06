@@ -47,6 +47,7 @@ import com.callpneck.activity.registrationSecond.Activity.WorkMapActivity;
 import com.callpneck.activity.registrationSecond.Model.GetWallet;
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
+import com.callpneck.activity.registrationSecond.helper.Constant;
 import com.callpneck.utils.Constants;
 
 import org.json.JSONObject;
@@ -94,7 +95,8 @@ public class ProfileFragment extends Fragment {
         if (user_mobile!=null)
         user_mobile.setText("+91 "+myMobile);
 
-        getWalletBalance();
+//        getWalletBalance();
+        walletBlncTv.setText("₹"+ Constant.WALLET_BALANCE+"");
 
         try {
             Glide.with(getContext()).load(sessionManager.getUserImage()).placeholder(R.drawable.ic_profile).into(circleImageView);
@@ -114,6 +116,8 @@ public class ProfileFragment extends Fragment {
         user_name.setText(myName);
     }
 
+
+    /*
     private void getWalletBalance() {
         Call<GetWallet> call = APIClient.getInstance().getWallet(sessionManager.getUserid());
         call.enqueue(new Callback<GetWallet>() {
@@ -134,6 +138,9 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+
+     */
     private void clickListeners() {
         settingBtn.setOnClickListener(new View.OnClickListener() {
             @Override

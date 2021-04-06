@@ -31,6 +31,8 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/feedback"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/white"/>
 
     </LinearLayout>
@@ -87,6 +89,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/user"
+
+                                android:fontFamily="@font/raleway_semibold"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -98,6 +102,8 @@
                                 android:layout_marginRight="-4dp"
                                 android:inputType="textCapWords"
                                 android:maxLength="50"
+
+                                android:fontFamily="@font/raleway"
                                 android:maxLines="1"
                                 android:id="@+id/user_name"
                                 android:singleLine="true" />
@@ -112,6 +118,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/subject"
+
+                                android:fontFamily="@font/raleway_semibold"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -124,6 +132,8 @@
                                 android:inputType="textCapWords"
                                 android:maxLength="50"
                                 android:maxLines="1"
+
+                                android:fontFamily="@font/raleway"
                                 android:id="@+id/subject"
                                 android:singleLine="true"/>
 
@@ -137,6 +147,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/message"
+
+                                android:fontFamily="@font/raleway_semibold"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -146,6 +158,8 @@
                                 android:layout_height="100dp"
                                 android:padding="10dp"
                                 android:layout_margin="@dimen/editpad5dp"
+
+                                android:fontFamily="@font/raleway"
                                 android:inputType="text|textMultiLine|textCapSentences"
                                 android:background="@drawable/rectangle_back"
                                 android:layout_gravity="top"
@@ -200,6 +214,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/submit_feedback"
+            android:fontFamily="@font/raleway_semibold"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
             android:textColor="@color/white" />
     </com.balysv.materialripple.MaterialRippleLayout>

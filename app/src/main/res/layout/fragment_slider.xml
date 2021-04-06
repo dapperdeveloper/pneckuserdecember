@@ -6,31 +6,27 @@
     android:layout_height="match_parent">
 
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <com.callpneck.utils.EnchantedViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom|center_horizontal">
 
-            <com.rd.PageIndicatorView
-                android:id="@+id/pageIndicatorView"
+
+            <me.relex.circleindicator.CircleIndicator
+                android:id="@+id/indicator_unselected_background"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+               android:layout_centerHorizontal="true"
                 android:layout_marginBottom="5dp"
-                android:visibility="visible"
-                app:piv_animationType="worm"
-                app:piv_dynamicCount="true"
-                app:piv_interactiveAnimation="true"
-                app:piv_radius="3dp"
-                app:piv_selectedColor="@color/app_color"
-                app:piv_unselectedColor="@color/graycolor"
-                app:piv_viewPager="@id/viewPager" />
+                android:layout_marginEnd="10dp"
+                app:ci_drawable="@drawable/selecteditem_dot"
+                app:ci_drawable_unselected="@drawable/nonselecteditem_dot"
+                app:ci_height="6dp"
+                app:ci_width="6dp" />
 
-        </RelativeLayout>
+
 
     </RelativeLayout>
 

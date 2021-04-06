@@ -6,6 +6,7 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.callpneck.Const;
+import com.callpneck.Language.LanguageSettingActivity;
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.SecurityActivity;
@@ -52,14 +56,17 @@ public class SettingActivity extends AppCompatActivity {
     private SharedPreferences sp;
     private SharedPreferences.Editor spEditor;
     private ProgressDialog progressDialog;
+    private LinearLayout changeLanguageBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_setting);
 
         backBtn = findViewById(R.id.backBtn);
         fcmSwitch = findViewById(R.id.fcmSwitch);
         notificationStatusTv = findViewById(R.id.notificationStatusTv);
+        changeLanguageBtn = findViewById(R.id.changeLanguageBtn);
 
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
@@ -95,7 +102,19 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        changeLanguageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLanguageActivity();
+            }
+        });
 
+    }
+
+    private void openLanguageActivity() {
+        Intent intent = new Intent(SettingActivity.this, LanguageSettingActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.zoom_in_activity, R.anim.scale_to_center);
     }
 
     private void subscribeToTopic(){
@@ -143,4 +162,9 @@ public class SettingActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.scale_to_center, R.anim.push_down_out);
+    }
 }

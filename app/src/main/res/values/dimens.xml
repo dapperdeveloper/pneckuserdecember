@@ -63,5 +63,6 @@
     <dimen name="small_size">12sp</dimen>
     <dimen name="margin_10dp">10dp</dimen>
     <dimen name="margin_5dp">5dp</dimen>
+    <dimen name="enchanted_view_pager_margin">0dp</dimen>
 
 </resources>

@@ -28,6 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="@string/restaurant"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerInParent="true"
             android:textSize="16sp"
             android:textColor="@color/white"

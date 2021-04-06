@@ -28,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/about_us"
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:textSize="16sp"
@@ -54,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="32sp"
+                android:fontFamily="@font/raleway_semibold"
                 android:text="P Neck Service App"
                 android:textColor="@color/grey_800"/>
             <View
@@ -67,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:layout_marginTop="24dp"
+                android:fontFamily="@font/raleway_semibold"
                 android:textColor="@color/grey_500"
                 android:layout_centerVertical="true"
                 android:text="@string/founder"/>
@@ -75,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textColor="@color/grey_800"
+                android:fontFamily="@font/raleway"
                 android:layout_centerVertical="true"
                 android:text="@string/founder_name"/>
 
@@ -83,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:layout_marginTop="24dp"
+                android:fontFamily="@font/raleway_semibold"
                 android:textColor="@color/grey_500"
                 android:layout_centerVertical="true"
                 android:text="@string/company_"/>
@@ -91,16 +96,19 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textColor="@color/grey_800"
+                android:fontFamily="@font/raleway"
                 android:layout_centerVertical="true"
                 android:text="@string/company"/>
 
             <TextView
+                android:id="@+id/about_us"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textColor="@color/grey_800"
                 android:layout_marginTop="24dp"
                 android:layout_centerVertical="true"
+                android:fontFamily="@font/raleway"
                 android:text="@string/ABOUT_US"/>
 
 
@@ -111,6 +119,7 @@
                 android:layout_marginTop="20dp"
                 android:paddingTop="10dp"
                 android:id="@+id/privacy_policy"
+                android:fontFamily="@font/raleway_semibold"
                 android:paddingBottom="10dp"
                 android:paddingRight="@dimen/denim_20"
                 android:textColor="@color/text_color"

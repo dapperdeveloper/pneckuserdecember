@@ -45,6 +45,8 @@
                 android:textColor="@color/white"
                 android:text="Continue with Phone Number"
                 android:textSize="18sp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:background="@drawable/button_corner_background"
                 />
         </androidx.cardview.widget.CardView>
@@ -93,6 +95,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Gmail"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:layout_marginLeft="@dimen/editpad5dp"
                         android:gravity="center|start"
                         android:textSize="18sp"
@@ -129,6 +133,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Facebook"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:textSize="18sp"
                         android:layout_marginLeft="@dimen/editpad5dp"
                         android:gravity="center|start"
@@ -146,6 +152,7 @@
             android:layout_marginTop="@dimen/denim_20"
             android:text="@string/by_clicking"
             android:layout_margin="10dp"
+            android:fontFamily="@font/raleway"
             android:layout_alignParentBottom="true"
             android:textSize="10sp" />
 

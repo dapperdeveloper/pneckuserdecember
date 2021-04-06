@@ -46,6 +46,7 @@
                         android:layout_height="wrap_content"
                         android:padding="2dp"
                         android:text="Order ID:"
+                        android:fontFamily="@font/raleway_semibold"
                         android:textColor="@color/colorGrey" />
 
                     <TextView
@@ -54,6 +55,7 @@
                         android:layout_height="wrap_content"
                         android:padding="3dp"
                         android:text=""
+                        android:fontFamily="@font/raleway"
                         android:textColor="@color/colorBalck"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -68,6 +70,8 @@
                         android:layout_height="wrap_content"
                         android:padding="2dp"
                         android:text="TOTAL:"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:textColor="@color/colorGrey" />
 
                     <TextView
@@ -76,6 +80,7 @@
                         android:layout_height="match_parent"
                         android:padding="3dp"
                         android:text=""
+                        android:fontFamily="@font/raleway"
                         android:textColor="@color/colorBalck"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -96,6 +101,8 @@
                         android:layout_height="wrap_content"
                         android:padding="2dp"
                         android:text="Time:"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:textColor="@color/colorGrey" />
 
                     <TextView
@@ -104,6 +111,7 @@
                         android:layout_height="wrap_content"
                         android:padding="3dp"
                         android:text=""
+                        android:fontFamily="@font/raleway"
                         android:textColor="@color/colorBalck"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -120,6 +128,8 @@
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="Name:"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textColor="@color/colorGrey" />
 
                 <TextView
@@ -128,6 +138,7 @@
                     android:layout_height="wrap_content"
                     android:padding="3dp"
                     android:text=""
+                    android:fontFamily="@font/raleway"
                     android:textColor="@color/colorBalck"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -141,6 +152,8 @@
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="Mobile:"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textColor="@color/colorGrey" />
 
                 <TextView
@@ -149,6 +162,7 @@
                     android:layout_height="wrap_content"
                     android:padding="3dp"
                     android:text=""
+                    android:fontFamily="@font/raleway"
                     android:textColor="@color/colorBalck"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -162,6 +176,8 @@
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="Payment Mode:"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textColor="@color/colorGrey" />
 
                 <TextView
@@ -170,6 +186,7 @@
                     android:layout_height="wrap_content"
                     android:padding="3dp"
                     android:text=""
+                    android:fontFamily="@font/raleway"
                     android:textColor="@color/colorBalck"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -184,6 +201,8 @@
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="Address:"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textColor="@color/colorGrey" />
 
                 <TextView
@@ -192,6 +211,7 @@
                     android:layout_height="wrap_content"
                     android:padding="3dp"
                     android:text=""
+                    android:fontFamily="@font/raleway"
                     android:textColor="@color/colorBalck"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -209,6 +229,8 @@
                     android:gravity="center"
                     android:padding="3dp"
                     android:text=" paid "
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textColor="@color/colorWhite" />
 
                 <View
@@ -233,6 +255,8 @@
                         android:padding="2dp"
                         android:gravity="center"
                         android:layout_gravity="center"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:text="-: Order List :-"
                         android:textSize="18sp"
                         android:layout_marginTop="16dp"
@@ -246,7 +270,8 @@
                         android:layout_marginTop="16dp"
                         android:textColor="@color/colorBalck"
                         android:textStyle="bold"
-                        android:text="hkjshkjahdkjhsajdhkadhkjhdsajhdsakjhdskjsahdhdsa"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:text=""
                         />
 
 
@@ -293,6 +318,7 @@
             android:gravity="center"
             android:padding="3dp"
             android:text="  Delivered "
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/colorWhite"
             android:textSize="16dp" />
 

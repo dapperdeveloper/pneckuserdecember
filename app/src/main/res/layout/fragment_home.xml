@@ -57,7 +57,7 @@
                             android:text="@string/app_name"
                             android:textColor="@color/white"
                             android:textSize="30dp"
-                            android:fontFamily="@font/montserrat_bold"
+                            android:fontFamily="@font/raleway_semibold"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
 
@@ -97,7 +97,7 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
                                 android:text="Good Night"
-                                android:fontFamily="@font/montserrat_bold"
+                                android:fontFamily="@font/raleway_semibold"
                                 android:textSize="12dp" />
 
                             <ImageView
@@ -115,6 +115,7 @@
                                 android:gravity="center_vertical|right"
                                 android:text="Balance"
                                 android:textSize="12dp"
+                                android:fontFamily="@font/raleway_semibold"
                                 android:visibility="visible" />
                         </LinearLayout>
 
@@ -132,6 +133,7 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
                                 android:text="@string/app_name"
+                                android:fontFamily="@font/raleway_semibold"
                                 android:textSize="15dp" />
 
                             <TextView
@@ -142,8 +144,9 @@
                                 android:layout_weight="1"
                                 android:gravity="center_vertical|right"
                                 android:text="₹0.0"
+
                                 android:textSize="15dp"
-                                android:fontFamily="@font/montserrat_bold"
+                                android:fontFamily="@font/raleway_semibold"
                                 android:visibility="visible" />
 
 
@@ -162,7 +165,7 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
                                 android:text="@string/ADDRESS"
-                                android:fontFamily="@font/montserrat_bold"
+                                android:fontFamily="@font/raleway_semibold"
                                 android:textSize="10dp" />
 
                         </LinearLayout>
@@ -193,7 +196,7 @@
                                 android:layout_centerVertical="true"
                                 android:textColor="@color/black"
                                 android:textSize="12sp"
-                                android:fontFamily="@font/montserrat_bold"
+                                android:fontFamily="@font/raleway"
                                 android:layout_toLeftOf="@+id/ll"
                                 android:text="Ground Floor, Plot No.170,Block-B,...."
                                 android:singleLine="true"
@@ -223,7 +226,7 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
                                 android:text="Search Category Here"
-                                android:fontFamily="@font/montserrat_bold"
+                                android:fontFamily="@font/raleway_semibold"
                                 android:textSize="10dp" />
 
                         </LinearLayout>
@@ -248,7 +251,7 @@
                                 android:layout_alignParentStart="true"
                                 android:textColor="@color/black"
                                 android:layout_centerVertical="true"
-                                android:fontFamily="@font/montserrat_bold"
+                                android:fontFamily="@font/raleway"
                                 android:textStyle="bold"
                                 android:textSize="12sp"/>
 

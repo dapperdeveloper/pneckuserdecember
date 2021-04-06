@@ -39,6 +39,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Product Name"
+                    android:fontFamily="@font/raleway_semibold"
                     android:textStyle="bold"
                     android:textSize="18sp"/>
                 <ImageView
@@ -64,6 +65,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="Product Price"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_gravity="bottom"
                     android:textSize="20sp"/>
 

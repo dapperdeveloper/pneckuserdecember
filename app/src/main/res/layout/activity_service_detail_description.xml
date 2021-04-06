@@ -38,6 +38,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/service_description"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:textSize="16sp"
                 android:textColor="@color/white"
                 />
@@ -76,6 +78,8 @@
                     android:singleLine="true"
                     android:text="Shoop #1"
                     android:textSize="16sp"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_marginLeft="@dimen/editpad5dp"
                     android:textColor="@color/white"
                     android:textStyle="bold"
@@ -111,6 +115,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about"
+
+            android:fontFamily="@font/raleway_semibold"
             android:padding="4dp"
             android:layout_margin="16dp"
             android:textSize="18sp"
@@ -129,6 +135,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Description-"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textStyle="bold"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="4dp"
@@ -140,6 +148,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="3"
+
+                    android:fontFamily="@font/raleway"
                     android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lore"
                     android:layout_marginLeft="16dp"
                     android:padding="3dp"
@@ -149,6 +159,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Profession-"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textStyle="bold"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="4dp"
@@ -160,6 +172,8 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="Bike Machanic"
+
+                    android:fontFamily="@font/raleway"
                     android:layout_marginLeft="16dp"
                     android:padding="3dp"
                     />
@@ -168,6 +182,8 @@
                     android:layout_height="wrap_content"
                     android:text="Address-"
                     android:textStyle="bold"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="4dp"
                     android:textColor="@color/black"
@@ -177,6 +193,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
+
+                    android:fontFamily="@font/raleway"
                     android:text="Mandi Samiti Najibabad Bijnor Uttar Pradesh, Uttar Pradesh"
                     android:layout_marginLeft="16dp"
                     android:padding="3dp"
@@ -185,6 +203,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Days-"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textStyle="bold"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="4dp"
@@ -195,6 +215,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
+
+                    android:fontFamily="@font/raleway"
                     android:text="Sunday, Monday, Tuesday, Wednesday, Thursday, Friday and Saturday,"
                     android:layout_marginLeft="16dp"
                     android:padding="3dp"
@@ -205,6 +227,8 @@
                     android:layout_height="wrap_content"
                     android:text="Opening Time-"
                     android:textStyle="bold"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="4dp"
                     android:textColor="@color/black"
@@ -215,6 +239,8 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="13:33 pm"
+
+                    android:fontFamily="@font/raleway"
                     android:layout_marginLeft="16dp"
                     android:padding="3dp"
                     />
@@ -224,6 +250,8 @@
                     android:layout_height="wrap_content"
                     android:text="Closing Time-"
                     android:textStyle="bold"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="4dp"
                     android:textColor="@color/black"
@@ -233,6 +261,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
+
+                    android:fontFamily="@font/raleway"
                     android:text="22:33 pm"
                     android:layout_marginLeft="16dp"
                     android:padding="3dp"
@@ -243,6 +273,8 @@
                     android:layout_height="wrap_content"
                     android:text="Website-"
                     android:textStyle="bold"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="4dp"
                     android:textColor="@color/black"
@@ -252,6 +284,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
+
+                    android:fontFamily="@font/raleway"
                     android:text="https//google.co.in"
                     android:layout_marginLeft="16dp"
                     android:padding="3dp"

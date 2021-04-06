@@ -44,6 +44,8 @@
                 android:layout_height="wrap_content"
                 android:text="Amount credited by user via credit/debit."
                 android:textColor="@color/black"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:textSize="16sp" />
 
             <TextView
@@ -52,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:text="15 Sep,2020(Tue)"
 
+                android:fontFamily="@font/raleway"
                 android:textSize="10sp" />
 
         </LinearLayout>
@@ -63,6 +66,7 @@
             android:layout_height="wrap_content"
             android:text="Rs.500"
 
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/black"
             android:textSize="20sp"
 

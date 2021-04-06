@@ -49,6 +49,8 @@
                 android:background="@null"
                 android:drawablePadding="10dp"
                 android:ems="10"
+
+                android:fontFamily="@font/raleway"
                 android:gravity="left|center"
                 android:hint="Search.."
                 android:imeOptions="actionSearch"

@@ -49,6 +49,17 @@ public class SessionManager {
 
     public static String isopen = "isopen";
 
+    public static String isFetchLocation = "isfetchlocation";
+
+    public void setBooleanFetchData(String key, Boolean val) {
+        editor.putBoolean(key, val);
+        editor.commit();
+    }
+
+    public boolean getBooleanFetchData(String key) {
+        return pref.getBoolean(key, false);
+    }
+
     public void setBooleanData(String key, Boolean val) {
         editor.putBoolean(key, val);
         editor.commit();

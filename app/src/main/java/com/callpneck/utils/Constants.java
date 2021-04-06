@@ -13,8 +13,10 @@ public class Constants {
             "Ratings"
     };
 
-    public static String razorKeyId="", privacyPolicy="",tremAndCondition="";
+    public static String razorKeyId="", privacyPolicy="",tremAndCondition="", aboutUs ="";
 
     public static Boolean isRazor = false;
+
+    public static int Char_limit =160;
 
 }

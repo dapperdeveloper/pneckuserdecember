@@ -47,6 +47,8 @@
             android:textColor="@color/black"
             android:gravity="center"
             android:singleLine="true"
+
+            android:fontFamily="@font/raleway_semibold"
             android:maxLength="20"
             android:layout_width="100dp"
             android:layout_height="wrap_content"/>

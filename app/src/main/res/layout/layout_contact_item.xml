@@ -23,6 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Username"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:padding="3dp"
                 android:textColor="@color/black"
                 android:layout_margin="10dp"
@@ -33,6 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Phone Number"
+
+                android:fontFamily="@font/raleway"
                 android:padding="3dp"
                 android:layout_margin="10dp"
                 />

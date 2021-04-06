@@ -29,6 +29,7 @@
                 android:layout_below="@+id/img_pass"
                 android:layout_marginLeft="10dp"
                 android:text="About Us"
+                android:fontFamily="@font/raleway_semibold"
                 android:textColor="@color/white"
                 android:textSize="35dp"
                 android:textStyle="bold" />
@@ -48,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/denim_20"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/raleway"
                 android:text="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English"
                 android:textColor="@color/black"
                 android:textSize="@dimen/contact_font" />
@@ -57,8 +58,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/denim_20"
-                android:fontFamily="sans-serif"
                 android:text="1. Privacy Policy"
+                android:fontFamily="@font/raleway_semibold"
                 android:textColor="@color/black"
                 android:textSize="@dimen/contact_font" />
 
@@ -66,16 +67,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/denim_20"
-                android:fontFamily="sans-serif"
                 android:text="2. Terms And Conditions"
                 android:textColor="@color/black"
+                android:fontFamily="@font/raleway_semibold"
                 android:textSize="@dimen/contact_font" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/denim_20"
-                android:fontFamily="sans-serif"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="3. Join the team"
                 android:textColor="@color/black"
                 android:textSize="@dimen/contact_font" />
@@ -84,7 +86,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/denim_20"
-                android:fontFamily="sans-serif"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:text="4. Blog"
                 android:textColor="@color/black"
                 android:textSize="@dimen/contact_font" />
@@ -93,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/denim_20"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/raleway_semibold"
                 android:text="5. Software Licenses"
                 android:textColor="@color/black"
                 android:textSize="@dimen/contact_font" />
@@ -105,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/raleway_semibold"
             android:gravity="center_horizontal"
             android:text="Versio: 1.0.0"
             android:textColor="@color/black"

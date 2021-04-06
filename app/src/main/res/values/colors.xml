@@ -177,4 +177,8 @@
     <color name="colorLinkDay">#0008f2</color>
     <color name="colorNutritionBackgroundDay">#65CCCCCC</color>
     <color name="colorDeleteDay">#ae1212</color>
+
+    <color name="select_dot">#d42b7b</color>
+    <color name="non_select_dot">#A5A5A5</color>
+
 </resources>

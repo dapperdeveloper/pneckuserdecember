@@ -16,10 +16,10 @@ import java.util.concurrent.TimeUnit
  * @author Mobin Munir
  */
 class SimpleCountDownTimerKotlin(
-    private var fromMinutes: Long,
-    private var fromSeconds: Long,
-    private val onCountDownListener: OnCountDownListener,
-    private var delayInSeconds: Long = 1
+        private var fromMinutes: Long,
+        private var fromSeconds: Long,
+        private val onCountDownListener: OnCountDownListener,
+        private var delayInSeconds: Long = 1
 ) {
 
     private val calendar = Calendar.getInstance()
@@ -45,8 +45,8 @@ class SimpleCountDownTimerKotlin(
      * This method sets business logic for countdown operation before it starts.
      */
     private fun setCountDownValues(
-        fromMinutes: Long = this.fromMinutes,
-        fromSeconds: Long = this.fromSeconds
+            fromMinutes: Long = this.fromMinutes,
+            fromSeconds: Long = this.fromSeconds
     ) {
         this.fromMinutes = fromMinutes
         this.fromSeconds = fromSeconds
@@ -82,13 +82,13 @@ class SimpleCountDownTimerKotlin(
      */
     fun setTimerPattern(pattern: String) {
         if (pattern.equals("mm:ss", ignoreCase = true) || pattern.equals(
-                "m:s",
-                ignoreCase = true
-            ) || pattern.equals("mm", ignoreCase = true) ||
-            pattern.equals("ss", ignoreCase = true) || pattern.equals(
-                "m",
-                ignoreCase = true
-            ) || pattern.equals("s", ignoreCase = true)
+                        "m:s",
+                        ignoreCase = true
+                ) || pattern.equals("mm", ignoreCase = true) ||
+                pattern.equals("ss", ignoreCase = true) || pattern.equals(
+                        "m",
+                        ignoreCase = true
+                ) || pattern.equals("s", ignoreCase = true)
         ) simpleDateFormat.applyPattern(pattern)
     }
 
@@ -146,8 +146,8 @@ class SimpleCountDownTimerKotlin(
 
     private fun decrementSeconds() {
         handler.postDelayed(
-            runnable,
-            TimeUnit.SECONDS.toMillis(delayInSeconds)
+                runnable,
+                TimeUnit.SECONDS.toMillis(delayInSeconds)
         )
     }
 

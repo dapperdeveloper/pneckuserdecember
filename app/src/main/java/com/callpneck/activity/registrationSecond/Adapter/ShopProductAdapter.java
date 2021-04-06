@@ -83,7 +83,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
             @Override
             public void onClick(View view) {
                 if (item.getStock().equals("1")){
-                    showQuantityDialog(item);
+                    showQuantityDialog(item, holder.txt_offer.getText().toString());
                 }
                 else {
                     StyleableToast.makeText(context, "currently out of stock...!", Toast.LENGTH_LONG, R.style.mytoast).show();
@@ -95,7 +95,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
             @Override
             public void onClick(View view) {
                 if (item.getStock().equals("1")){
-                    showQuantityDialog(item);
+                    showQuantityDialog(item, holder.txt_offer.getText().toString());
                 }
                 else {
                     StyleableToast.makeText(context, "currently out of stock...!", Toast.LENGTH_LONG, R.style.mytoast).show();
@@ -111,16 +111,14 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
     private double finalCost =0;
     private int quantity = 0;
 
-    private void showQuantityDialog(Product item) {
+    private void showQuantityDialog(Product item, String discount) {
 
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogTheme);
 
-       View view = LayoutInflater.from(context).inflate(R.layout.dialog_shop_item,null);
-        bottomSheetDialog.setContentView(view);
-        bottomSheetDialog.setCanceledOnTouchOutside(false);
-        ImageView productIv;
-        final TextView titleTv, pCategoryTv, descriptionTv, closeTv, originalPriceTv, finalPriceTv
-                ,quantityTv;
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_shop_item,null);
+        ImageView productIv,closeTv ;
+        final TextView titleTv, pCategoryTv, descriptionTv, originalPriceTv, finalPriceTv
+                ,quantityTv, discountNoteTv, itemPriceQuantity;
         ImageButton decrementBtn, incrementBtn;
         Button continueBtn;
 
@@ -128,19 +126,27 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
         titleTv = view.findViewById(R.id.titleTv);
         pCategoryTv = view.findViewById(R.id.pCategoryTv);
         descriptionTv = view.findViewById(R.id.descriptionTv);
-        closeTv = view.findViewById(R.id.closeTv);
+        closeTv = view.findViewById(R.id.Goback);
         originalPriceTv = view.findViewById(R.id.originalPriceTv);
         finalPriceTv = view.findViewById(R.id.finalPriceTv);
         quantityTv = view.findViewById(R.id.quantityTv);
         decrementBtn = view.findViewById(R.id.decrementBtn);
         incrementBtn = view.findViewById(R.id.incrementBtn);
         continueBtn = view.findViewById(R.id.continueBtn);
+        discountNoteTv = view.findViewById(R.id.discountNoteTv);
+        itemPriceQuantity = view.findViewById(R.id.itemPriceQuantity);
+        //set view
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
 
         //get data
         final String productId = item.getId()+"";
         String title = item.getName();
         String description = item.getDetails();
 
+        String category = item.getCategoryname()+"";
 
 
         final String price;
@@ -152,14 +158,16 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
         Glide.with(context).load(item.getImage().get(0).toString()).placeholder(R.drawable.ic_user_replace).into(productIv);
 
 
-
-
+        discountNoteTv.setText(discount);
         titleTv.setText(""+title);
         descriptionTv.setText(""+description);
 
         quantityTv.setText(""+quantity);
         originalPriceTv.setText("Rs."+item.getSelling_price());
         finalPriceTv.setText("Rs."+finalCost);
+        itemPriceQuantity.setText("x "+quantity+ " items");
+
+        pCategoryTv.setText(category);
         String image;
         try {
             image= item.getImage().get(0).toString();
@@ -167,8 +175,6 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
         catch (Exception e){
             image = "http://pneck.com/front_theme/images/logo-white.png";
         }
-        bottomSheetDialog.show();
-
         incrementBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,6 +182,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
                 quantity++;
                 finalPriceTv.setText("Rs."+finalCost);
                 quantityTv.setText(""+quantity);
+                itemPriceQuantity.setText("x "+quantity+ " items");
             }
         });
         decrementBtn.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +194,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
                     quantity--;
                     finalPriceTv.setText("Rs."+finalCost);
                     quantityTv.setText(""+quantity);
+                    itemPriceQuantity.setText("x "+quantity+ " items");
                 }
             }
         });
@@ -199,14 +207,14 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
                 String totalPrice = finalPriceTv.getText().toString().trim().replace("Rs.","");
                 String quantity = quantityTv.getText().toString().trim();
                 addToCart(title,priceEach, finalImage,totalPrice,quantity);
-                bottomSheetDialog.dismiss();
+                dialog.dismiss();
 
             }
         });
         closeTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottomSheetDialog.dismiss();
+                dialog.dismiss();
             }
         });
 

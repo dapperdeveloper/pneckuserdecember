@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
 import com.callpneck.activity.AppController;
@@ -52,7 +53,7 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
 
     View view_order_placed,view_order_confirmed,view_order_processed,view_order_pickup,con_divider,ready_divider,placed_divider;
     ImageView img_orderconfirmed,orderprocessed,orderpickup;
-    TextView textorderpickup,text_confirmed,textorderprocessed, orderNumberTv, orderTimeTv, nameTv;
+    TextView textorderpickup,text_confirmed,textorderprocessed, orderNumberTv, orderTimeTv, nameTv, waitingLayout;
 
     LinearLayout toolbar_layout;
 
@@ -66,6 +67,7 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_track_order_delivery);
 
         toolbar_layout = findViewById(R.id.toolbar_layout);
@@ -94,6 +96,7 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
         call_Btn = findViewById(R.id.call_Btn);
 
         statusLayout = findViewById(R.id.statusLayout);
+        waitingLayout = findViewById(R.id.waitingLayout);
         Intent intent=getIntent();
 
 
@@ -190,29 +193,34 @@ public class TrackOrderDeliveryActivity extends AppCompatActivity implements Vie
                             if (status.equalsIgnoreCase("Pending")){
                                 statusLayout.setVisibility(View.GONE);
                                 callBtnLayout.setVisibility(View.GONE);
+                                waitingLayout.setVisibility(View.VISIBLE);
                             }
                             if (status.equalsIgnoreCase("Received")){
                                 orderStatus = "0";
                                 getOrderStatus(orderStatus);
                                 statusLayout.setVisibility(View.VISIBLE);
+                                waitingLayout.setVisibility(View.GONE);
                                 callBtnLayout.setVisibility(View.GONE);
                             }
                             else if (status.equalsIgnoreCase("Preparing")){
                                 orderStatus="1";
                                 getOrderStatus(orderStatus);
                                 statusLayout.setVisibility(View.VISIBLE);
+                                waitingLayout.setVisibility(View.GONE);
                                 callBtnLayout.setVisibility(View.VISIBLE);
                             }
                             else if (status.equalsIgnoreCase("On The Way")){
                                 orderStatus = "2";
                                 getOrderStatus(orderStatus);
                                 statusLayout.setVisibility(View.VISIBLE);
+                                waitingLayout.setVisibility(View.GONE);
                                 callBtnLayout.setVisibility(View.VISIBLE);
                             }
                             else if (status.equalsIgnoreCase("Delivered")){
                                 orderStatus= "3";
                                 getOrderStatus(orderStatus);
                                 statusLayout.setVisibility(View.VISIBLE);
+                                waitingLayout.setVisibility(View.GONE);
                                 callBtnLayout.setVisibility(View.VISIBLE);
                                 StyleableToast.makeText(TrackOrderDeliveryActivity.this, "Thank You For Ordering!", Toast.LENGTH_LONG, R.style.mytoast).show();
 

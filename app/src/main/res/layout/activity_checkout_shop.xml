@@ -46,6 +46,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/wallet_balance"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:textColor="@color/colorPrimary"
                         android:textStyle="bold" />
 
@@ -80,6 +82,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="@string/Delivery_Address"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="@dimen/mid_text" />
                 </RelativeLayout>
@@ -90,6 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/margin_10dp"
+                    android:fontFamily="@font/raleway"
                     android:textColor="@color/dark_gray"
                     android:textSize="@dimen/mid_text" />
 
@@ -100,6 +105,7 @@
                     android:layout_marginStart="@dimen/margin_10dp"
                     android:layout_marginTop="2dp"
                     android:ems="10"
+                    android:fontFamily="@font/raleway_semibold"
                     android:hint="Select address for delivery"
                     android:textColor="@color/overlay_white" />
 
@@ -117,6 +123,7 @@
                         android:layout_weight="1"
                         android:singleLine="true"
                         android:tag="home"
+                        android:fontFamily="@font/raleway_semibold"
                         android:text="@string/title_home" />
 
                     <CheckBox
@@ -126,6 +133,8 @@
                         android:layout_weight="1"
                         android:singleLine="true"
                         android:tag="work"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:text="@string/work" />
                     <CheckBox
                         android:id="@+id/chLocation"
@@ -133,6 +142,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:singleLine="true"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:tag="my_location"
                         android:text="@string/my_location" />
 
@@ -156,6 +167,8 @@
                     android:layout_marginTop="@dimen/margin_10dp"
                     android:layout_marginBottom="@dimen/margin_10dp"
                     android:text="@string/payment_mathod"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/mid_text" />
 
@@ -179,6 +192,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2.5"
                         android:text="@string/cod_pay"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:textColor="@color/txt_color"
                         android:textSize="@dimen/mid_text" />
 
@@ -224,6 +239,8 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2.5"
                             android:text="@string/razor_payment"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/txt_color"
                             android:textSize="@dimen/mid_text" />
 
@@ -265,6 +282,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
+                        android:fontFamily="@font/raleway_semibold"
                         android:text="@string/total_amt" />
 
                     <TextView
@@ -272,6 +290,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/raleway"
                         android:gravity="end" />
                 </LinearLayout>
 
@@ -286,6 +305,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:text="@string/tax" />
 
                     <TextView
@@ -293,6 +314,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/raleway"
                         android:gravity="end" />
                 </LinearLayout>
                 <LinearLayout
@@ -305,6 +327,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:text="Delivery Charges" />
 
                     <TextView
@@ -312,6 +336,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/raleway"
                         android:gravity="end" />
                 </LinearLayout>
 
@@ -325,6 +350,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:text="@string/wallet_balance" />
 
                     <TextView
@@ -332,6 +359,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/raleway"
                         android:gravity="end" />
                 </LinearLayout>
             </LinearLayout>
@@ -362,6 +390,8 @@
             android:layout_centerVertical="true"
             android:drawablePadding="@dimen/margin_5dp"
             android:text="@string/total"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
             android:textStyle="bold" />
@@ -373,6 +403,8 @@
             android:text=" Rs. 500"
             android:layout_marginLeft="8dp"
             android:textSize="14sp"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/tvPreTotal"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -392,6 +424,8 @@
             android:paddingEnd="@dimen/margin_10dp"
             android:paddingBottom="7dp"
             android:text="@string/confirm"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textAllCaps="true"
             android:textColor="@color/white" />
 
@@ -409,6 +443,8 @@
             android:paddingEnd="@dimen/margin_10dp"
             android:paddingBottom="7dp"
             android:text="@string/proceed"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:visibility="gone" />

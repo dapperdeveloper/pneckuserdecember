@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#00FFFFFF"
             android:hint="Enter Source"
+            android:fontFamily="@font/raleway_semibold"
             android:drawableLeft="@drawable/ic_location"
             android:background="@drawable/border_text"
             android:maxLines="2"

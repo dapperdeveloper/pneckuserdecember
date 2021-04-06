@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
 
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.LaunchActivityClass;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
@@ -42,6 +43,7 @@ public class MoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_more);
         recyclerView = findViewById(R.id.recycler_view);
         progressBar = findViewById(R.id.progress_bar);

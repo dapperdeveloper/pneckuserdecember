@@ -17,9 +17,19 @@ import com.callpneck.activity.Database.MainData;
 import com.callpneck.activity.Database.RoomDB;
 import com.callpneck.activity.registrationSecond.Adapter.MyCartAdapter;
 import com.callpneck.activity.registrationSecond.Adapter.MyShopCartAdapter;
+import com.callpneck.activity.registrationSecond.api.APIClient;
+import com.callpneck.activity.registrationSecond.helper.Constant;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EditShopCartActivity extends AppCompatActivity {
 
@@ -111,7 +121,36 @@ public class EditShopCartActivity extends AppCompatActivity {
 
 
 
+
+        getDeliveryCharges();
+
     }
+    private void getDeliveryCharges() {
+
+        Call<JsonObject> call = APIClient.getInstance().deliveryCharge();
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
+
+                    Constant.SETTING_DELIVERY_CHARGE = jsonObject.getDouble("data");
+
+                }catch (Exception e){
+                    e.toString();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     private void openCheckoutActivity() {
         Intent intent = new Intent(EditShopCartActivity.this, CheckoutShopActivity.class);

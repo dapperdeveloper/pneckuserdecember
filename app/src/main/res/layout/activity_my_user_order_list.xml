@@ -27,6 +27,8 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:text="@string/ORDERS"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textSize="18sp"
             android:layout_centerInParent="true"/>
 

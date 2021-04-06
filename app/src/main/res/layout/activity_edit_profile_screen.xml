@@ -31,6 +31,8 @@
             android:textStyle="bold"
             android:layout_gravity="center"
             android:gravity="center"
+
+            android:fontFamily="@font/raleway_semibold"
             android:text="@string/profile"
             android:textColor="@color/white"/>
 
@@ -115,6 +117,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/full_name"
+                                    android:fontFamily="@font/raleway_semibold"
                                     android:textAlignment="center"
                                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                     android:textColor="@color/grey_40" />
@@ -127,6 +130,7 @@
                                     android:inputType="textCapWords"
                                     android:maxLength="50"
                                     android:maxLines="1"
+                                    android:fontFamily="@font/raleway"
                                     android:id="@+id/first_name"
                                     android:singleLine="true" />
 
@@ -142,6 +146,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/last_name"
                                     android:visibility="gone"
+                                    android:fontFamily="@font/raleway_semibold"
                                     android:textAlignment="center"
                                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                     android:textColor="@color/grey_40" />
@@ -153,6 +158,8 @@
                                     android:layout_marginRight="-4dp"
                                     android:inputType="textCapWords"
                                     android:maxLength="50"
+
+                                    android:fontFamily="@font/raleway_semibold"
                                     android:visibility="gone"
                                     android:maxLines="1"
                                     android:id="@+id/last_name"
@@ -168,6 +175,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/phone_number"
+
+                                    android:fontFamily="@font/raleway_semibold"
                                     android:textAlignment="center"
                                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                     android:textColor="@color/grey_40" />
@@ -180,6 +189,8 @@
                                     android:inputType="number"
                                     android:maxLength="10"
                                     android:maxLines="1"
+
+                                    android:fontFamily="@font/raleway"
                                     android:clickable="false"
                                     android:focusable="false"
                                     android:editable="false"
@@ -195,6 +206,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/email"
+
+                                    android:fontFamily="@font/raleway_semibold"
                                     android:textAlignment="center"
                                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                     android:textColor="@color/grey_40" />
@@ -207,6 +220,7 @@
                                     android:inputType="textEmailAddress"
                                     android:maxLength="50"
                                     android:maxLines="1"
+                                    android:fontFamily="@font/raleway"
                                     android:id="@+id/email"
                                     android:clickable="false"
                                     android:focusable="false"
@@ -222,6 +236,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/GENDER"
+
+                                    android:fontFamily="@font/raleway_semibold"
                                     android:textAlignment="center"
                                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                     android:textColor="@color/grey_40" />
@@ -231,6 +247,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:autofillHints="SELECT GENDER"
+                                    android:fontFamily="@font/raleway_semibold"
                                     android:gravity="center" />
 
                                 <View
@@ -260,6 +277,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/ADDRESS_TEXT"
+
+                                    android:fontFamily="@font/raleway_semibold"
                                     android:textAlignment="center"
                                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                     android:textColor="@color/grey_40" />
@@ -272,6 +291,7 @@
                                     android:inputType="textEmailAddress"
                                     android:maxLength="50"
                                     android:maxLines="1"
+                                    android:fontFamily="@font/raleway"
                                     android:id="@+id/address"
                                     android:singleLine="true" />
 
@@ -318,6 +338,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/update"
+            android:fontFamily="@font/raleway_semibold"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
             android:textColor="@color/white" />
     </com.balysv.materialripple.MaterialRippleLayout>

@@ -31,6 +31,8 @@
             android:layout_centerVertical="true"
             android:textColor="@color/white"
             android:textSize="16sp"
+
+            android:fontFamily="@font/raleway_semibold"
             android:text="@string/invite_friends"/>
 
     </RelativeLayout>
@@ -172,6 +174,8 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:text="@string/refere"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:textColor="#000000"
                         android:textStyle="bold" />
@@ -181,6 +185,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="@string/your_refer_code"
+
+                        android:fontFamily="@font/raleway"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -189,6 +195,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:background="@drawable/bg_dashedborder"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:textStyle="bold|italic" />
@@ -200,6 +208,8 @@
                         android:layout_marginTop="15dp"
                         android:gravity="center"
                         android:text="@string/tap_copy"
+
+                        android:fontFamily="@font/raleway"
                         android:textColor="@color/colorPrimaryDark" />
 
                     <TextView
@@ -216,6 +226,8 @@
                         android:paddingEnd="50dp"
                         android:paddingBottom="10dp"
                         android:text="@string/refer_now"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />

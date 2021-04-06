@@ -49,6 +49,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:text="Add Home"
+            android:fontFamily="@font/raleway_semibold"
 
             />
 
@@ -57,6 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
+
+            android:fontFamily="@font/raleway"
             android:hint="Click to add new address"
             android:textColor="@color/colorPrimaryDark" />
 
@@ -66,6 +69,8 @@
             android:layout_height="wrap_content"
             android:text="@string/up_location"
             android:textAllCaps="false"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_marginTop="10dp"
             style="@style/Widget.AppCompat.Button.Colored"
             android:minHeight="0dp"

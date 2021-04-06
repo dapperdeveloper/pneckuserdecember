@@ -68,6 +68,7 @@
            android:layout_height="wrap_content"
            android:layout_marginLeft="76dp"
            android:text="Shop Name"
+               android:fontFamily="@font/raleway_semibold"
            android:singleLine="true"
            android:textSize="16sp"
            android:textColor="@color/black"
@@ -79,6 +80,8 @@
            android:layout_height="wrap_content"
            android:layout_marginLeft="76dp"
            android:maxLines="2"
+
+           android:fontFamily="@font/raleway_semibold"
            android:layout_marginTop="1dp"
            android:text="12.34 km away"
            android:textSize="16sp"
@@ -133,6 +136,8 @@
                            android:layout_gravity="center"
                            android:text="View Profile"
                            android:padding="4dp"
+
+                           android:fontFamily="@font/raleway_semibold"
                            android:drawableEnd="@drawable/right_arrow"
                            android:textColor="@color/colorWhite"
                            android:drawableTint="@color/white"

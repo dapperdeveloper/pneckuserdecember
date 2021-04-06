@@ -1,5 +1,6 @@
 package com.callpneck.activity.registrationSecond.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -60,8 +61,8 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
 
         //holder.productPriceTv.setText(new StringBuilder("Rs.").append(item.getPrice()));
 
-        holder.descriptionTv.setText(item.getDescription());
-        holder.ingredientsTv.setText("Ingredients: "+item.getIngredients());
+        holder.descriptionTv.setText(item.getDescription()+"");
+        holder.ingredientsTv.setText(item.getIngredients()+"");
         //Initialize database
         database = RoomDB.getInstance(context);
 
@@ -95,14 +96,13 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
     private double finalCost =0;
     private int quantity = 0;
     private void showQuantityDialog(ProductList modelProduct) {
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.DialogTheme);
 
         View view = LayoutInflater.from(context).inflate(R.layout.bs_dialog_quantity,null);
-        bottomSheetDialog.setContentView(view);
 
-        ImageView productIv;
+        ImageView productIv, closeTv;
         final TextView titleTv, pCategoryTv, descriptionTv, discountNoteTv, originalPriceTv, finalPriceTv
-                ,quantityTv;
+                ,quantityTv, ingredientsTv, itemPriceQuantity;
         ImageButton decrementBtn, incrementBtn;
         Button continueBtn;
 
@@ -117,7 +117,14 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
         decrementBtn = view.findViewById(R.id.decrementBtn);
         incrementBtn = view.findViewById(R.id.incrementBtn);
         continueBtn = view.findViewById(R.id.continueBtn);
+        closeTv = view.findViewById(R.id.Goback);
+        ingredientsTv = view.findViewById(R.id.ingredientsTv);
+        itemPriceQuantity = view.findViewById(R.id.itemPriceQuantity);
+        //set view
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
 
+        dialog.show();
         //get data
         final String productId = modelProduct.getId()+"";
         String title = modelProduct.getName();
@@ -126,6 +133,7 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
         String discount = modelProduct.getDiscount();
         String image = modelProduct.getImage();
 
+        String ingredients = modelProduct.getIngredients();
 
         final String price;
         price = modelProduct.getOffer_price();
@@ -144,13 +152,13 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
         titleTv.setText(""+title);
         pCategoryTv.setText(""+productCategory);
         descriptionTv.setText(""+description);
-        discountNoteTv.setText(""+discount);
+        discountNoteTv.setText(""+discount+"% OFF");
 
+        ingredientsTv.setText(ingredients);
         quantityTv.setText(""+quantity);
         originalPriceTv.setText("Rs."+modelProduct.getOffer_price());
         finalPriceTv.setText("Rs."+finalCost);
-        bottomSheetDialog.show();
-
+        itemPriceQuantity.setText("x "+quantity+ " items");
         incrementBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,6 +167,7 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
 
                 finalPriceTv.setText("Rs."+finalCost);
                 quantityTv.setText(""+quantity);
+                itemPriceQuantity.setText("x "+quantity+ " items");
             }
         });
         decrementBtn.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +179,7 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
                     quantity--;
                     finalPriceTv.setText("Rs."+finalCost);
                     quantityTv.setText(""+quantity);
+                    itemPriceQuantity.setText("x "+quantity+ " items");
                 }
             }
         });
@@ -182,8 +192,15 @@ public class MyRestaurantMenuAdapter extends RecyclerView.Adapter<MyRestaurantMe
                 String quantity = quantityTv.getText().toString().trim();
                 addToCart(title,priceEach, image,totalPrice,quantity);
 
-                bottomSheetDialog.dismiss();
+                dialog.dismiss();
 
+            }
+        });
+
+        closeTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 

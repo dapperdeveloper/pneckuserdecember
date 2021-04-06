@@ -44,6 +44,7 @@
                 android:id="@+id/userNameTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_semibold"
                 android:text="Amount credited by user via credit/debit."
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -54,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="15 Sep,2020(Tue)"
 
+                android:fontFamily="@font/raleway"
                 android:textSize="10sp" />
 
         </LinearLayout>
@@ -64,10 +66,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rs.500"
-
             android:textColor="@color/black"
             android:textSize="20sp"
 
+            android:fontFamily="@font/raleway_semibold"
             android:layout_marginRight="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/divider"

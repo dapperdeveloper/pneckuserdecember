@@ -26,6 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dp"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_marginLeft="16dp"
             android:textStyle="bold"
             android:text="@string/contact_us"
@@ -46,6 +48,8 @@
             android:layout_height="wrap_content"
             android:textSize="32sp"
             android:text="P Neck Support Team"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/grey_800"/>
         <View
             android:layout_width="110dp"
@@ -63,6 +67,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:textColor="@color/grey_500"
                 android:layout_centerVertical="true"
                 android:text="@string/contact"/>
@@ -83,6 +89,8 @@
                     android:textSize="18sp"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/grey_800"
+
+                    android:fontFamily="@font/raleway"
                     android:layout_centerVertical="true"
                     android:text="@string/PNECK_SUPPORT_NUMBER"/>
 
@@ -101,6 +109,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:layout_marginTop="24dp"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:textColor="@color/grey_500"
                 android:layout_centerVertical="true"
                 android:text="@string/email"/>
@@ -121,6 +131,8 @@
                     android:textSize="18sp"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/grey_800"
+
+                    android:fontFamily="@font/raleway"
                     android:layout_centerVertical="true"
                     android:text="@string/PNECK_SUPPORT_EMAIL"/>
 
@@ -136,6 +148,8 @@
             android:textColor="@color/grey_800"
             android:layout_marginTop="24dp"
             android:layout_centerVertical="true"
+
+            android:fontFamily="@font/raleway"
             android:text="@string/SUPPORT_MESSAGE"/>
 
     </LinearLayout>
@@ -154,6 +168,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/drop_a_mail"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
             android:textColor="@color/colorWhite" />
     </com.balysv.materialripple.MaterialRippleLayout>

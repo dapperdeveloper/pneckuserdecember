@@ -23,6 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/my_balance"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/white"
             android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Rs.0.00"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/white"
             android:textSize="36sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -84,6 +88,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/add_money"
+
+                        android:fontFamily="@font/raleway_semibold"
                         android:layout_marginTop="8dp"
                         android:textColor="@color/black"
                         android:layout_gravity="bottom|center"/>
@@ -118,6 +124,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/transfer"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/black"
                     android:layout_gravity="bottom|center"/>
@@ -151,6 +159,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/transactions"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/black"
                     android:layout_gravity="bottom|center"/>

@@ -30,6 +30,8 @@
                 android:layout_marginRight="22dp"
                 android:layout_marginTop="16dp"
                 android:inputType="number"
+
+                android:fontFamily="@font/raleway"
                 style="@style/EditText.Grey"
                 android:hint="Enter Money"/>
 
@@ -38,6 +40,7 @@
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:text="Send"
+                android:fontFamily="@font/raleway_semibold"
                 android:enabled="true"
                 android:layout_margin="16dp"
                 android:background="@color/colorPrimary"

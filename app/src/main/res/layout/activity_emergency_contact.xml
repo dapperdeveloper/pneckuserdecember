@@ -27,6 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/emergency_contact"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:textSize="16sp"
@@ -62,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:text="For Your Safety"
                 android:textSize="22sp"
+                android:fontFamily="@font/raleway_semibold"
                 android:padding="3dp"
                 android:textColor="@color/black"
                 android:layout_marginBottom="16dp"
@@ -70,6 +73,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway"
                 android:text="Send alert your near ones in case of an emergency."
                 android:layout_gravity="center_horizontal"
                 android:textSize="14sp"
@@ -81,6 +85,7 @@
                 android:layout_gravity="center"
                 android:padding="3dp"
                 android:layout_marginBottom="16dp"
+                android:fontFamily="@font/raleway"
                 android:text="Please add them to your \nemergency contacts."/>
         </LinearLayout>
 
@@ -106,6 +111,8 @@
             android:layout_centerInParent="true"
             android:layout_marginBottom="8dp"
             android:padding="3dp"
+
+            android:fontFamily="@font/raleway_semibold"
             android:text="@string/you_can_add_maximum_5_contacts"/>
         <Button
             android:id="@+id/addContacts"
@@ -113,6 +120,8 @@
             android:layout_height="wrap_content"
             android:text="@string/add_contacts"
             android:textSize="16sp"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/white"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="24dp"

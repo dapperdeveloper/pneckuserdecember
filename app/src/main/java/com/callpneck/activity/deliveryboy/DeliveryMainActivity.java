@@ -30,6 +30,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.LaunchActivityClass;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
@@ -118,6 +119,7 @@ public class DeliveryMainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_delivery_main);
 
         mCurrentLocationBtn = findViewById(R.id.get_device_location);

@@ -90,6 +90,7 @@
                                 android:layout_marginLeft="3dp"
                                 android:padding="2dp"
                                 android:text="Rs.150"
+                                android:fontFamily="@font/raleway_semibold"
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="14dp"
                                 android:textStyle="bold" />
@@ -102,6 +103,8 @@
                                 android:layout_marginLeft="3dp"
                                 android:padding="2dp"
                                 android:text="Rs.250"
+
+                                android:fontFamily="@font/raleway_semibold"
                                 android:textColor="@color/black"
                                 android:textSize="12dp"
                                 android:textStyle="bold" />
@@ -143,6 +146,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Add"
+                        android:fontFamily="@font/raleway_semibold"
                         android:textSize="12sp"
                         android:textColor="@color/white"
                         />
@@ -169,6 +173,7 @@
                 android:gravity="center|right"
                 android:padding="5dp"
                 android:text="  Out of Stock  "
+                android:fontFamily="@font/raleway_semibold"
                 android:textColor="@color/colorWhite"
                 android:textSize="10dp" />
         </LinearLayout>
@@ -188,6 +193,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="20% Off"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/colorWhite"
             android:textSize="14dp"
             android:textStyle="bold" />

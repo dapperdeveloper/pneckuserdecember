@@ -65,7 +65,6 @@ import retrofit2.Response;
 public class ShopHomeActivity extends AppCompatActivity {
 
     String categoryName;
-
     TextView titleTv, filterTv, addressTv;
     String title;
     private EditText searchView;

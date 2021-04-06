@@ -29,6 +29,7 @@
                 android:fontFamily="@font/raleway_semibold"
                 android:padding="4dp"
                 android:text="Delivery_boy"
+
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/textView5"
@@ -45,6 +46,7 @@
                 android:padding="4dp"
                 android:text="Order Id"
                 android:textAlignment="center"
+                android:fontFamily="@font/raleway_semibold"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="@+id/textView3"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -69,6 +71,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:text="#230339303"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView6"
@@ -107,6 +111,8 @@
                     android:layout_weight="1"
                     android:maxLines="2"
                     android:padding="2dp"
+
+                    android:fontFamily="@font/raleway"
                     android:text="Address"
                     android:textSize="12sp" />
 
@@ -119,6 +125,8 @@
                 android:layout_height="38dp"
                 android:background="@drawable/rectangle_green_button"
                 android:text="View Details"
+
+                android:fontFamily="@font/raleway_semibold"
                 android:layout_marginTop="8dp"
                 android:padding="4dp"
                 android:layout_marginRight="16dp"
@@ -135,6 +143,7 @@
                 android:fontFamily="@font/raleway_semibold"
                 android:padding="4dp"
                 android:text="Rs.0"
+
                 android:layout_marginTop="8dp"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp"
@@ -158,9 +167,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
-                android:fontFamily="@font/raleway_semibold"
+                android:fontFamily="@font/raleway"
                 android:padding="4dp"
                 android:text="04 Dec,2020"
+
                 android:textSize="12sp"
                 android:layout_marginBottom="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"

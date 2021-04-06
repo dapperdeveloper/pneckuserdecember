@@ -30,6 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="@string/notifications"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerInParent="true"
             android:textSize="16sp"
             android:textColor="@color/white"
@@ -57,6 +59,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/all"
+
+            android:fontFamily="@font/raleway_semibold"
             android:background="@drawable/shape_rect04"
             android:textColor="@color/black"/>
         <TextView
@@ -66,6 +70,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/notifications"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/black"/>
         <TextView
             android:id="@+id/tabNewsTv"
@@ -74,6 +80,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/news"
+
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/black"/>
     </LinearLayout>
 
@@ -99,6 +107,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="All"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerInParent="true"
             android:textColor="@color/black"/>
 
@@ -124,6 +134,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Notification"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerInParent="true"
             android:textColor="@color/black"/>
     </RelativeLayout>
@@ -148,6 +160,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="News"
+
+            android:fontFamily="@font/raleway_semibold"
             android:layout_centerInParent="true"
             android:textColor="@color/black"/>
     </RelativeLayout>

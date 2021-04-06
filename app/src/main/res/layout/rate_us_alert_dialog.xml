@@ -11,6 +11,8 @@
         android:textSize="18dp"
         android:textColor="@color/black"
         android:textStyle="bold"
+
+        android:fontFamily="@font/raleway_semibold"
         android:id="@+id/clear_conversation_text"
         android:text="@string/TELL_YOUR_EXPERIENCE_WITH_PNECK"/>
 
@@ -37,6 +39,8 @@
             android:textSize="16dp"
             android:textColor="@color/black"
             android:id="@+id/user_comment"
+
+            android:fontFamily="@font/raleway_semibold"
             android:text="Feedback"/>
 
         <com.google.android.material.textfield.TextInputEditText
@@ -44,6 +48,8 @@
             android:layout_height="100dp"
             android:padding="10dp"
             android:layout_margin="@dimen/editpad5dp"
+
+            android:fontFamily="@font/raleway"
             android:inputType="text|textMultiLine|textCapSentences"
             android:background="@drawable/rectangle_back"
             android:layout_gravity="top"
@@ -70,6 +76,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:textSize="18dp"
+
+            android:fontFamily="@font/raleway_semibold"
             android:id="@+id/Cancel_dialog"
             android:textColor="@color/black"
             android:gravity="center"
@@ -81,6 +89,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:textSize="18dp"
+
+            android:fontFamily="@font/raleway_semibold"
             android:id="@+id/submit_rating"
             android:textColor="@color/black"
             android:gravity="center"

@@ -50,6 +50,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -289,27 +290,31 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         chWallet.setTag("false");
         SetDataTotal();
     }
-    private void getWalletBalance() {
-        Call<GetWallet> call = APIClient.getInstance().getWallet(user_id);
-        call.enqueue(new Callback<GetWallet>() {
-            @Override
-            public void onResponse(Call<GetWallet> call, Response<GetWallet> response) {
-                GetWallet getWallet = response.body();
-                if (getWallet != null && getWallet.getStatus()){
-                    Constant.WALLET_BALANCE = Double.parseDouble(getWallet.getAmount()+"");
-                    tvWltBalance.setText(getString(R.string.total_balance) + Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
-                }
-                else {
 
+    private void getWalletBalance() {
+        Call<JsonObject> call = APIClient.getInstance().getWallet(user_id);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    Constant.WALLET_BALANCE = jsonObject.getDouble("amount");
+                    tvWltBalance.setText(getString(R.string.total_balance) + Constant.SETTING_CURRENCY_SYMBOL + Constant.WALLET_BALANCE);
+
+                }catch (Exception e){
+                    e.toString();
                 }
+
             }
 
             @Override
-            public void onFailure(Call<GetWallet> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.d("WalletBalance", t.getMessage());
             }
         });
     }
+
 
 
     private boolean validation(){

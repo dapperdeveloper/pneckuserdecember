@@ -19,6 +19,8 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:paddingStart="8dp"
+
+            android:fontFamily="@font/raleway_semibold"
             android:text="@string/lorum"
             android:singleLine="true"
             android:textColor="@color/colorPrimaryText"
@@ -32,6 +34,8 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:singleLine="true"
+
+            android:fontFamily="@font/raleway"
             android:text="@string/lorum"
             android:textColor="@color/colorSecondaryText"
             android:textSize="10sp" />

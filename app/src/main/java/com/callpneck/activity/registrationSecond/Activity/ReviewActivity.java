@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.R;
 import com.callpneck.activity.registrationSecond.Adapter.AdapterReview;
 import com.callpneck.activity.registrationSecond.Model.ModelReview;
@@ -31,6 +32,7 @@ public class ReviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_review);
 
         reviewRv  = findViewById(R.id.reviewRv);

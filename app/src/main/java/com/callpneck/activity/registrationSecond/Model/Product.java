@@ -49,6 +49,10 @@ public class Product {
     @Expose
     List<String> image;
 
+    @SerializedName("categoryname")
+    @Expose
+    String categoryname;
+
     public List<String> getImage() {
         return image;
     }
@@ -136,5 +140,13 @@ public class Product {
 
     public void setStock(String stock) {
         this.stock = stock;
+    }
+
+    public String getCategoryname() {
+        return categoryname;
+    }
+
+    public void setCategoryname(String categoryname) {
+        this.categoryname = categoryname;
     }
 }

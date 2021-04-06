@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.android.volley.toolbox.NetworkImageView;
 import com.bumptech.glide.Glide;
 import com.callpneck.Language.LanguageSettingActivity;
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.LaunchActivityClass;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
@@ -126,6 +127,7 @@ public class ReceiptOrderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_receipt_order);
         ButterKnife.bind(this);
         if (getSupportActionBar() != null)

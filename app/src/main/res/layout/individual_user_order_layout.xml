@@ -19,6 +19,7 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:id="@+id/order_id"
+            android:fontFamily="@font/raleway_semibold"
             android:text=""
             android:layout_centerHorizontal="true"/>
 

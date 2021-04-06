@@ -25,6 +25,11 @@ import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentLis
 import com.callpneck.activity.registrationSecond.Model.paymentHistory.PaymentListResponse;
 import com.callpneck.activity.registrationSecond.api.APIClient;
 import com.callpneck.activity.registrationSecond.api.APIRequests;
+import com.callpneck.activity.registrationSecond.helper.Constant;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,30 +130,30 @@ public class WalletFragment extends Fragment {
     }
 
     private void getWalletBalance() {
-        Call<GetWallet> call = APIClient.getInstance().getWallet(user_id);
-        call.enqueue(new Callback<GetWallet>() {
+        Call<JsonObject> call = APIClient.getInstance().getWallet(sessionManager.getUserid());
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<GetWallet> call, Response<GetWallet> response) {
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JSONObject jsonObject;
                 try {
-                    GetWallet getWallet = response.body();
-                    if (getWallet != null && getWallet.getStatus()){
-                        walletBlncTv.setText("₹"+getWallet.getAmount()+"");
-                    }
-                    else {
+                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    Constant.WALLET_BALANCE = jsonObject.getDouble("amount");
+                    walletBlncTv.setText("₹"+Constant.WALLET_BALANCE+"");
 
-                    }
                 }catch (Exception e){
-                    e.printStackTrace();
+                    e.toString();
                 }
 
             }
 
             @Override
-            public void onFailure(Call<GetWallet> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.d("WalletBalance", t.getMessage());
             }
         });
     }
+
+
 
     private void clicks() {
         addMoneyBtn.setOnClickListener(new View.OnClickListener() {

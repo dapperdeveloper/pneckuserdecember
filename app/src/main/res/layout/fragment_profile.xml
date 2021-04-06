@@ -70,7 +70,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
                             android:layout_marginTop="24dp"
-                            android:text="UserName"
+                            android:text=""
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/white"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -82,6 +83,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
+                            android:fontFamily="@font/raleway"
                             android:layout_marginTop="3dp"
                             android:textColor="@color/white"
                             android:textSize="12sp"
@@ -116,6 +118,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/wallet_balance"
+                                    android:fontFamily="@font/raleway_semibold"
                                     android:textStyle="bold"
                                     android:textColor="@color/black"
                                     android:layout_margin="16dp"/>
@@ -125,6 +128,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Rs.0.00"
+                                    android:fontFamily="@font/raleway_semibold"
                                     android:textStyle="bold"
                                     android:layout_alignParentEnd="true"
                                     android:textColor="@color/colorPrimary"
@@ -164,6 +168,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:fontFamily="@font/raleway_semibold"
                                         android:text="@string/bookings"/>
 
                                 </LinearLayout>
@@ -186,6 +191,8 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+
+                                        android:fontFamily="@font/raleway_semibold"
                                         android:text="@string/wallet"/>
 
                                 </LinearLayout>
@@ -208,6 +215,8 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+
+                                        android:fontFamily="@font/raleway_semibold"
                                         android:text="@string/top_up"/>
 
                                 </LinearLayout>
@@ -229,6 +238,8 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+
+                                        android:fontFamily="@font/raleway_semibold"
                                         android:text="@string/invite"/>
 
                                 </LinearLayout>
@@ -252,6 +263,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/general_settings"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_margin="10dp"
                     android:textSize="18sp"
                     android:textColor="@color/black"/>
@@ -287,6 +300,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/emergency_contact"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/black"
                             android:layout_toRightOf="@+id/l"
                             android:layout_centerVertical="true"
@@ -328,6 +343,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/notifications"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/black"
                             android:layout_toRightOf="@+id/i"
                             android:layout_centerVertical="true"
@@ -346,6 +363,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:visibility="gone"
                         android:background="?android:attr/listDivider" />
 
 
@@ -354,7 +372,8 @@
                     <RelativeLayout
                         android:id="@+id/changeLanguageBtn"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/d"
@@ -372,6 +391,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/change_language"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/black"
                             android:layout_toRightOf="@+id/d"
                             android:layout_centerVertical="true"
@@ -389,12 +410,14 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:visibility="gone"
                         android:background="?android:attr/listDivider" />
 
                     <RelativeLayout
                         android:id="@+id/settingBtn"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/po"
@@ -412,6 +435,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/settings"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/black"
                             android:layout_toRightOf="@+id/po"
                             android:layout_centerVertical="true"
@@ -435,6 +460,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/favourite_locations"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_margin="10dp"
                     android:textSize="18sp"
                     android:textColor="@color/black"/>
@@ -468,6 +495,8 @@
                             android:layout_marginLeft="10dp"
                             android:layout_toRightOf="@+id/dd"
                             android:text="@string/add_home"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:layout_centerVertical="true"
                             android:textColor="@color/black" />
 
@@ -506,6 +535,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/add_work"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/black"
                             android:layout_toRightOf="@+id/ss"
                             android:layout_centerVertical="true"
@@ -559,6 +590,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about_us_profile"
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/black"
                             android:layout_toRightOf="@+id/ee"
                             android:layout_centerVertical="true"
@@ -600,6 +632,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/privacy_policy"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/black"
                             android:layout_toRightOf="@+id/we"
                             android:layout_centerVertical="true"
@@ -641,6 +675,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/term_and_conditions"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/black"
                             android:layout_toRightOf="@+id/rkr"
                             android:layout_centerVertical="true"
@@ -682,6 +718,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/feedback"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/black"
                             android:layout_toRightOf="@+id/rklr"
                             android:layout_centerVertical="true"
@@ -725,6 +763,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/contact_us"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/black"
                             android:layout_toRightOf="@+id/wwf"
                             android:layout_centerVertical="true"
@@ -747,6 +787,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/others"
+
+                    android:fontFamily="@font/raleway_semibold"
                     android:layout_margin="10dp"
                     android:textSize="18sp"
                     android:textColor="@color/black"/>
@@ -779,6 +821,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/logout"
+
+                            android:fontFamily="@font/raleway_semibold"
                             android:textColor="@color/black"
                             android:layout_toRightOf="@+id/ege"
                             android:layout_centerVertical="true"

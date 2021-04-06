@@ -133,7 +133,7 @@ public interface APIRequests {
 
     @FormUrlEncoded
     @POST("wallet_list")
-    Call<GetWallet> getWallet(@Field("user_id") String user_id);
+    Call<JsonObject> getWallet(@Field("user_id") String user_id);
     @FormUrlEncoded
     @POST("payment_list")
     Call<PaymentListResponse> getPaymentList(@Field("user_id") String user_id);
@@ -384,6 +384,10 @@ public interface APIRequests {
     );
 
     @FormUrlEncoded
+    @POST("orderlistuser")
+    Call<OrderSubmit> finishOrder(@Field("order_id") String order_id);
+
+    @FormUrlEncoded
     @POST("DeliveryBoyOrderList")
     Call<CustumerOrderDetail> deliveryBoyOrderList(@Field("order_id") String order_id, @Field("type") String type);
 
@@ -398,6 +402,9 @@ public interface APIRequests {
 
     @GET("paymentkey")
     Call<JsonObject> paymentKey();
+
+    @GET("delivery_price")
+    Call<JsonObject> deliveryCharge();
 
     @GET("website_url")
     Call<JsonObject> getWebsiteUrl();

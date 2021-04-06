@@ -18,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -36,9 +37,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.callpneck.Language.ThemeUtils;
 import com.callpneck.LaunchActivityClass;
 import com.callpneck.R;
 import com.callpneck.SessionManager;
@@ -58,9 +62,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import net.bohush.geometricprogressview.GeometricProgressView;
 
 import org.apache.http.util.TextUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,6 +94,7 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeUtils.setLanguage(this);
         setContentView(R.layout.activity_delivery_boy_list);
 
         if (getIntent()!= null){
@@ -107,7 +115,7 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
         recyclerView = findViewById(R.id.recycleview);
         if (UserLongitude!= null&& UserLatitude!=null)
-        getDeliveryBoyData();
+            getDeliveryBoyData();
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -174,7 +182,8 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
                                         else {
                                             deliveryFee = "100";
                                         }
-                                        showMAkeOrderDialog(item.getId()+"", item.getFirstName()+" "+item.getLastName()+"", item.getEmpAddress()+"", deliveryFee);
+
+                                        startActivity(new Intent(DeliveryBoyListActivity.this, CreateOrderActivity.class).putExtra("emp_id", item.getId()+"").putExtra("emp_name", item.getFirstName()+" "+item.getLastName()+"").putExtra("emp_address",item.getEmpAddress()+"").putExtra("deliveryFee",deliveryFee).putExtra("pickupAddress", pickupAddress).putExtra("dropAddress",dropAddress));
                                     }
                                 });
                                 recyclerView.setAdapter(adapter);
@@ -197,414 +206,6 @@ public class DeliveryBoyListActivity extends AppCompatActivity {
     }
 
 
-    private static final int CAMERA_REQUEST_CODE = 200;
-    private static final int STORAGE_REQUEST_CODE = 300;
-
-    //image pick constant
-    private static final int IMAGE_PICK_GALLERY_CODE = 400;
-    private static final int IMAGE_PICK_CAMERA_CODE = 500;
-
-    private String[] cameraPermission;
-    private String[] storagePermission;
-
-    ImageView orderIV;
-    EditText orderEt;
-    BottomSheetDialog bottomSheet, bottomSheetDialog;
-    private void showMAkeOrderDialog(String emp_id, String emp_name, String emp_address, String deliveryFee) {
-        final View view = getLayoutInflater().inflate(R.layout.layout_make_order_screen, null);
-         bottomSheet = new BottomSheetDialog(this);
-        bottomSheet.setContentView(view);
-        bottomSheet.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        bottomSheet.setCancelable(false);
-        orderEt = view.findViewById(R.id.orderEt);
-        RelativeLayout addPhotoBtn = view.findViewById(R.id.addPhotoBtn);
-        orderIV = view.findViewById(R.id.orderIV);
-        Button submitBtn = view.findViewById(R.id.submitBtn);
-        ImageView closeBtn = view.findViewById(R.id.closeBtn);
-
-        cameraPermission = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-
-
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheet.dismiss();
-            }
-        });
-
-        addPhotoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showImagePickDialog();
-            }
-        });
-
-
-        submitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (image_uri!=null){
-                    final View view = getLayoutInflater().inflate(R.layout.process_order_sheet_layout, null);
-                    bottomSheetDialog = new BottomSheetDialog(DeliveryBoyListActivity.this);
-                    bottomSheetDialog.setContentView(view);
-                    bottomSheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    bottomSheetDialog.setCancelable(true);
-                    bottomSheetDialog.show();
-                    orderWithImage(bottomSheetDialog, emp_id, emp_name, emp_address, deliveryFee);
-                }else {
-                    if (TextUtils.isEmpty(orderEt.getText().toString())){
-                        Toast.makeText(DeliveryBoyListActivity.this, "Make a order......", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    final View view = getLayoutInflater().inflate(R.layout.process_order_sheet_layout, null);
-                    bottomSheetDialog = new BottomSheetDialog(DeliveryBoyListActivity.this);
-                    bottomSheetDialog.setContentView(view);
-                    bottomSheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    bottomSheetDialog.setCancelable(true);
-                    bottomSheetDialog.show();
-                    orderWithoutImage(bottomSheetDialog, emp_id, emp_name, emp_address, deliveryFee);
-                }
-            }
-        });
-
-        bottomSheet.show();
-
-    }
-    File file;
-    private void orderWithImage(BottomSheetDialog bottomSheetDialog, String emp_id, String emp_name, String emp_address, String deliveryFee) {
-        RequestBody orde_list  = RequestBody.create(MediaType.parse("multipart/form-data"), orderEt.getText().toString()+"");
-        RequestBody start_address  = RequestBody.create(MediaType.parse("multipart/form-data"), pickupAddress);
-        RequestBody drop_address  = RequestBody.create(MediaType.parse("multipart/form-data"), dropAddress);
-        RequestBody user_id  = RequestBody.create(MediaType.parse("multipart/form-data"), sessionManager.getUserid()+"");
-        RequestBody user_name  = RequestBody.create(MediaType.parse("multipart/form-data"), sessionManager.getUserName()+"");
-        RequestBody user_mobile  = RequestBody.create(MediaType.parse("multipart/form-data"), sessionManager.getUserMobile()+"");
-        RequestBody empId  = RequestBody.create(MediaType.parse("multipart/form-data"), emp_id);
-        RequestBody empName  = RequestBody.create(MediaType.parse("multipart/form-data"), emp_name);
-        RequestBody empAddress  = RequestBody.create(MediaType.parse("multipart/form-data"), emp_address);
-        RequestBody empFee  = RequestBody.create(MediaType.parse("multipart/form-data"), deliveryFee);
-
-        MultipartBody.Part requestImage = null;
-        if (file == null)
-        {
-            file = new File(getRealPathFromURI(image_uri));
-
-        }
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        requestImage = MultipartBody.Part.createFormData("order_image", file.getName(), requestFile);
-
-        Log.e("SendingData", sessionManager.getUserid()+"\n"+sessionManager.getUserName()+"\n"+dropAddress+"\n"+pickupAddress+"\n"+emp_id+"\n"+emp_name+"\n"+deliveryFee);
-
-
-        Call<OrderSubmit> call = APIClient.getInstance().createOrderByUser(orde_list, start_address, drop_address, user_id, user_name, user_mobile, empId, empName, empAddress, empFee, requestImage);
-
-
-
-        call.enqueue(new Callback<OrderSubmit>() {
-            @Override
-            public void onResponse(Call<OrderSubmit> call, Response<OrderSubmit> response) {
-                if (response.isSuccessful()){
-                    try {
-                        OrderSubmit orderSubmit = response.body();
-                        if (orderSubmit.getSuccess()){
-
-
-                            if (emp_id !=null && !emp_id.equals(""))
-                            {
-                                prepareNotificationMessage(emp_id, orderSubmit.getId()+"", bottomSheetDialog);
-                            }
-                            else {
-                                bottomSheetDialog.dismiss();
-                                bottomSheet.dismiss();
-                                sessionManager.saveCurrentOrderDeliveryId(orderSubmit.getId()+"");
-
-                                if (sessionManager.getCurrentDeliveryOrderId()!=null&&
-                                        sessionManager.getCurrentDeliveryOrderId().length()>0){
-                                    LaunchActivityClass.LaunchTrackingDeliveryScreen(DeliveryBoyListActivity.this);
-                                }
-                            }
-                           // prepareNotificationMessage(emp_id, orderSubmit.getId()+"");
-
-
-                        }
-                    }catch (Exception e){
-
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<OrderSubmit> call, Throwable t) {
-                bottomSheetDialog.dismiss();
-                bottomSheet.dismiss();
-            }
-        });
-
-
-
-
-
-    }
-
-
-    private void prepareNotificationMessage(String emp_id, String orderId, BottomSheetDialog bottomSheetDialog){
-        String NOTIFICATION_TOPIC = "/topics/" + Constants.FCM_TOPIC;
-        String NOTIFICATION_TITLE = "New Order" + orderId;
-        String NOTIFICATION_MESSAGE = "Congratulation....! You have new order From Customer";
-        String NOTIFICATION_TYPE = "CustomerOrder";
-
-        JSONObject notificationJo = new JSONObject();
-        JSONObject notificationBodyJo = new JSONObject();
-        try {
-            //what to send
-            notificationBodyJo.put("notificationType",NOTIFICATION_TYPE);
-            notificationBodyJo.put("buyerUid",sessionManager.getUserid()); //current user is user so uid is buyer id
-            notificationBodyJo.put("sellerUid",emp_id);
-            notificationBodyJo.put("orderId",orderId);
-            notificationBodyJo.put("notificationTitle",NOTIFICATION_TITLE);
-            notificationBodyJo.put("notificationMessage",NOTIFICATION_MESSAGE);
-
-            //where to send
-            notificationJo.put("to",NOTIFICATION_TOPIC);
-            notificationJo.put("data",notificationBodyJo);
-
-        }catch (Exception e){
-
-            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-        sendFcmNotification(notificationJo, orderId, bottomSheetDialog);
-    }
-
-    private void sendFcmNotification(JSONObject notificationJo, final String orderId, BottomSheetDialog bottomSheetDialog) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://fcm.googleapis.com/fcm/send", notificationJo,
-                new com.android.volley.Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        bottomSheetDialog.dismiss();
-                        bottomSheet.dismiss();
-                        sessionManager.saveCurrentOrderDeliveryId(orderId);
-
-                        if (sessionManager.getCurrentDeliveryOrderId()!=null&&
-                                sessionManager.getCurrentDeliveryOrderId().length()>0){
-                            LaunchActivityClass.LaunchTrackingDeliveryScreen(DeliveryBoyListActivity.this);
-                        }
-                        Log.d("FCM_RESPONSE", response.toString());
-                    }
-                },
-                new com.android.volley.Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        bottomSheetDialog.dismiss();
-                        bottomSheet.dismiss();
-                        sessionManager.saveCurrentOrderDeliveryId(orderId);
-
-
-
-                        if (sessionManager.getCurrentDeliveryOrderId()!=null&&
-                                sessionManager.getCurrentDeliveryOrderId().length()>0){
-                            LaunchActivityClass.LaunchTrackingDeliveryScreen(DeliveryBoyListActivity.this);
-                        }
-
-                        //error occur
-                        Log.d("FCM_ERROR", ""+error.getMessage());
-                    }
-                }){
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json");
-                headers.put("Authorization","key="+Constants.FCM_KEY);
-                return headers;
-            }
-        };
-
-        //enqueue the Volley request
-        Volley.newRequestQueue(this).add(jsonObjectRequest);
-
-    }
-
-    private String getRealPathFromURI(Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        androidx.loader.content.CursorLoader loader = new CursorLoader(this, contentUri, proj, null, null, null);
-        Cursor cursor = loader.loadInBackground();
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String result = cursor.getString(column_index);
-        cursor.close();
-        return result;
-    }
-    private void orderWithoutImage(BottomSheetDialog bottomSheetDialog, String emp_id, String emp_name, String emp_address, String deliveryFee) {
-
-        Call<OrderSubmit> call = APIClient.getInstance().createOrderByUserWithoutImage(orderEt.getText().toString()+"", pickupAddress, dropAddress, sessionManager.getUserid()+"", sessionManager.getUserName()+"", sessionManager.getUserMobile()+"", emp_id, emp_name, emp_address, deliveryFee, "");
-        call.enqueue(new Callback<OrderSubmit>() {
-            @Override
-            public void onResponse(Call<OrderSubmit> call, Response<OrderSubmit> response) {
-                if (response.isSuccessful()){
-                    try {
-                        OrderSubmit orderSubmit = response.body();
-                        if (orderSubmit.getSuccess()){
-
-                            if (emp_id!=null && !emp_id.equals(""))
-                            {
-                                prepareNotificationMessage(emp_id, orderSubmit.getId()+"", bottomSheetDialog);
-                            }
-                            else {
-                                bottomSheetDialog.dismiss();
-                                bottomSheet.dismiss();
-                                sessionManager.saveCurrentOrderDeliveryId(orderSubmit.getId()+"");
-
-                                if (sessionManager.getCurrentDeliveryOrderId()!=null&&
-                                        sessionManager.getCurrentDeliveryOrderId().length()>0){
-                                    LaunchActivityClass.LaunchTrackingDeliveryScreen(DeliveryBoyListActivity.this);
-                                }
-                            }
-
-
-
-                        }
-                    }catch (Exception e){
-
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<OrderSubmit> call, Throwable t) {
-                bottomSheetDialog.dismiss();
-                bottomSheet.dismiss();
-            }
-        });
-
-    }
-
-
-
-    private void showImagePickDialog() {
-        String[] options = {"Camera","Gallery"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Pick Image").setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                if(which == 0){
-                    //camera
-                    if(checkCameraPermission()){
-
-                        //camera permission allowed
-                        pickFromCamera();
-                    }else {
-                        //not allowed
-                        requestCameraPermission();
-                    }
-                }else {
-                    //gallery
-                    if(checkStoragePermission()){
-
-                        pickFromGallery();
-                    }else {
-
-                        requestStoragePermission();
-                    }
-                }
-            }
-        }).show();
-    }
-
-    private void pickFromGallery(){
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent,IMAGE_PICK_GALLERY_CODE);
-    }
-
-    Uri image_uri=null;
-    private void pickFromCamera(){
-        ContentValues contentValues= new ContentValues();
-        contentValues.put(MediaStore.Images.Media.TITLE,"Temp_Image_Title");
-        contentValues.put(MediaStore.Images.Media.DESCRIPTION,"Temp_Image_Description");
-        image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,image_uri);
-        startActivityForResult(intent,IMAGE_PICK_CAMERA_CODE);
-    }
-
-    private boolean checkStoragePermission(){
-
-        boolean result = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                (PackageManager.PERMISSION_GRANTED);
-
-        return  result;
-    }
-    private void requestStoragePermission(){
-        ActivityCompat.requestPermissions(this,storagePermission,STORAGE_REQUEST_CODE);
-    }
-
-    private boolean checkCameraPermission(){
-
-        boolean result = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA) ==
-                (PackageManager.PERMISSION_GRANTED);
-        boolean result2 = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                (PackageManager.PERMISSION_GRANTED);
-
-        return  result && result2;
-    }
-    private void requestCameraPermission(){
-        ActivityCompat.requestPermissions(this,cameraPermission,CAMERA_REQUEST_CODE);
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case CAMERA_REQUEST_CODE:{
-                if(grantResults.length >0){
-                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    if(cameraAccepted && storageAccepted){
-                        pickFromCamera();
-                    }else {
-                        Toast.makeText(this, "Camera permission is necessary.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-            break;
-            case STORAGE_REQUEST_CODE:{
-                if(grantResults.length >0){
-                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if(storageAccepted){
-                        pickFromGallery();
-                    }else {
-                        Toast.makeText(this, "Storage permission is necessary.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-            break;
-        }
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode == RESULT_OK){
-
-            if(requestCode == IMAGE_PICK_GALLERY_CODE){
-
-                image_uri = data.getData();
-                orderIV.setImageURI( image_uri);
-                orderIV.setVisibility(View.VISIBLE);
-            }
-            else if (requestCode == IMAGE_PICK_CAMERA_CODE){
-                orderIV.setImageURI( image_uri);
-                orderIV.setVisibility(View.VISIBLE);
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
     @Override
     public void onBackPressed() {

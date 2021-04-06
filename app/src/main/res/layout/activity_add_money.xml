@@ -49,14 +49,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/add_money"
                 android:padding="3dp"
+                android:fontFamily="@font/raleway_semibold"
                 android:layout_margin="10dp"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textColor="@color/black"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"
+                android:fontFamily="@font/raleway"
                 android:text="@string/choose_or_enter_amount"/>
 
             <RelativeLayout
@@ -92,6 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="Money"
+                        android:fontFamily="@font/raleway_semibold"
                         android:inputType="numberDecimal"
                         android:gravity="center"
                         android:textSize="32sp"
@@ -136,6 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="100"
+                        android:fontFamily="@font/raleway_semibold"
                         android:textAlignment="center"
                         android:gravity="center"
                         android:textColor="@color/colorBlack"
@@ -160,6 +164,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="300"
+                        android:fontFamily="@font/raleway_semibold"
                         android:textAlignment="center"
                         android:gravity="center"
                         android:textColor="@color/colorBlack"
@@ -184,6 +189,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="500"
+                        android:fontFamily="@font/raleway_semibold"
                         android:textAlignment="center"
                         android:gravity="center"
                         android:textColor="@color/colorBlack"
@@ -199,6 +205,7 @@
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:text="@string/add"
+                android:fontFamily="@font/raleway_semibold"
                 android:layout_margin="16dp"
                 android:background="@color/colorPrimary"
                 android:textColor="@color/white"

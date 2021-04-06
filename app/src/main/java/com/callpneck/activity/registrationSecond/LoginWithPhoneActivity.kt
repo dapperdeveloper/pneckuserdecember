@@ -15,9 +15,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.callpneck.R
 import com.callpneck.SessionManager
-import com.callpneck.Language.ThemeUtils
 import com.callpneck.commonutility.AllUrl
-import com.callpneck.utils.Variables
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.android.gms.auth.api.phone.SmsRetriever
@@ -28,7 +26,6 @@ import com.google.firebase.iid.InstanceIdResult
 import dmax.dialog.SpotsDialog
 import org.json.JSONObject
 import java.util.*
-import kotlin.jvm.Throws
 
 class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.OnCountDownListener{
     var login_with_phoneLayout: RelativeLayout? = null
@@ -57,7 +54,6 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
 
 
     private var receivedOtp: String? = null
-
     private var deviceToken: String? = null
 
     private val countDownTimer =
@@ -69,7 +65,6 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeUtils.setLanguage(this)
         setContentView(R.layout.activity_login_with_phone)
         sessionManager = SessionManager(this)
         progressDialog = SpotsDialog(this, R.style.Custom)
@@ -87,11 +82,11 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
             timetext!!.visibility= View.VISIBLE
 
             timetext!!.setText(time);
-          /*  Toast.makeText(
-                    this,
-                    "Seconds = " + countDownTimer.getSecondsTillCountDown() + " Minutes=" + countDownTimer.getMinutesTillCountDown(),
-                    Toast.LENGTH_SHORT
-            ).show()*/
+            /*  Toast.makeText(
+                      this,
+                      "Seconds = " + countDownTimer.getSecondsTillCountDown() + " Minutes=" + countDownTimer.getMinutesTillCountDown(),
+                      Toast.LENGTH_SHORT
+              ).show()*/
         }
 
     }
@@ -100,16 +95,17 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
         runOnUiThread {
             resendotp!!.visibility= View.VISIBLE
             timetext!!.visibility= View.GONE
-           // tv.text = "Finished"
-          //  startBtn.isEnabled = true
-           // resumeBtn.isEnabled = false
+            // tv.text = "Finished"
+            //  startBtn.isEnabled = true
+            // resumeBtn.isEnabled = false
         }
     }
 
 
+
     override fun onStop() {
         super.onStop()
-      //  autoDetectOTP.stopSmsReciever()
+        //  autoDetectOTP.stopSmsReciever()
     }
 
     val hintPhoneNumber: Unit
@@ -186,7 +182,7 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
             params["mobile"] = mobileno
             params["type"] = "2"
         }
-        Log.e("CHECKDATA", "ondata is called....." + params.toString())
+        Log.e("CHECKDATA","ondata is called....."+params.toString())
 
         //        progressDialog = new SpotsDialog(PneckMapLocation.this, R.style.Custom);
         progressDialog!!.show()
@@ -194,7 +190,7 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
         val requestQueue = Volley.newRequestQueue(this@LoginWithPhoneActivity)
         val stringRequest: JsonObjectRequest = object : JsonObjectRequest(Method.POST, AllUrl.userOtpSend, JSONObject(params as Map<*, *>), com.android.volley.Response.Listener { jsonObject ->
             // Utility.dismissProgressDialog();
-            Log.e("CHECKDATA", "ondata response is called....." + jsonObject.toString())
+            Log.e("CHECKDATA","ondata response is called....."+jsonObject.toString())
 
             progressDialog!!.dismiss()
             try {
@@ -205,10 +201,10 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
                 if (pass == resp_status) {
                     val jsonObject2 = jsonObject1.getJSONObject("data")
                     val otp = jsonObject2.getString("create_otp")
-                    Log.d("Seraj", otp);
+                    Log.d("Seraj",otp);
                     login_with_phoneLayout!!.visibility = View.GONE
                     verify_otp_layout!!.visibility = View.VISIBLE
-                    verityTitle!!.setText("Please wait We will send you the otp to +91 " + mobileno.toString())
+                    verityTitle!!.setText("Please wait We will  send otp to +91 "+mobileno.toString())
                     countDownTimer.start()
 
                 } else {
@@ -218,7 +214,7 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
                 e.printStackTrace()
             }
         }, com.android.volley.Response.ErrorListener { error ->
-            Log.e("CHECKDATA", "ondata is called....." + error.toString())
+            Log.e("CHECKDATA","ondata is called....."+error.toString())
 
             progressDialog!!.dismiss()
             VolleyLog.d("Error", "Error: " + error.message)
@@ -353,8 +349,6 @@ class LoginWithPhoneActivity : AppCompatActivity(), SimpleCountDownTimerKotlin.O
                     }
                     requestQueue.add(stringRequest)
                 })
-
-
     }
 
 

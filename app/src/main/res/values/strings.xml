@@ -73,7 +73,7 @@
     <string name="NO_ORDER_YET">No order yet</string>
     <string name="NOTIFICATION">Notification</string>
     <string name="founder_name">Badal Hashmi</string>
-    <string name="company">Pneck Pvt ltd</string>
+    <string name="company">Callpneck private limited</string>
     <string name="ABOUT_US">Pneck pvt ltd is established for given Manpower and Temporary Employee for one time.  who provide best Service for Consumers. Pneck motive is that provide better and best service to anyone,Anywhere and any time. it is not only a Company. it is a thought to get ride of those problems   which we face in our daily busy life .</string>
     <string name="SUPPORT_MESSAGE">Please drop your concern to support@pneck.in, we will resolve it as soon as possible because we love to help you.</string>
     <string name="ADDRESS_TEXT">ADDRESS</string>
@@ -533,5 +533,6 @@
     <string name="wait">Kindly wait...</string>
     <string name="including_delivery_charges">Including Delivery Charges.</string>
     <string name="category">Category</string>
+    <string name="waiting_for_delivery_boy_response">Waiting for Delivery Boy Response</string>
 
 </resources>
