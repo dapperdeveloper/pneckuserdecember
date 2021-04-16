@@ -20,7 +20,7 @@
             android:backgroundTint="@color/transparent"
             android:gravity="start"
             android:fontFamily="@font/raleway_semibold"
-            android:hint="Create your order..."
+            android:hint="Create your order...\ne.g. \n1 kg. Sugar\n5 kg. Atta"
             android:paddingStart="15dp"
             android:textColor="@color/black" />
 
@@ -48,6 +48,7 @@
         android:background="@drawable/post_bg"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:visibility="gone"
         android:fontFamily="@font/raleway_semibold"
         android:layout_margin="@dimen/margin_10dp"
         />

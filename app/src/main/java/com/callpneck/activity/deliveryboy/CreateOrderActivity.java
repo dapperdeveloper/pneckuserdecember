@@ -104,7 +104,7 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
     Bitmap bitmap;
 
     String postCategory, emp_id, emp_name, emp_address, deliveryFee, dropAddress,pickupAddress ;
-    Spinner spinner;
+//    Spinner spinner;
     Button submitBtn;
     SessionManager sessionManager;
     Toolbar toolbar;
@@ -134,7 +134,7 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         cameraPermission = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         sessionManager = new SessionManager(this);
-        spinner.setOnItemSelectedListener(this);
+        //spinner.setOnItemSelectedListener(this);
         dialog = new ProgressDialog(this);
 
         dialog.setTitle("Please wait");
@@ -175,17 +175,17 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (image_uri!=null && bitmap!=null){
-
-                    orderWithImage(emp_id, emp_name, emp_address, deliveryFee);
-                }else {
-                    if (TextUtils.isEmpty(description_edit.getText().toString())){
+//                if (image_uri!=null && bitmap!=null){
+//
+//                    orderWithImage(emp_id, emp_name, emp_address, deliveryFee);
+//                }else {
+                if (TextUtils.isEmpty(description_edit.getText().toString())){
                         Toast.makeText(CreateOrderActivity.this, "Make a order......", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     orderWithoutImage( emp_id, emp_name, emp_address, deliveryFee);
                 }
-            }
+//            }
         });
 
 
@@ -309,7 +309,7 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         description_edit=findViewById(R.id.description_edit);
         aditional_details_text_count = findViewById(R.id.aditional_details_text_count);
         pImageIv = findViewById(R.id.pImageIv);
-        spinner = findViewById(R.id.spinner);
+        //spinner = findViewById(R.id.spinner);
         submitBtn = findViewById(R.id.submitBtn);
 
     }
@@ -320,7 +320,7 @@ public class CreateOrderActivity extends AppCompatActivity implements AdapterVie
         categories.add("Attach Photo");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(dataAdapter);
+        //spinner.setAdapter(dataAdapter);
     }
 
     @Override
